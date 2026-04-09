@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RM PANGKALAN | Order Now</title>
+    
+    <!-- PWA Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#7c3aed">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        :root { --primary: #7c3aed; --bg: #f3f4f9; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1f2937; -webkit-tap-highlight-color: transparent; }
+        
+        /* Splash Screen */
+        #splashScreen { 
+            position: fixed; inset: 0; background: var(--primary); z-index: 2000; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            transition: opacity 0.5s ease;
+        }
+
+        /* Sidebar Styling */
+        .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; }
+        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; }
+        .nav-item.active { background: white; color: var(--primary); border-radius: 15px; }
+        
+        /* Menu Cards */
+        .food-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .food-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.1); }
+        
+        /* Category Pills */
+        .cat-pill.active { background: var(--primary); color: white; box-shadow: 0 10px 15px -3px rgba(124, 58, 237, 0.2); }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Floating Cart */
+        #mobileCart { 
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.1); 
+            transform: translateY(150%); 
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        #mobileCart.active { transform: translateY(0); }
+
+        /* Fly to Cart Animation */
+        .fly-item {
+            position: fixed;
+            z-index: 3000;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Detail Modal Customization */
+        .swal2-popup.detail-modal {
+            border-radius: 40px !important;
+            padding: 1.5rem !important;
+            width: 95% !important;
+            max-width: 500px !important;
+        }
+
+        .order-review-table th { font-weight: 800; color: #94a3b8; text-transform: uppercase; font-size: 0.65rem; padding-bottom: 0.5rem; }
+        .order-review-table td { padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+
+        .payment-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .payment-option.active {
+            border-color: var(--primary);
+            background-color: #f5f3ff;
+        }
+    </style>
+</head>
+<body class="overflow-hidden">
+
+    <!-- Splash Screen -->
+    <div id="splashScreen">
+        <div class="bg-white p-6 rounded-[40px] shadow-2xl animate-bounce mb-6"><i data-lucide="utensils" class="w-12 h-12 text-violet-600"></i></div>
+        <h1 class="text-white text-3xl font-black italic tracking-tighter">FoodMeal.</h1>
+        <p class="text-violet-200 text-xs mt-2 uppercase font-bold tracking-widest">RM Pangkalan Enterprise</p>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- SIDEBAR (Desktop) -->
+        <aside class="hidden lg:flex flex-col w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl overflow-hidden">
+            <div class="p-8">
+                <div class="text-3xl font-black text-white italic mb-12">FoodMeal.</div>
+                <nav class="space-y-2">
+                    <a href="index.html" class="nav-item active w-full flex items-center gap-4 px-6 py-4 font-bold"><i data-lucide="layout-grid" class="w-5 h-5"></i> Menu Utama</a>
+                    <a href="koki.html" class="nav-item w-full flex items-center gap-4 px-6 py-4 font-bold"><i data-lucide="cooking-pot" class="w-5 h-5"></i> Kitchen</a>
+                    <a href="kasir.html" class="nav-item w-full flex items-center gap-4 px-6 py-4 font-bold"><i data-lucide="file-text" class="w-5 h-5"></i> Kasir</a>
+                    <a href="admin.html" class="nav-item w-full flex items-center gap-4 px-6 py-4 font-bold"><i data-lucide="settings" class="w-5 h-5"></i> Dashboard Admin</a>
+                </nav>
+            </div>
+            <div class="mt-auto p-6">
+                <div class="bg-white/10 p-5 rounded-[30px] border border-white/20 text-white">
+                    <p class="text-[10px] font-bold opacity-70 uppercase tracking-widest mb-1">Status Sinkron</p>
+                    <p id="syncStatus" class="text-xs font-black">Connecting...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 flex flex-col min-w-0 bg-transparent">
+            <!-- Header -->
+            <header class="h-24 px-8 flex items-center justify-between flex-shrink-0">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-800">Halo, Selamat Datang!</h2>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Pesan rasa autentik RM Pangkalan</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden md:block">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Cari hidangan..." class="bg-white h-12 rounded-2xl pl-12 pr-4 text-sm shadow-sm border-none outline-none focus:ring-2 focus:ring-violet-200">
+                    </div>
+                    <button onclick="syncData()" class="p-3 bg-white rounded-xl shadow-sm text-violet-600 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content -->
+            <div class="flex-1 overflow-y-auto no-scrollbar px-8 pb-32">
+                
+                <!-- Promo Banner -->
+                <section class="bg-slate-900 h-48 rounded-[35px] relative overflow-hidden mb-10 group shadow-2xl shadow-slate-200">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
+                    <div class="relative z-10 p-10 h-full flex flex-col justify-center">
+                        <h3 class="text-3xl font-black text-white italic leading-tight">Voucher Keluarga<br><span class="text-violet-400">Hingga 20%</span></h3>
+                        <p class="text-white/70 text-[10px] mt-2 font-bold uppercase tracking-widest">Berlaku untuk Dine-In & Take-Away</p>
+                    </div>
+                </section>
+
+                <!-- Categories -->
+                <section class="mb-8">
+                    <div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+                        <button onclick="filterMenu('All')" class="cat-pill active px-8 py-3 bg-white rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition-all">Semua</button>
+                        <button onclick="filterMenu('Paket')" class="cat-pill px-8 py-3 bg-white rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition-all text-slate-400">Paket Keluarga</button>
+                        <button onclick="filterMenu('Makanan')" class="cat-pill px-8 py-3 bg-white rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition-all text-slate-400">Makanan</button>
+                        <button onclick="filterMenu('Minuman')" class="cat-pill px-8 py-3 bg-white rounded-full text-xs font-bold shadow-sm whitespace-nowrap transition-all text-slate-400">Minuman</button>
+                    </div>
+                </section>
+
+                <!-- Menu Grid -->
+                <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Dinamis dari JS -->
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT PANEL (Cart Desktop) -->
+        <aside class="hidden xl:flex flex-col w-[420px] m-4 ml-0 bg-white rounded-[40px] shadow-2xl overflow-hidden">
+            <div class="p-8 pb-4">
+                <div id="desktopCartIcon" class="bg-violet-600 p-8 rounded-[30px] text-white relative overflow-hidden shadow-2xl shadow-violet-100 mb-8">
+                    <p class="text-[10px] font-bold opacity-70 uppercase tracking-widest">Sistem Digital</p>
+                    <h4 class="text-2xl font-black mt-1 tracking-tighter">RM PANGKALAN</h4>
+                    <i data-lucide="credit-card" class="absolute -right-6 -bottom-6 w-32 h-32 opacity-10"></i>
+                </div>
+                <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Detail Pesanan Anda</h5>
+            </div>
+
+            <div id="cartItems" class="flex-1 px-8 overflow-y-auto no-scrollbar space-y-4">
+                <div id="emptyCart" class="flex flex-col items-center justify-center py-20 opacity-20 italic text-xs font-bold">
+                    <i data-lucide="shopping-cart" class="w-12 h-12 mb-3"></i>
+                    Keranjang Kosong
+                </div>
+            </div>
+
+            <div class="p-8 bg-slate-50 border-t space-y-6">
+                <div class="flex justify-between items-center mb-2">
+                    <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Layanan</div>
+                    <select id="orderType" class="text-xs font-black bg-white px-4 py-2 rounded-xl outline-none shadow-sm">
+                        <option value="Dine-in">MAKAN DI SINI</option>
+                        <option value="Take-away">BAWA PULANG</option>
+                    </select>
+                </div>
+                <div class="flex justify-between items-center pt-4 border-t border-slate-200">
+                    <span class="text-sm font-bold text-slate-400 uppercase">Total</span>
+                    <span id="totalCart" class="text-3xl font-black text-violet-600">Rp 0</span>
+                </div>
+                <button onclick="confirmOrder()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-2xl shadow-violet-200 active:scale-95 transition-all tracking-widest uppercase text-xs">Checkout</button>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Floating Cart (Mobile) -->
+    <div id="mobileCart" class="xl:hidden fixed bottom-0 left-0 right-0 bg-white p-6 rounded-t-[40px] z-50">
+        <div class="flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div id="mobileCartIcon" class="w-14 h-14 bg-violet-600 rounded-2xl flex items-center justify-center text-white relative shadow-lg shadow-violet-200">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <span id="mobileCount" class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </div>
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total</p>
+                    <p id="mobileTotal" class="text-xl font-black text-violet-600">Rp 0</p>
+                </div>
+            </div>
+            <button onclick="confirmOrder()" class="bg-violet-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-violet-100 active:scale-95">Bayar</button>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API_URL;
+        
+        let DB = { menu: [] };
+        let cart = [];
+        let activeCategory = 'All';
+        let selectedPayment = 'Tunai';
+
+        window.onload = () => {
+            lucide.createIcons();
+            syncData();
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.display = 'none', 700);
+                }
+            }, 1500);
+        };
+
+        async function syncData() {
+            if (!API_URL) return;
+            try {
+                const res = await fetch(`${API_URL}?action=getData`);
+                const data = await res.json();
+                DB = data;
+                document.getElementById('syncStatus').innerText = 'Cloud Terhubung';
+                renderMenu();
+            } catch (e) {
+                document.getElementById('syncStatus').innerText = 'Sync Error';
+            }
+        }
+
+        function renderMenu(search = '') {
+            const grid = document.getElementById('menuGrid');
+            if (!grid || !DB.menu) return;
+
+            const filtered = DB.menu.filter(m => {
+                const matchesSearch = m.Name.toLowerCase().includes(search.toLowerCase());
+                const matchesCat = activeCategory === 'All' || m.Category === activeCategory;
+                return matchesSearch && matchesCat;
+            });
+
+            grid.innerHTML = filtered.map((m, idx) => `
+                <div class="food-card bg-white p-5 rounded-[35px] shadow-sm border border-slate-50 relative flex flex-col animate-pop" style="animation-delay: ${idx * 0.05}s">
+                    ${m.Rating ? `<span class="absolute top-4 left-4 z-10 bg-white/90 px-3 py-1 rounded-xl text-[8px] font-black flex items-center gap-1 shadow-sm"><i data-lucide="star" class="w-2.5 h-2.5 text-orange-400 fill-orange-400"></i> ${m.Rating}</span>` : ''}
+                    <div onclick="showDetail('${m.ID}')" class="w-full aspect-[4/3] rounded-[25px] overflow-hidden mb-5 relative group bg-slate-100 cursor-zoom-in">
+                        <img src="${m.Img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300?text=Hidangan+Pangkalan'">
+                    </div>
+                    <h4 class="font-extrabold text-sm text-slate-800 line-clamp-1">${m.Name}</h4>
+                    <p class="text-[9px] font-bold text-slate-400 mt-1 mb-4 leading-relaxed line-clamp-2">${m.Description || 'Hidangan lezat khas RM Pangkalan.'}</p>
+                    <div class="mt-auto flex items-center justify-between">
+                        <span class="text-sm font-black text-violet-600">Rp ${Number(m.Price).toLocaleString()}</span>
+                        <button onclick="triggerAddToCart(event, '${m.ID}')" class="bg-violet-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-violet-100 active:scale-90 transition-transform"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function triggerAddToCart(event, id) {
+            const btn = event.currentTarget;
+            const menu = DB.menu.find(m => m.ID == id);
+            if (!menu) return;
+
+            const flyer = document.createElement('div');
+            flyer.className = 'fly-item';
+            flyer.innerHTML = menu.Img.includes('http') ? `<img src="${menu.Img}" class="w-8 h-8 rounded-full object-cover">` : '🍲';
+            
+            const rect = btn.getBoundingClientRect();
+            flyer.style.left = rect.left + 'px';
+            flyer.style.top = rect.top + 'px';
+            document.body.appendChild(flyer);
+
+            const isDesktop = window.innerWidth >= 1280;
+            const target = isDesktop ? document.getElementById('desktopCartIcon') : document.getElementById('mobileCartIcon');
+            const targetRect = target.getBoundingClientRect();
+
+            setTimeout(() => {
+                flyer.style.left = (targetRect.left + targetRect.width / 2) + 'px';
+                flyer.style.top = (targetRect.top + targetRect.height / 2) + 'px';
+                flyer.style.transform = 'scale(0.1) rotate(360deg)';
+                flyer.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => { flyer.remove(); addToCart(id); }, 800);
+        }
+
+        function addToCart(id) {
+            const item = DB.menu.find(m => m.ID == id);
+            if (!item) return;
+            cart.push({...item, cartId: Date.now()});
+            updateCartUI();
+        }
+
+        function removeFromCartById(id) {
+            const index = cart.findLastIndex(i => i.ID == id);
+            if (index > -1) cart.splice(index, 1);
+            updateCartUI();
+            if (Swal.isVisible()) renderReviewContent();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById('cartItems');
+            const empty = document.getElementById('emptyCart');
+            const totalEl = document.getElementById('totalCart');
+            const mobTotal = document.getElementById('mobileTotal');
+            const mobCount = document.getElementById('mobileCount');
+            const mobBar = document.getElementById('mobileCart');
+
+            if (cart.length === 0) {
+                if(empty) empty.style.display = 'flex';
+                list.querySelectorAll('.cart-item').forEach(e => e.remove());
+                totalEl.innerText = 'Rp 0';
+                if (mobBar) mobBar.classList.remove('active');
+                return;
+            }
+
+            if (empty) empty.style.display = 'none';
+            if (mobBar) mobBar.classList.add('active');
+
+            const grouped = getGroupedCart();
+            list.innerHTML = Object.values(grouped).map(i => `
+                <div class="cart-item flex items-center gap-4 bg-slate-50 p-4 rounded-2xl animate-pop">
+                    <div class="w-14 h-14 rounded-xl bg-white flex-shrink-0 flex items-center justify-center text-2xl shadow-sm">🥘</div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[10px] font-black truncate text-slate-800">${i.Name}</p>
+                        <p class="text-[9px] font-bold text-violet-600 mt-1">x${i.qty} - Rp ${(i.Price * i.qty).toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeItems('${i.ID}')" class="text-red-400 p-2 hover:bg-red-50 rounded-lg transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((s, i) => s + Number(i.Price), 0);
+            totalEl.innerText = `Rp ${total.toLocaleString()}`;
+            if (mobTotal) mobTotal.innerText = `Rp ${total.toLocaleString()}`;
+            if (mobCount) mobCount.innerText = cart.length;
+            lucide.createIcons();
+        }
+
+        function removeItems(id) {
+            cart = cart.filter(i => i.ID != id);
+            updateCartUI();
+        }
+
+        function getGroupedCart() {
+            return cart.reduce((acc, i) => {
+                if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0};
+                acc[i.ID].qty++;
+                return acc;
+            }, {});
+        }
+
+        // --- REVIEW MODAL LOGIC ---
+        function renderReviewContent() {
+            const grouped = getGroupedCart();
+            const subtotal = cart.reduce((s, i) => s + Number(i.Price), 0);
+            const container = document.getElementById('reviewContainer');
+            
+            if (cart.length === 0) {
+                Swal.close();
+                return;
+            }
+
+            let html = `
+                <div class="bg-slate-50 p-4 sm:p-6 rounded-[30px] border border-slate-100 max-h-[250px] overflow-y-auto no-scrollbar mb-6">
+                    <table class="w-full text-left order-review-table">
+                        <thead>
+                            <tr><th>Menu</th><th class="text-center">Jumlah</th><th class="text-right">Total</th></tr>
+                        </thead>
+                        <tbody>
+                            ${Object.values(grouped).map(i => `
+                                <tr>
+                                    <td class="text-[10px] font-bold text-slate-700 leading-tight pr-2">${i.Name}</td>
+                                    <td class="text-center">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <button onclick="removeFromCartById('${i.ID}')" class="w-6 h-6 flex items-center justify-center bg-white border border-slate-200 rounded-lg text-red-500 font-bold active:scale-90">-</button>
+                                            <span class="text-[11px] font-black w-4">${i.qty}</span>
+                                            <button onclick="addToCart('${i.ID}')" class="w-6 h-6 flex items-center justify-center bg-violet-600 rounded-lg text-white font-bold active:scale-90">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="text-right text-[10px] font-black text-violet-600">Rp ${(i.Price * i.qty).toLocaleString()}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mb-6">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-2">Metode Pembayaran</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div onclick="setPay('Tunai')" class="payment-option ${selectedPayment === 'Tunai' ? 'active' : ''} p-3 rounded-2xl bg-white shadow-sm flex flex-col items-center gap-1">
+                            <i data-lucide="banknote" class="w-5 h-5 text-green-600"></i>
+                            <span class="text-[9px] font-bold uppercase">Tunai</span>
+                        </div>
+                        <div onclick="setPay('QRIS')" class="payment-option ${selectedPayment === 'QRIS' ? 'active' : ''} p-3 rounded-2xl bg-white shadow-sm flex flex-col items-center gap-1">
+                            <i data-lucide="qr-code" class="w-5 h-5 text-blue-600"></i>
+                            <span class="text-[9px] font-bold uppercase">QRIS</span>
+                        </div>
+                        <div onclick="setPay('Transfer')" class="payment-option ${selectedPayment === 'Transfer' ? 'active' : ''} p-3 rounded-2xl bg-white shadow-sm flex flex-col items-center gap-1">
+                            <i data-lucide="credit-card" class="w-5 h-5 text-violet-600"></i>
+                            <span class="text-[9px] font-bold uppercase">Transfer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center px-4 pt-4 border-t">
+                    <span class="text-sm font-extrabold text-slate-400 uppercase">Total Akhir</span>
+                    <span class="text-2xl font-black text-violet-600 tracking-tighter">Rp ${subtotal.toLocaleString()}</span>
+                </div>
+            `;
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function setPay(method) {
+            selectedPayment = method;
+            renderReviewContent();
+        }
+
+        function confirmOrder() {
+            if (cart.length === 0) return;
+            const type = document.getElementById('orderType').value;
+            
+            Swal.fire({
+                title: '<div class="text-2xl font-black italic tracking-tighter text-slate-800">Ringkasan Pesanan</div>',
+                html: `<div id="reviewContainer"></div>`,
+                showCancelButton: true,
+                confirmButtonText: 'Proses Pesanan',
+                cancelButtonText: 'Kembali',
+                confirmButtonColor: '#7c3aed',
+                cancelButtonColor: '#94a3b8',
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4 px-8', cancelButton: 'rounded-2xl font-bold py-4 px-8' },
+                didOpen: () => renderReviewContent()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    processOrder(cart.reduce((s, i) => s + Number(i.Price), 0), type);
+                }
+            });
+        }
+
+        async function processOrder(total, type) {
+            Swal.fire({ title: 'Mengirim Pesanan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const payload = {
+                action: 'addOrder',
+                id: 'ORD-' + Math.floor(Date.now()/1000).toString().slice(-6),
+                items: cart.map(i => i.Name).join(', '),
+                total: total,
+                role: 'Pelanggan',
+                type: `${type} (${selectedPayment})`
+            };
+
+            try {
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Terima kasih, pesanan Anda sedang disiapkan.', timer: 4000 });
+                cart = []; updateCartUI();
+            } catch (e) {
+                Swal.fire('Gagal', 'Koneksi bermasalah, silakan coba lagi.', 'error');
+            }
+        }
+
+        // --- EXISTING LOGIC ---
+        function filterMenu(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(p => {
+                p.classList.remove('active', 'text-white');
+                p.classList.add('text-slate-400');
+                if(p.innerText.includes(cat) || (cat === 'All' && p.innerText.includes('Semua'))) {
+                    p.classList.add('active'); p.classList.remove('text-slate-400');
+                }
+            });
+            renderMenu();
+        }
+
+        function showDetail(id) {
+            const m = DB.menu.find(x => x.ID == id);
+            if (!m) return;
+            Swal.fire({
+                title: `<div class="text-2xl font-black italic tracking-tighter text-slate-800">${m.Name}</div>`,
+                html: `
+                    <div class="text-left">
+                        <div class="w-full h-48 sm:h-64 rounded-[30px] overflow-hidden mb-6 shadow-lg"><img src="${m.Img}" class="w-full h-full object-cover"></div>
+                        <p class="text-slate-500 text-sm mb-6">${m.Description || 'Hidangan spesial RM Pangkalan.'}</p>
+                        <div class="text-2xl font-black text-violet-600">Rp ${Number(m.Price).toLocaleString()}</div>
+                    </div>
+                `,
+                showConfirmButton: true, confirmButtonText: 'Tambah ke Pesanan', confirmButtonColor: '#7c3aed',
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold' },
+            }).then((r) => { if (r.isConfirmed) triggerAddToCart({currentTarget: {getBoundingClientRect:()=>({left:window.innerWidth/2, top:window.innerHeight/2})}}, id); });
+        }
+
+        function handleSearch(val) { renderMenu(val); }
+    </script>
+</body>
+</html>
