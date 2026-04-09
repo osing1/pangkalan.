@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodMeal | Kitchen System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        :root { --primary: #7c3aed; --bg: #0f172a; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f8fafc; }
+        .order-card { background: #1e293b; border-radius: 30px; border: 1px solid #334155; transition: 0.3s; }
+        .order-card.urgent { border-left: 10px solid #ef4444; }
+        .order-card.cooking { border-left: 10px solid #f59e0b; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .animate-pulse-red { animation: pulse-red 2s infinite; }
+    </style>
+</head>
+<body class="p-6 md:p-10 flex flex-col h-screen overflow-hidden">
+
+    <header class="flex flex-wrap justify-between items-center mb-10 gap-4">
+        <div>
+            <h1 class="text-3xl font-black text-violet-500 italic tracking-tighter">Kitchen Console.</h1>
+            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Antrean Masakan Real-time</p>
+        </div>
+        <div class="flex items-center gap-6 bg-slate-800/50 p-4 rounded-[25px] border border-slate-700">
+            <div class="text-center px-4 border-r border-slate-700">
+                <p class="text-[9px] font-bold text-slate-500 uppercase">Antre</p>
+                <p id="countPending" class="text-xl font-black text-red-400">0</p>
+            </div>
+            <div class="text-center px-4">
+                <p class="text-[9px] font-bold text-slate-500 uppercase">Dimasak</p>
+                <p id="countCooking" class="text-xl font-black text-orange-400">0</p>
+            </div>
+            <button onclick="fetchOrders()" class="ml-4 p-3 bg-violet-600 rounded-2xl hover:bg-violet-700 transition-all active:scale-95 shadow-lg shadow-violet-900/20">
+                <i data-lucide="refresh-cw" id="syncIcon" class="w-5 h-5 text-white"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- KDS GRID -->
+    <div id="kdsGrid" class="flex-1 overflow-y-auto no-scrollbar grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-10">
+        <!-- Konten akan dimuat di sini -->
+        <div class="col-span-full py-32 text-center">
+            <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="chef-hat" class="w-10 h-10 text-slate-600"></i>
+            </div>
+            <p class="text-slate-500 font-bold italic">Menunggu pesanan baru dari pelanggan...</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let orders = [];
+
+        window.onload = () => {
+            lucide.createIcons();
+            fetchOrders();
+            setInterval(fetchOrders, 10000); // Sinkronisasi setiap 10 detik
+        };
+
+        async function fetchOrders() {
+            const icon = document.getElementById('syncIcon');
+            icon.classList.add('animate-spin');
+            try {
+                const res = await fetch(`${API_URL}?action=getData`);
+                const data = await res.json();
+                orders = data.transactions.filter(t => t.Status === 'Pending' || t.Status === 'Cooking');
+                renderKDS();
+            } catch (e) { console.error("KDS Sync Error:", e); }
+            finally { icon.classList.remove('animate-spin'); }
+        }
+
+        function renderKDS() {
+            const grid = document.getElementById('kdsGrid');
+            const pCount = document.getElementById('countPending');
+            const cCount = document.getElementById('countCooking');
+            
+            pCount.innerText = orders.filter(o => o.Status === 'Pending').length;
+            cCount.innerText = orders.filter(o => o.Status === 'Cooking').length;
+
+            if (orders.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-32 text-center"><p class="text-slate-600 font-bold italic">Dapur Bersih! Tidak ada antrean.</p></div>`;
+                return;
+            }
+
+            grid.innerHTML = orders.map((o, idx) => {
+                const items = o.Items.split(',').map(i => i.trim());
+                const isCooking = o.Status === 'Cooking';
+                const timeDiff = Math.floor((new Date() - new Date(o.Date)) / 60000); // dalam menit
+                
+                return `
+                <div class="order-card p-8 flex flex-col animate-pop ${isCooking ? 'cooking' : 'urgent'}">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Order #${o.ID.slice(-4)}</span>
+                            <h3 class="text-lg font-black text-white mt-1">${o.Role}</h3>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-3 py-1 bg-slate-700 rounded-lg text-[9px] font-black uppercase text-slate-300 tracking-tighter">${o.Type}</span>
+                            <p class="text-[10px] font-bold mt-2 ${timeDiff > 15 ? 'text-red-400 animate-pulse-red' : 'text-slate-500'}">${timeDiff} Menit Lalu</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 space-y-3
