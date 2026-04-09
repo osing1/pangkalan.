@@ -59,7 +59,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
         }
 
-        /* Modal Styles */
+        /* Modal Styles matching the screenshot */
         .swal2-popup.detail-modal {
             border-radius: 50px !important;
             padding: 2.5rem !important;
@@ -368,7 +368,23 @@
             if(empty) empty.style.display = 'none'; 
             if(mb) mb.classList.add('active');
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
-            if(list) list.innerHTML = Object.values(grouped).map(i => `<div class="cart-item flex items-center gap-4 bg-slate-50 p-4 rounded-2xl animate-pop"><div class="w-12 h-12 rounded-xl bg-white flex-shrink-0 flex items-center justify-center text-lg shadow-sm">🍲</div><div class="flex-1 min-w-0"><p class="text-[10px] font-black truncate">${i.Name}</p><p class="text-[9px] font-bold text-violet-600 mt-1">x${i.qty} - Rp ${(i.Price*i.qty).toLocaleString()}</p></div><button onclick="cart = cart.filter(x => x.ID != '${i.ID}'); updateCartUI()" class="text-red-400 p-2"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('');
+            if(list) {
+                list.innerHTML = Object.values(grouped).map(i => `
+                    <div class="cart-item bg-slate-50 p-4 rounded-2xl animate-pop border border-transparent hover:border-violet-100 transition-all">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-white flex-shrink-0 flex items-center justify-center text-lg shadow-sm">🥘</div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-[11px] font-black truncate text-slate-800">${i.Name}</p>
+                                <p class="text-[10px] font-black text-violet-600">Rp ${Number(i.Price).toLocaleString()}</p>
+                            </div>
+                            <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border shadow-sm">
+                                <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-bold px-1 hover:scale-125 transition-transform">-</button>
+                                <span class="text-[10px] font-black w-4 text-center">${i.qty}</span>
+                                <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-bold px-1 hover:scale-125 transition-transform">+</button>
+                            </div>
+                        </div>
+                    </div>`).join('');
+            }
             const sub = cart.reduce((s, i) => s + Number(i.Price), 0);
             if(tot) tot.innerText = `Rp ${sub.toLocaleString()}`; if(mt) mt.innerText = `Rp ${sub.toLocaleString()}`; if(mc) mc.innerText = cart.length;
             lucide.createIcons();
@@ -382,23 +398,60 @@
             if(!container) return;
             container.innerHTML = `
                 <div class="space-y-6">
+                    <!-- Service Type -->
                     <div class="grid grid-cols-2 gap-4">
-                        <div onclick="selectedService='Dine-in';renderReview()" class="service-option ${selectedService==='Dine-in'?'active':''}"><span class="text-xs font-extrabold text-slate-800 uppercase">Makan Sini</span></div>
-                        <div onclick="selectedService='Take-away';renderReview()" class="service-option ${selectedService==='Take-away'?'active':''}"><i data-lucide="shopping-bag" class="w-5 h-5 mb-1"></i><span class="text-xs font-extrabold text-slate-800 uppercase">Bawa Pulang</span></div>
+                        <div onclick="selectedService='Dine-in';renderReview()" class="service-option ${selectedService==='Dine-in'?'active':''}">
+                            <span class="text-xs font-extrabold text-slate-800 uppercase italic">Makan Sini</span>
+                        </div>
+                        <div onclick="selectedService='Take-away';renderReview()" class="service-option ${selectedService==='Take-away'?'active':''}">
+                            <i data-lucide="shopping-bag" class="w-5 h-5 mb-1 text-slate-600"></i>
+                            <span class="text-xs font-extrabold text-slate-800 uppercase italic">Bawa Pulang</span>
+                        </div>
                     </div>
-                    <div class="space-y-3">
+
+                    <!-- Input Data -->
+                    <div class="space-y-3 text-left">
                         <input type="text" id="inputName" placeholder="Nama Anda" value="${name}" class="checkout-input">
                         ${selectedService === 'Dine-in' ? `<input type="number" id="inputTable" placeholder="No Meja" value="${table}" class="checkout-input">` : ''}
                     </div>
-                    <div class="space-y-2 max-h-[150px] overflow-y-auto no-scrollbar">
-                        ${Object.values(grouped).map(i => `<div class="order-row"><span class="text-[11px] font-bold text-slate-700">${i.Name}</span><div class="flex items-center gap-6"><div class="flex gap-3"><button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-bold">-</button><span class="text-[10px] font-black">x${i.qty}</span><button onclick="addToCart('${i.ID}')" class="text-violet-600 font-bold">+</button></div><span class="text-[11px] font-black text-violet-600">Rp ${(i.Price*i.qty).toLocaleString()}</span></div></div>`).join('')}
+
+                    <!-- Items List -->
+                    <div class="space-y-2 max-h-[180px] overflow-y-auto no-scrollbar">
+                        ${Object.values(grouped).map(i => `
+                            <div class="order-row border border-slate-50">
+                                <span class="text-[11px] font-bold text-slate-700">${i.Name}</span>
+                                <div class="flex items-center gap-6">
+                                    <div class="flex items-center gap-3 bg-white px-3 py-1 rounded-xl shadow-sm border">
+                                        <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-bold">-</button>
+                                        <span class="text-[10px] font-black">x${i.qty}</span>
+                                        <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-bold">+</button>
+                                    </div>
+                                    <span class="text-[11px] font-black text-violet-600 w-20 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
+                                </div>
+                            </div>`).join('')}
                     </div>
+
+                    <!-- Payment Method -->
                     <div class="grid grid-cols-3 gap-3">
-                        <div onclick="selectedPayment='Tunai';renderReview()" class="payment-option ${selectedPayment==='Tunai'?'active':''}"><i data-lucide="banknote" class="text-green-600 w-5 h-5 mb-1"></i><span class="text-[8px] font-black">TUNAI</span></div>
-                        <div onclick="selectedPayment='QRIS';renderReview()" class="payment-option ${selectedPayment==='QRIS'?'active':''}"><i data-lucide="qr-code" class="text-blue-600 w-5 h-5 mb-1"></i><span class="text-[8px] font-black">QRIS</span></div>
-                        <div onclick="selectedPayment='Transfer';renderReview()" class="payment-option ${selectedPayment==='Transfer'?'active':''}"><i data-lucide="credit-card" class="text-violet-600 w-5 h-5 mb-1"></i><span class="text-[8px] font-black">BANK</span></div>
+                        <div onclick="selectedPayment='Tunai';renderReview()" class="payment-option ${selectedPayment==='Tunai'?'active':''}">
+                            <i data-lucide="banknote" class="text-green-600 w-5 h-5 mb-1"></i>
+                            <span class="text-[8px] font-black italic">TUNAI</span>
+                        </div>
+                        <div onclick="selectedPayment='QRIS';renderReview()" class="payment-option ${selectedPayment==='QRIS'?'active':''}">
+                            <i data-lucide="qr-code" class="text-blue-600 w-5 h-5 mb-1"></i>
+                            <span class="text-[8px] font-black italic">QRIS</span>
+                        </div>
+                        <div onclick="selectedPayment='Transfer';renderReview()" class="payment-option ${selectedPayment==='Transfer'?'active':''}">
+                            <i data-lucide="credit-card" class="text-violet-600 w-5 h-5 mb-1"></i>
+                            <span class="text-[8px] font-black italic">BANK</span>
+                        </div>
                     </div>
-                    <div class="flex justify-between items-center pt-4 border-t"><span class="text-xs font-bold text-slate-400 uppercase">TOTAL</span><span class="text-2xl font-black text-violet-600">Rp ${sub.toLocaleString()}</span></div>
+
+                    <!-- Total -->
+                    <div class="flex justify-between items-center pt-4 border-t border-slate-100">
+                        <span class="text-xs font-bold text-slate-400 uppercase italic">TOTAL</span>
+                        <span class="text-2xl font-black text-violet-600 tracking-tighter">Rp ${sub.toLocaleString()}</span>
+                    </div>
                     <div id="validationMsg" class="error-box hidden"><i data-lucide="alert-circle" class="w-4 h-4"></i><span>Masukkan data dengan benar</span></div>
                 </div>`;
             lucide.createIcons();
@@ -440,28 +493,26 @@
             list.innerHTML = myOrderIds.map(myId => {
                 const trx = DB.transactions.find(t => t.ID === myId); if(!trx) return '';
                 let sid = trx.Status === 'Pending' ? 1 : (trx.Status === 'Cooking' ? 2 : 3);
-                let col = trx.Status==='Cooking'?'bg-orange-100 text-orange-600':(trx.Status==='Ready'?'bg-green-100 text-green-600':'bg-slate-100 text-slate-400');
                 return `<div onclick="showReceipt('${trx.ID}')" class="bg-white p-6 rounded-[40px] shadow-sm border border-slate-100 mb-4 cursor-pointer">
-                    <div class="flex justify-between items-center mb-6"><span class="text-[10px] font-black text-slate-400 uppercase">Order #${trx.ID.slice(-4)}</span><div class="px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-[9px] font-black">LIHAT RECEIPT</div></div>
+                    <div class="flex justify-between items-center mb-6"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Order #${trx.ID.slice(-4)}</span><div class="px-3 py-1 rounded-full bg-violet-50 text-violet-600 text-[9px] font-black">LIHAT RECEIPT</div></div>
                     <div class="flex gap-2 mb-4">${['Pending','Cooking','Ready'].map((s,i)=>`<div class="track-step ${i+1<=sid?'active':''}"><div class="track-line ${i===2?'hidden':''} ${i+1<sid?'!bg-violet-600':''}"></div><div class="track-circle"></div><span class="text-[8px] font-black uppercase mt-1 opacity-50 ${i+1<=sid?'opacity-100':''}">${s}</span></div>`).join('')}</div>
-                    <p class="text-xs font-bold text-slate-700 line-clamp-1">${trx.Items}</p></div>`;
+                    <p class="text-xs font-bold text-slate-700 line-clamp-1 italic">${trx.Items}</p></div>`;
             }).join('');
             lucide.createIcons();
         }
 
         function showReceipt(id) {
             const trx = DB.transactions.find(t => t.ID === id); if(!trx) return;
-            Swal.fire({ title: 'Digital Receipt', html: `<div class="text-left font-mono text-xs space-y-2 p-4 bg-slate-50 rounded-2xl"><div class="flex justify-between"><span>ID:</span><span>${trx.ID}</span></div><div>${trx.Items}</div><hr class="border-dashed"><div class="flex justify-between font-bold text-violet-600"><span>TOTAL:</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div></div>`, confirmButtonText: 'OKE', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' } });
+            Swal.fire({ title: 'Receipt Digital', html: `<div class="text-left font-mono text-xs space-y-2 p-4 bg-slate-50 rounded-2xl"><div class="flex justify-between"><span>ID:</span><span>${trx.ID}</span></div><div>${trx.Items}</div><hr class="border-dashed"><div class="flex justify-between font-bold text-violet-600"><span>TOTAL:</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div></div>`, confirmButtonText: 'OKE', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' } });
         }
 
         function showDetail(id) {
             const m = DB.menu.find(x => x.ID == id); if (!m) return;
-            Swal.fire({ title: `<div class="text-2xl font-black italic tracking-tighter">${m.Name}</div>`, html: `<div class="text-left"><div class="rounded-[30px] overflow-hidden mb-6 h-48 sm:h-64"><img src="${m.Img}" class="w-full h-full object-cover"></div><p class="text-slate-500 text-sm mb-6">${m.Description || 'Signature dish.'}</p><div class="text-2xl font-black text-violet-600">Rp ${Number(m.Price).toLocaleString()}</div></div>`, showConfirmButton: true, confirmButtonText: 'Order', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4' },
+            Swal.fire({ title: `<div class="text-2xl font-black italic tracking-tighter">${m.Name}</div>`, html: `<div class="text-left"><div class="rounded-[30px] overflow-hidden mb-6 h-48 sm:h-64"><img src="${m.Img}" class="w-full h-full object-cover"></div><p class="text-slate-500 text-sm mb-6 font-medium">${m.Description || 'Signature dish.'}</p><div class="text-2xl font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</div></div>`, showConfirmButton: true, confirmButtonText: 'Order', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4' },
             }).then((r) => { if (r.isConfirmed) triggerAddToCart({currentTarget: {getBoundingClientRect:()=>({left:window.innerWidth/2, top:window.innerHeight/2})}}, id); });
         }
 
         function filterMenu(cat) { activeCategory = cat; document.querySelectorAll('.cat-pill').forEach(p => p.classList.toggle('active', p.innerText.includes(cat) || (cat==='All'&&p.innerText.includes('Semua')))); renderMenu(); }
-        function handleSearch(val) { renderMenu(val); }
     </script>
 </body>
 </html>
