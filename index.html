@@ -106,7 +106,6 @@
 </head>
 <body class="overflow-hidden">
 
-    <!-- Splash Screen -->
     <div id="splashScreen">
         <div class="bg-white p-6 rounded-[40px] shadow-2xl animate-bounce mb-6"><i data-lucide="utensils" class="w-12 h-12 text-violet-600"></i></div>
         <h1 class="text-white text-3xl font-black italic tracking-tighter">FoodMeal.</h1>
@@ -135,7 +134,6 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col min-w-0 bg-transparent">
             <header class="h-24 px-8 flex items-center justify-between flex-shrink-0">
                 <div id="headerInfo">
@@ -151,11 +149,10 @@
             </header>
 
             <div id="tabMenu" class="flex-1 overflow-y-auto no-scrollbar px-8 pb-32">
-                <!-- Promo Banner -->
                 <section class="bg-slate-900 h-48 rounded-[40px] relative overflow-hidden mb-10 group shadow-2xl">
                     <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
                     <div class="relative z-10 p-10 h-full flex flex-col justify-center max-w-md text-white">
-                        <h3 class="text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">PANGKALAN20</span></h3>
+                        <h3 class="text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">DISKON KHUSUS</span></h3>
                     </div>
                 </section>
 
@@ -176,29 +173,25 @@
             </div>
         </main>
 
-        <!-- RIGHT PANEL (Desktop Cart) -->
         <aside id="rightPanel" class="hidden xl:flex flex-col w-[420px] m-4 ml-0 bg-white rounded-[40px] shadow-2xl overflow-hidden">
             <div class="p-8 pb-4">
-                <div id="desktopCartIcon" class="bg-violet-600 p-8 rounded-[35px] text-white relative overflow-hidden shadow-2xl shadow-violet-100 mb-8">
-                    <div class="relative z-10 flex justify-between items-start">
-                        <div><p class="text-[10px] font-bold opacity-70 uppercase tracking-widest">Balance</p><h4 class="text-3xl font-black mt-1" id="walletBalance">Rp 0</h4></div>
-                        <button onclick="topUpSim()" class="bg-violet-400 p-3 rounded-2xl hover:bg-violet-300 transition-all"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                <div class="mb-8 bg-slate-50 p-6 rounded-[35px] border border-slate-100 flex items-center gap-4">
+                    <div class="bg-violet-600 p-3 rounded-2xl text-white shadow-lg"><i data-lucide="map-pin"></i></div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Meja / Lokasi</p>
+                        <p class="text-sm font-bold text-slate-800 truncate" id="locationLabel">Area Tunggu</p>
                     </div>
-                </div>
-                <div class="mb-8 p-1 border-b border-slate-100 pb-6 flex items-center gap-4">
-                    <div class="bg-violet-100 p-3 rounded-2xl text-violet-600"><i data-lucide="map-pin"></i></div>
-                    <div><p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Meja / Lokasi</p><p class="text-xs font-bold text-slate-800" id="locationLabel">Area Tunggu</p></div>
-                    <button class="ml-auto text-[10px] font-bold text-violet-600 uppercase" onclick="changeLocation()">Change</button>
+                    <button class="bg-white p-2 rounded-xl text-violet-600 shadow-sm border border-slate-100" onclick="changeLocation()"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
                 </div>
                 <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 px-1">Order Menu</h5>
             </div>
             <div id="cartItems" class="flex-1 px-8 overflow-y-auto no-scrollbar space-y-4"></div>
             <div class="p-8 bg-slate-50 border-t">
                 <div class="flex justify-between items-center mb-6">
-                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest">Total</span>
+                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest">Total Tagihan</span>
                     <span id="totalCart" class="text-3xl font-black text-violet-600 tracking-tighter">Rp 0</span>
                 </div>
-                <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-2xl shadow-violet-200 active:scale-95 transition-all text-xs tracking-widest uppercase italic">Checkout</button>
+                <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-2xl shadow-violet-200 active:scale-95 transition-all text-xs tracking-widest uppercase italic">Checkout Pesanan</button>
             </div>
         </aside>
     </div>
@@ -208,7 +201,7 @@
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-4">
                 <div id="mobileCartIcon" class="w-14 h-14 bg-violet-600 rounded-2xl flex items-center justify-center text-white relative shadow-lg shadow-violet-200"><i data-lucide="shopping-bag" class="w-6 h-6"></i><span id="mobileCount" class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span></div>
-                <div><p id="mobileTotal" class="text-lg font-black text-violet-600">Rp 0</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest uppercase">Ready to Order</p></div>
+                <div><p id="mobileTotal" class="text-lg font-black text-violet-600">Rp 0</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest uppercase">Pesan Sekarang</p></div>
             </div>
             <button onclick="openCheckoutModal()" class="bg-violet-600 text-white px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest active:scale-95 shadow-lg shadow-violet-100 italic">Pay Now</button>
         </div>
@@ -230,7 +223,6 @@
         let activeTab = 'menu';
         let selectedPayment = 'Tunai';
         let selectedService = 'Dine-in';
-        let walletBalance = parseInt(localStorage.getItem('PANGKALAN_WALLET') || '125000');
         let myOrderIds = JSON.parse(localStorage.getItem('MY_ORDERS') || '[]');
         let syncInterval;
 
@@ -282,13 +274,20 @@
 
         function switchTab(tab) {
             activeTab = tab;
-            document.getElementById('tabMenu').classList.toggle('hidden', tab !== 'menu');
-            document.getElementById('tabTrack').classList.toggle('hidden', tab !== 'track');
-            document.getElementById('side-nav-menu').classList.toggle('active', tab === 'menu');
-            document.getElementById('side-nav-track').classList.toggle('active', tab === 'track');
-            startPolling(tab === 'track' ? 5000 : 15000);
+            const menuTab = document.getElementById('tabMenu');
+            const trackTab = document.getElementById('tabTrack');
+            if(!menuTab || !trackTab) return;
+
+            menuTab.classList.toggle('hidden', tab !== 'menu');
+            trackTab.classList.toggle('hidden', tab !== 'track');
+            
+            const sideMenu = document.getElementById('side-nav-menu');
+            const sideTrack = document.getElementById('side-nav-track');
+            if(sideMenu) sideMenu.classList.toggle('active', tab === 'menu');
+            if(sideTrack) sideTrack.classList.toggle('active', tab === 'track');
+            
+            startPolling(tab === 'track' ? 6000 : 15000);
             if(tab === 'track') renderTracking();
-            else renderMenu();
             lucide.createIcons();
         }
 
@@ -299,12 +298,13 @@
                 <div class="food-card bg-white p-5 rounded-[35px] shadow-sm border border-slate-50 flex flex-col animate-pop" style="animation-delay: ${idx * 0.05}s">
                     <div onclick="showDetail('${m.ID}')" class="w-full aspect-[4/3] rounded-[25px] overflow-hidden mb-5 relative group bg-slate-100 img-skeleton">
                         <img src="${m.Img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onload="this.parentElement.classList.remove('img-skeleton'); this.style.opacity='1'" style="opacity:0" onerror="this.src='https://placehold.co/400x300?text=RM+Pangkalan'">
+                        ${m.Rating ? `<span class="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-xl text-[8px] font-black flex items-center gap-1 shadow-sm"><i data-lucide="star" class="w-2.5 h-2.5 text-orange-400 fill-orange-400"></i> ${m.Rating}</span>` : ''}
                     </div>
                     <h4 class="font-extrabold text-sm text-slate-800 line-clamp-1 italic">${m.Name}</h4>
                     <p class="text-[9px] font-bold text-slate-400 mt-1 mb-4 line-clamp-2">${m.Description || 'Cita rasa autentik.'}</p>
                     <div class="mt-auto flex items-center justify-between">
                         <span class="text-sm font-black text-violet-600">Rp ${Number(m.Price).toLocaleString()}</span>
-                        <button onclick="triggerAddToCart(event, '${m.ID}')" class="bg-violet-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-transform"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                        <button onclick="triggerAddToCart(event, '${m.ID}')" class="bg-violet-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-transform"><i data-lucide="plus"></i></button>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
@@ -315,7 +315,8 @@
             const flyer = document.createElement('div'); flyer.className = 'fly-item'; flyer.innerHTML = '🥘';
             flyer.style.left = rect.left + 'px'; flyer.style.top = rect.top + 'px';
             document.body.appendChild(flyer);
-            const target = document.getElementById('desktopCartIcon');
+            
+            const target = document.getElementById('locationLabel'); // Target ke area meja/lokasi di sidebar
             if(target) {
                 const tRect = target.getBoundingClientRect();
                 setTimeout(() => { flyer.style.left = (tRect.left + tRect.width/2) + 'px'; flyer.style.top = (tRect.top + tRect.height/2) + 'px'; flyer.style.transform = 'scale(0.1) rotate(360deg)'; flyer.style.opacity = '0'; }, 10);
@@ -334,11 +335,12 @@
         }
         
         function updateCartUI() {
-            const list = document.getElementById('cartItems'), tot = document.getElementById('totalCart'), mt = document.getElementById('mobileTotal'), mc = document.getElementById('mobileCount'), mb = document.getElementById('mobileCart');
-            
+            const list = document.getElementById('cartItems'), tot = document.getElementById('totalCart'), mb = document.getElementById('mobileCart'), mt = document.getElementById('mobileTotal'), mc = document.getElementById('mobileCount');
+            if(!list || !tot) return;
+
             if (cart.length === 0) { 
-                if(list) list.innerHTML = `<div id="emptyCart" class="flex flex-col items-center justify-center py-20 opacity-20 italic text-xs font-bold"><i data-lucide="shopping-cart" class="mb-2"></i> Keranjang Kosong</div>`; 
-                if(tot) tot.innerText = 'Rp 0'; 
+                list.innerHTML = `<div id="emptyCart" class="flex flex-col items-center justify-center py-20 opacity-20 italic text-xs font-bold"><i data-lucide="shopping-cart" class="mb-2"></i> Keranjang Kosong</div>`; 
+                tot.innerText = 'Rp 0'; 
                 if(mb) mb.classList.remove('active');
                 lucide.createIcons(); 
                 return; 
@@ -347,21 +349,19 @@
             if(mb) mb.classList.add('active');
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
             
-            if(list) {
-                list.innerHTML = Object.values(grouped).map(i => `
-                    <div class="order-card-row bg-slate-50 border-none shadow-sm">
-                        <div class="qty-pill bg-white">
-                            <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-bold">-</button>
-                            <span class="text-xs font-black">x${i.qty}</span>
-                            <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-bold">+</button>
-                        </div>
-                        <p class="flex-1 px-4 text-[11px] font-bold text-slate-800 truncate uppercase text-center">${i.Name}</p>
-                        <span class="text-[13px] font-black text-violet-600 w-24 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
-                    </div>`).join('');
-            }
+            list.innerHTML = Object.values(grouped).map(i => `
+                <div class="order-card-row bg-slate-50 border-none shadow-sm">
+                    <div class="qty-pill bg-white">
+                        <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-sm">-</button>
+                        <span class="text-xs font-black">x${i.qty}</span>
+                        <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-black text-sm">+</button>
+                    </div>
+                    <p class="flex-1 px-4 text-xs font-bold text-slate-800 truncate uppercase text-center">${i.Name}</p>
+                    <span class="text-[13px] font-black text-violet-600 w-24 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
+                </div>`).join('');
             
             const sub = cart.reduce((s, i) => s + Number(i.Price), 0);
-            if(tot) tot.innerText = `Rp ${sub.toLocaleString()}`;
+            tot.innerText = `Rp ${sub.toLocaleString()}`;
             if(mt) mt.innerText = `Rp ${sub.toLocaleString()}`;
             if(mc) mc.innerText = cart.length;
             lucide.createIcons();
@@ -372,8 +372,7 @@
             if(!container) return; 
 
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
-            const subtotalMenu = cart.reduce((s, i) => s + Number(i.Price), 0);
-            const total = subtotalMenu + 1500;
+            const total = cart.reduce((s, i) => s + Number(i.Price), 0);
             const name = document.getElementById('inputName')?.value || localStorage.getItem('LAST_CUST_NAME') || '';
             const table = document.getElementById('inputTable')?.value || '';
             
@@ -423,7 +422,7 @@
                     </div>
 
                     <div class="pt-6 border-t flex justify-between items-center">
-                        <span class="text-[11px] font-black text-slate-400 uppercase italic">TOTAL + LAYANAN</span>
+                        <span class="text-[11px] font-black text-slate-400 uppercase italic">TOTAL PESANAN</span>
                         <span class="text-4xl font-black text-violet-600 tracking-tighter">Rp ${total.toLocaleString()}</span>
                     </div>
 
@@ -456,7 +455,7 @@
         async function processFinalOrder(u) {
             Swal.fire({ title: 'Kirim Pesanan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             const oid = 'ORD-' + Math.floor(Date.now()/1000).toString().slice(-6);
-            const sub = cart.reduce((s,i)=>s+Number(i.Price),0) + 1500;
+            const sub = cart.reduce((s,i)=>s+Number(i.Price),0);
             try {
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'addOrder', id: oid, items: cart.map(i => i.Name).join(', '), total: sub, role: u.n, type: `${selectedService} [${selectedPayment}]` }) });
                 myOrderIds.unshift(oid); localStorage.setItem('MY_ORDERS', JSON.stringify(myOrderIds));
@@ -469,6 +468,7 @@
             const list = document.getElementById('orderTrackingList'); if(!list) return;
             const myOrders = DB.transactions.filter(t => myOrderIds.includes(t.ID));
             if (myOrders.length === 0) { list.innerHTML = `<div class="py-20 text-center text-slate-300 italic font-bold">Belum ada pesanan aktif.</div>`; return; }
+            
             list.innerHTML = myOrders.reverse().map(trx => {
                 let sid = trx.Status === 'Pending' ? 1 : (trx.Status === 'Cooking' ? 2 : 3);
                 return `<div onclick="showReceipt('${trx.ID}')" class="bg-white p-6 rounded-[40px] shadow-sm border border-slate-100 mb-6 animate-pop cursor-pointer">
@@ -491,14 +491,13 @@
 
         function updateHeaderUI() {
             const name = localStorage.getItem('LAST_CUST_NAME') || 'Pelanggan';
-            document.getElementById('welcomeMsg').innerText = `Hey, ${name}`;
-            document.getElementById('walletBalance').innerText = `Rp ${walletBalance.toLocaleString()}`;
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            if(welcomeMsg) welcomeMsg.innerText = `Hey, ${name}`;
         }
 
         function filterMenu(cat) { activeCategory = cat; document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.id === `cat-${cat.toLowerCase()}`)); renderMenu(); }
         function changeName() { Swal.fire({ title: 'Nama Profil', input: 'text', confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed && r.value) { localStorage.setItem('LAST_CUST_NAME', r.value); updateHeaderUI(); } }); }
         function changeLocation() { Swal.fire({ title: 'Pilih Meja', input: 'select', inputOptions: {'Meja 01':'Meja 01','Meja 02':'Meja 02','Area Tunggu':'Area Tunggu'}, confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed) document.getElementById('locationLabel').innerText = r.value; }); }
-        function topUpSim() { Swal.fire({ title: 'Top Up', input: 'number', confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed && r.value > 0) { walletBalance += parseInt(r.value); localStorage.setItem('PANGKALAN_WALLET', walletBalance); updateHeaderUI(); } }); }
     </script>
 </body>
 </html>
