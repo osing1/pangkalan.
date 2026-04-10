@@ -15,25 +15,25 @@
         :root { --primary: #7c3aed; --bg: #f3f4f9; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; -webkit-tap-highlight-color: transparent; }
         
-        /* Layout Sidebar */
+        /* Sidebar Layout */
         .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
         .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
         
-        /* Navigation */
+        /* Sidebar Navigation */
         .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
         .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         
-        /* Cards & Tables */
+        /* Pro Cards & Tables */
         .card-pro { background: white; border-radius: 35px; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); }
         .table-header { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 20px; background: #f8fafc; }
         
-        /* Live Indicator */
+        /* Status Indicators */
         .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
         .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
 
-        /* Inputs */
+        /* Form Inputs */
         .admin-input {
             width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px;
             padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
@@ -44,18 +44,14 @@
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
-        /* Security Overlays */
+        /* Login Security Layer */
         #loginOverlay {
             position: fixed; inset: 0; background: var(--primary); z-index: 10000;
             display: flex; align-items: center; justify-content: center; padding: 15px;
         }
         
-        /* Focus & Interaction Management */
-        [inert] { pointer-events: none; user-select: none; filter: blur(4px); opacity: 0.5; transition: all 0.3s; }
-        #loginOverlay[inert] { opacity: 0; visibility: hidden; pointer-events: none; }
-        
-        /* Modal Refinement */
-        .swal2-popup.detail-modal { border-radius: 50px !important; padding: 1.25rem 0.2rem !important; width: 98% !important; max-width: 500px !important; }
+        /* Modern Focus Management */
+        [inert] { pointer-events: none; user-select: none; filter: blur(6px); opacity: 0.4; transition: all 0.4s; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -66,27 +62,25 @@
             <div class="bg-violet-100 w-20 h-20 rounded-[30px] flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="shield-check" class="text-violet-600 w-10 h-10"></i>
             </div>
-            <h2 id="loginTitle" class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Admin Access</h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Management System RM Pangkalan</p>
+            <h2 id="loginTitle" class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase leading-none">Admin Access</h2>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-10">RM Pangkalan Enterprise</p>
             
             <div class="space-y-4">
-                <div id="apiSetupSection" class="hidden pb-4 mb-4 border-b border-dashed">
-                    <p class="text-[9px] font-black text-red-500 uppercase mb-2">Konfigurasi API Diperlukan:</p>
-                    <input type="text" id="loginApiUrl" placeholder="Paste URL Apps Script di sini..." class="admin-input border-red-100 bg-red-50/30">
-                </div>
-
                 <div class="text-left">
-                    <label for="loginUser" class="text-[9px] font-black text-slate-400 uppercase ml-3">Username</label>
-                    <input type="text" id="loginUser" placeholder="Username owner" class="admin-input mt-1">
+                    <label for="loginUser" class="text-[9px] font-black text-slate-400 uppercase ml-3 tracking-widest">Username</label>
+                    <input type="text" id="loginUser" placeholder="owner" class="admin-input mt-1">
                 </div>
                 <div class="text-left">
-                    <label for="loginPass" class="text-[9px] font-black text-slate-400 uppercase ml-3">Password</label>
+                    <label for="loginPass" class="text-[9px] font-black text-slate-400 uppercase ml-3 tracking-widest">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="admin-input mt-1">
                 </div>
                 
-                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-4">MASUK KE PANEL</button>
+                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-6">MASUK KE PANEL</button>
             </div>
-            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest italic leading-none">Enterprise Cloud POS v7.1</p>
+            
+            <div class="mt-10 pt-6 border-t border-slate-50">
+                <p class="text-[9px] font-bold text-slate-300 uppercase tracking-widest italic leading-none">Enterprise Cloud POS v7.5</p>
+            </div>
         </div>
     </div>
 
@@ -100,8 +94,8 @@
             
             <nav class="space-y-6 w-full">
                 <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
-                <div onclick="switchTab('menu')" id="nav-menu" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Menu List</span></div>
-                <div onclick="switchTab('staff')" id="nav-staff" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Staff List</span></div>
+                <div onclick="switchTab('menu')" id="nav-menu" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Daftar Menu</span></div>
+                <div onclick="switchTab('staff')" id="nav-staff" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Karyawan</span></div>
             </nav>
         </div>
         
@@ -109,7 +103,7 @@
             <div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10 w-full overflow-hidden">
                 <div id="statusIndicator" class="live-dot flex-shrink-0"></div>
                 <div class="flex flex-col min-w-0">
-                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">Online</span>
+                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic leading-none">System Online</span>
                     <span id="digitalClock" class="hidden lg:block text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
                 </div>
             </div>
@@ -123,8 +117,8 @@
     <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
         <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 bg-white/50 backdrop-blur-md">
             <div>
-                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase tracking-tighter">Dashboard</h1>
-                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 leading-none">Enterprise Management</p>
+                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase tracking-tighter">DASHBOARD</h1>
+                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 leading-none">RM Pangkalan Management</p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="syncData()" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
@@ -151,35 +145,36 @@
                     </div>
                 </div>
 
+                <!-- API Integration Display -->
                 <section class="card-pro p-6 md:p-10">
                     <div class="flex items-center gap-4 mb-8">
                         <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
                         <div>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Cloud API Configuration</h3>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 leading-none">Endpoint utama sinkronisasi database</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 leading-none">Koneksi Aktif: Google Apps Script</p>
                         </div>
                     </div>
                     <div class="flex flex-col lg:flex-row gap-4">
                         <input type="text" id="apiInput" placeholder="URL Google Apps Script..." class="admin-input flex-1">
-                        <button onclick="saveApi()" class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg uppercase text-xs italic tracking-widest">UPDATE API</button>
+                        <button onclick="saveApi()" class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg uppercase text-xs italic tracking-widest transition-all hover:scale-[1.02]">UPDATE CLOUD API</button>
                     </div>
                 </section>
             </div>
 
-            <!-- Menu Section -->
+            <!-- Menu List Section -->
             <div id="section-menu" class="hidden animate-pop">
                 <section class="card-pro overflow-hidden">
                     <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic">Inventory Menu</h3>
-                        <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">+ TAMBAH MENU</button>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic leading-none">Inventory & Manajemen Menu</h3>
+                        <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all active:scale-95">+ TAMBAH MENU</button>
                     </div>
                     <div class="overflow-x-auto no-scrollbar">
                         <table class="w-full text-left">
                             <thead>
                                 <tr>
                                     <th class="table-header w-20">ID</th>
-                                    <th class="table-header">Menu</th>
-                                    <th class="table-header">Harga</th>
+                                    <th class="table-header">Informasi Menu</th>
+                                    <th class="table-header">Harga Jual</th>
                                     <th class="table-header text-right">Aksi</th>
                                 </tr>
                             </thead>
@@ -189,12 +184,12 @@
                 </section>
             </div>
 
-            <!-- Staff Section -->
+            <!-- Staff List Section -->
             <div id="section-staff" class="hidden animate-pop">
                 <section class="card-pro overflow-hidden">
                     <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic">Staff Access Control</h3>
-                        <button onclick="openStaffForm()" class="w-full sm:w-auto bg-violet-600 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-violet-100">+ TAMBAH STAFF</button>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic leading-none">Kontrol Akses Karyawan</h3>
+                        <button onclick="openStaffForm()" class="w-full sm:w-auto bg-violet-600 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-violet-100 transition-all active:scale-95">+ TAMBAH KARYAWAN</button>
                     </div>
                     <div class="overflow-x-auto no-scrollbar">
                         <table class="w-full text-left">
@@ -215,8 +210,9 @@
     </main>
 
     <script>
-        const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
-        let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API;
+        // --- API CONFIGURATION ---
+        const API_URL_LOCKED = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let API_URL = localStorage.getItem('RM_API_URL') || API_URL_LOCKED;
         let DB = { menu: [], transactions: [], users: [] };
         let activeTab = 'dashboard';
 
@@ -225,7 +221,9 @@
             checkAuth();
             updateClock();
             setInterval(updateClock, 1000);
-            document.getElementById('apiInput').value = API_URL;
+            
+            const apiField = document.getElementById('apiInput');
+            if(apiField) apiField.value = API_URL;
         };
 
         function checkAuth() {
@@ -235,10 +233,10 @@
             const content = document.getElementById('mainContent');
 
             if (user) {
-                // Focus management: release focus before hiding
-                if (overlay.contains(document.activeElement)) document.activeElement.blur();
+                // Blur focused elements to avoid browser blocking
+                if (document.activeElement) document.activeElement.blur();
                 
-                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
                 overlay.setAttribute('inert', ''); 
                 
                 sidebar.classList.remove('hidden');
@@ -250,7 +248,7 @@
                 document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
                 syncData();
             } else {
-                overlay.classList.remove('hidden');
+                overlay.style.display = 'flex';
                 overlay.removeAttribute('inert');
                 
                 sidebar.classList.add('hidden');
@@ -258,53 +256,41 @@
                 
                 content.classList.add('hidden');
                 content.setAttribute('inert', '');
-                
-                if(!localStorage.getItem('RM_API_URL')) {
-                    document.getElementById('apiSetupSection').classList.remove('hidden');
-                }
 
-                // Autofocus first field
-                setTimeout(() => document.getElementById('loginUser')?.focus(), 100);
+                setTimeout(() => document.getElementById('loginUser')?.focus(), 200);
             }
         }
 
         async function handleLogin() {
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            const tempApi = document.getElementById('loginApiUrl')?.value.trim();
-            const targetApi = tempApi || API_URL;
-            
-            if(!targetApi || !targetApi.includes('google.com')) {
-                return Swal.fire('Error', 'Masukkan URL API yang valid.', 'error');
-            }
-
             const btn = document.getElementById('loginBtn');
-            btn.innerText = 'MEMVERIFIKASI...';
+            
+            if(!user || !pass) return Swal.fire('Error', 'Username dan Password wajib diisi.', 'error');
+
+            btn.innerText = 'VERIFIKASI...';
             btn.disabled = true;
 
             try {
-                const res = await fetch(`${targetApi}?action=getData`);
-                if (!res.ok) throw new Error('Network Error');
+                // Fetch data using GET to bypass complex POST CORS preflight
+                const res = await fetch(`${API_URL}?action=getData`);
+                if (!res.ok) throw new Error('Koneksi Gagal');
                 
                 const data = await res.json();
-                const validUser = data.users.find(u => u.Username === user && u.Password === pass && u.Role === 'Owner');
+                const validUser = data.users.find(u => u.Username.toLowerCase() === user.toLowerCase() && String(u.Password) === pass && u.Role === 'Owner');
                 
                 if (validUser) {
-                    if(tempApi) {
-                        localStorage.setItem('RM_API_URL', tempApi);
-                        API_URL = tempApi;
-                        document.getElementById('apiInput').value = tempApi;
-                    }
-                    sessionStorage.setItem('ADMIN_AUTH', user);
+                    sessionStorage.setItem('ADMIN_AUTH', validUser.Username);
                     checkAuth();
+                    Swal.fire({ icon: 'success', title: 'Akses Diterima', text: 'Selamat datang, Owner!', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Login Gagal', text: 'Kredensial salah atau role bukan Owner.', customClass: {popup: 'rounded-[35px]'} });
+                    Swal.fire({ icon: 'error', title: 'Login Gagal', text: 'Kredensial salah atau role Anda bukan Owner.', customClass: {popup: 'rounded-[35px]'} });
                 }
             } catch (e) {
                 Swal.fire({ 
                     icon: 'warning', 
-                    title: 'Kesalahan Koneksi', 
-                    html: `<div class="text-left text-xs leading-relaxed">Sistem tidak dapat menghubungi API. Mohon periksa:<br>1. Akses Deploy diatur ke <b>Anyone</b>.<br>2. Klik <b>New Version</b>.<br>3. URL API sudah benar.</div>`,
+                    title: 'Database Tidak Merespon', 
+                    html: `<div class="text-left text-xs leading-relaxed">Sistem gagal terhubung ke Cloud. Pastikan:<br>1. Apps Script di-Deploy sebagai <b>Anyone</b>.<br>2. Anda sudah klik <b>New Version</b>.<br>3. Koneksi internet stabil.</div>`,
                     customClass: {popup: 'rounded-[35px]'} 
                 });
             } finally {
@@ -331,16 +317,16 @@
                 if(section) section.classList.toggle('hidden', t !== tab);
                 if(nav) nav.classList.toggle('active', t === tab);
             });
-            document.getElementById('tabTitle').innerText = tab.toUpperCase();
+            document.getElementById('tabTitle').innerText = tab === 'menu' ? 'DAFTAR MENU' : (tab === 'staff' ? 'KARYAWAN' : 'DASHBOARD');
             lucide.createIcons();
         }
 
         function saveApi() {
             const url = document.getElementById('apiInput').value.trim();
-            if(!url.includes('google.com')) return Swal.fire('Error', 'URL tidak valid.', 'error');
+            if(!url.includes('google.com')) return Swal.fire('Error', 'URL Google Apps Script tidak valid.', 'error');
             localStorage.setItem('RM_API_URL', url);
             API_URL = url;
-            Swal.fire({ icon: 'success', title: 'API Diperbarui', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+            Swal.fire({ icon: 'success', title: 'API Diperbarui', text: 'Sistem menyinkronkan data ulang.', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
             syncData();
         }
 
@@ -370,7 +356,7 @@
                     <td class="p-6 font-mono text-[10px] text-slate-400 uppercase tracking-tighter">#${m.ID}</td>
                     <td class="p-6">
                         <div class="flex items-center gap-4">
-                            <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100'}" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-100" onerror="this.src='https://placehold.co/100?text=Menu'">
+                            <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100'}" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-100" onerror="this.src='https://placehold.co/100?text=Food'">
                             <div class="min-w-0">
                                 <p class="font-black text-slate-800 text-xs uppercase truncate italic leading-none">${m.Name}</p>
                                 <p class="text-[9px] font-bold text-violet-500 uppercase tracking-widest mt-1 leading-none">${m.Category}</p>
