@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RM Pangkalan | Owner Center</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        :root { --primary: #7c3aed; --bg: #f3f4f9; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; -webkit-tap-highlight-color: transparent; }
+        
+        /* --- SIDEBAR REFINEMENT --- */
+        .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
+        .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
+        
+        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        
+        .card-pro { background: white; border-radius: 35px; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); }
+        
+        .table-header { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 20px; background: #f8fafc; }
+        
+        .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
+        .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* --- INPUT FIELD PRO --- */
+        .admin-input {
+            width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px;
+            padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
+        }
+        .admin-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.05); }
+
+        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR - iPad/Desktop -->
+    <aside class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
+        <div class="p-6 lg:p-10 z-10 flex flex-col items-center lg:items-start w-full">
+            <div class="logo-box mb-14 flex flex-col items-center lg:items-start text-center lg:text-left">
+                <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1">PANGKALAN</span>
+                <span class="text-[8px] lg:text-[10px] font-bold uppercase tracking-[3px] opacity-70 italic">Admin Center</span>
+            </div>
+            
+            <nav class="space-y-6 w-full">
+                <div class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
+                <div class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold opacity-60"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Menu List</span></div>
+                <div class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold opacity-60"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Staff</span></div>
+            </nav>
+        </div>
+        
+        <div class="mt-auto p-6 z-10 flex flex-col items-center lg:items-start gap-4">
+            <div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10 w-full overflow-hidden">
+                <div id="statusIndicator" class="live-dot flex-shrink-0"></div>
+                <div class="flex flex-col min-w-0">
+                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">System Online</span>
+                    <span id="digitalClock" class="hidden lg:block text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
+                </div>
+            </div>
+            <a href="index.html" class="flex items-center justify-center gap-3 bg-white/10 w-full p-4 rounded-2xl font-bold hover:bg-white/20 transition-all border border-white/10">
+                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Exit</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
+        <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 bg-white/50 backdrop-blur-md">
+            <div>
+                <h1 class="text-xl md:text-2xl font-black text-slate-800 italic leading-none">Owner Control</h1>
+                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Konfigurasi Cloud & Inventaris Menu</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="syncData()" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white font-black text-sm">OW</div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+            
+            <!-- API Configuration Section -->
+            <section class="card-pro p-6 md:p-10 animate-pop">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Cloud API Configuration</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">Endpoint utama sinkronisasi database</p>
+                    </div>
+                </div>
+                <div class="flex flex-col lg:flex-row gap-4">
+                    <input type="text" id="apiInput" placeholder="Paste URL Google Apps Script di sini..." class="admin-input flex-1">
+                    <button onclick="saveApi()" class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg shadow-violet-100 active:scale-95 transition-all uppercase text-xs italic tracking-widest">SIMPAN API</button>
+                </div>
+            </section>
+
+            <!-- Menu Management Section -->
+            <section class="card-pro overflow-hidden animate-pop" style="animation-delay: 0.1s">
+                <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Daftar Menu Aktif</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Total: <span id="menuCount">0</span> Masakan</p>
+                    </div>
+                    <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">+ TAMBAH MENU</button>
+                </div>
+                
+                <div class="overflow-x-auto no-scrollbar">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr>
+                                <th class="table-header w-20">ID</th>
+                                <th class="table-header">Informasi Menu</th>
+                                <th class="table-header">Harga</th>
+                                <th class="table-header text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="menuTableBody" class="divide-y divide-slate-50">
+                            <!-- Data Row Example -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="emptyState" class="hidden py-24 text-center opacity-30 italic font-bold uppercase tracking-widest text-xs">
+                    <i data-lucide="database" class="mx-auto mb-4 w-10 h-10"></i>
+                    Belum Ada Data Terhubung
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        let API_URL = localStorage.getItem('RM_API_URL') || '';
+        let DB = { menu: [] };
+
+        window.onload = () => {
+            lucide.createIcons();
+            document.getElementById('apiInput').value = API_URL;
+            if(API_URL) syncData();
+            else document.getElementById('emptyState').classList.remove('hidden');
+            
+            updateClock();
+            setInterval(updateClock, 1000);
+        };
+
+        function updateClock() {
+            const el = document.getElementById('digitalClock');
+            if(el) el.innerText = new Date().toLocaleTimeString('id-ID', { hour12: false });
+        }
+
+        function saveApi() {
+            const url = document.getElementById('apiInput').value.trim();
+            if(!url.includes('google.com')) {
+                return Swal.fire({ icon: 'error', title: 'URL Tidak Valid', text: 'Gunakan URL Web App dari Google Apps Script.', customClass: {popup: 'rounded-[35px]'} });
+            }
+            localStorage.setItem('RM_API_URL', url);
+            API_URL = url;
+            Swal.fire({ icon: 'success', title: 'Berhasil Disimpan', text: 'Sistem siap mensinkronkan data.', timer: 2000, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+            syncData();
+        }
+
+        async function syncData() {
+            if(!API_URL) return;
+            try {
+                const res = await fetch(`${API_URL}?action=getData`);
+                const data = await res.json();
+                DB = data;
+                renderMenuTable();
+                document.getElementById('emptyState').classList.add('hidden');
+            } catch (e) { 
+                console.error(e);
+                document.getElementById('emptyState').classList.remove('hidden');
+            }
+        }
+
+        function renderMenuTable() {
+            const tbody = document.getElementById('menuTableBody');
+            document.getElementById('menuCount').innerText = DB.menu.length;
+            
+            tbody.innerHTML = DB.menu.map(m => `
+                <tr class="hover:bg-slate-50 transition-all group">
+                    <td class="p-6 font-mono text-[10px] text-slate-400">#${m.ID}</td>
+                    <td class="p-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 flex-shrink-0 shadow-sm">
+                                <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            </div>
+                            <div class="min-w-0">
+                                <p class="font-black text-slate-800 uppercase text-xs truncate">${m.Name}</p>
+                                <p class="text-[9px] font-bold text-violet-500 uppercase tracking-wider">${m.Category}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-6">
+                        <span class="font-black text-slate-700 text-sm tracking-tighter italic">Rp ${Number(m.Price).toLocaleString()}</span>
+                    </td>
+                    <td class="p-6">
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button onclick="deleteMenu('${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function openMenuForm(id = null) {
+            const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Math.floor(Date.now()/1000).toString().slice(-4), Name:'', Category:'Makanan', Price:0, Description:'', Img:'' };
+            
+            const { value: form } = await Swal.fire({
+                title: `<span class="italic font-black text-2xl tracking-tighter uppercase">${id ? 'Ubah Menu' : 'Menu Baru'}</span>`,
+                html: `
+                    <div class="space-y-4 p-2 text-left">
+                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Nama Masakan</label>
+                        <input id="m-name" class="admin-input mt-1" placeholder="Contoh: Ayam Bakar" value="${item.Name}"></div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Harga (Rp)</label>
+                            <input id="m-price" type="number" class="admin-input mt-1" placeholder="25000" value="${item.Price}"></div>
+                            <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Kategori</label>
+                            <select id="m-cat" class="admin-input mt-1">
+                                <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>
+                                <option value="Minuman" ${item.Category === 'Minuman' ? 'selected' : ''}>Minuman</option>
+                                <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
+                            </select></div>
+                        </div>
+                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">URL Gambar (Unsplash)</label>
+                        <input id="m-img" class="admin-input mt-1" placeholder="Paste link gambar di sini..." value="${item.Img}"></div>
+                    </div>`,
+                showCancelButton: true,
+                confirmButtonColor: '#7c3aed',
+                confirmButtonText: 'SIMPAN DATA',
+                cancelButtonText: 'BATAL',
+                customClass: { popup: 'rounded-[50px] p-6', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic', cancelButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
+                preConfirm: () => {
+                    const n = document.getElementById('m-name').value;
+                    const p = document.getElementById('m-price').value;
+                    if(!n || !p) return Swal.showValidationMessage('Nama & Harga wajib diisi!');
+                    return {
+                        action: 'updateMenu',
+                        id: item.ID,
+                        name: n,
+                        category: document.getElementById('m-cat').value,
+                        price: p,
+                        description: item.Description || 'Menu autentik RM Pangkalan',
+                        img: document.getElementById('m-img').value || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c',
+                        rating: '5.0', available: true
+                    };
+                }
+            });
+            
+            if(form) {
+                Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+                try {
+                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) });
+                    Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+                    syncData();
+                } catch (e) { Swal.fire('Gagal', 'Terjadi kesalahan jaringan', 'error'); }
+            }
+        }
+
+        async function deleteMenu(id) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'Hapus Menu?',
+                text: "Data yang dihapus tidak bisa dikembalikan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                customClass: { popup: 'rounded-[40px]' }
+            });
+            
+            if(isConfirmed) {
+                Swal.fire({ title: 'Menghapus...', didOpen: () => Swal.showLoading() });
+                try {
+                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'deleteMenu', id: id }) });
+                    syncData();
+                    Swal.fire({ icon: 'success', title: 'Terhapus!', timer: 1500, showConfirmButton: false });
+                } catch (e) { Swal.fire('Gagal', 'Error database', 'error'); }
+            }
+        }
+    </script>
+</body>
+</html>
