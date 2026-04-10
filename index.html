@@ -102,6 +102,10 @@
         }
 
         .swal-title-custom { font-size: 32px; font-weight: 800; font-style: italic; letter-spacing: -1.5px; color: #1e293b; }
+
+        .receipt-container { background: #fff; padding: 25px; font-family: 'Courier New', Courier, monospace; color: #333; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); border-radius: 10px; }
+        .receipt-dashed { border-top: 2px dashed #ddd; margin: 15px 0; }
+        .receipt-qr { width: 120px; height: 120px; margin: 20px auto; border: 5px solid #fff; outline: 1px solid #eee; }
     </style>
 </head>
 <body class="overflow-hidden">
@@ -141,6 +145,10 @@
                     <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Pesan rasa autentik RM Pangkalan</p>
                 </div>
                 <div class="flex items-center gap-4">
+                    <div id="searchBox" class="relative hidden md:block">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300"></i>
+                        <input type="text" id="searchInput" placeholder="Cari hidangan..." class="bg-white h-12 rounded-2xl pl-12 pr-4 text-sm shadow-sm border-none outline-none focus:ring-2 focus:ring-violet-200">
+                    </div>
                     <button onclick="syncData(true)" class="p-3 bg-white rounded-xl shadow-sm text-violet-600 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
                     <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border-4 border-white cursor-pointer hover:border-violet-100 transition-colors" onclick="changeName()">
                         <img id="userAvatar" src="https://ui-avatars.com/api/?name=Guest&background=7c3aed&color=fff" class="w-full h-full object-cover">
@@ -152,7 +160,7 @@
                 <section class="bg-slate-900 h-48 rounded-[40px] relative overflow-hidden mb-10 group shadow-2xl">
                     <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
                     <div class="relative z-10 p-10 h-full flex flex-col justify-center max-w-md text-white">
-                        <h3 class="text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">DISKON KHUSUS</span></h3>
+                        <h3 class="text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">PANGKALAN20</span></h3>
                     </div>
                 </section>
 
@@ -186,9 +194,10 @@
                 <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 px-1">Order Menu</h5>
             </div>
             <div id="cartItems" class="flex-1 px-8 overflow-y-auto no-scrollbar space-y-4"></div>
-            <div class="p-8 bg-slate-50 border-t">
-                <div class="flex justify-between items-center mb-6">
-                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest">Total Tagihan</span>
+            <div class="p-8 bg-slate-50 border-t space-y-2">
+                <div class="flex justify-between items-center px-1"><span class="text-[10px] font-bold text-slate-400 uppercase">Service Fee</span><span class="text-[10px] font-black text-slate-400">Rp 1.500</span></div>
+                <div class="flex justify-between items-center mb-6 pt-2 border-t border-slate-100">
+                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest">Total</span>
                     <span id="totalCart" class="text-3xl font-black text-violet-600 tracking-tighter">Rp 0</span>
                 </div>
                 <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-2xl shadow-violet-200 active:scale-95 transition-all text-xs tracking-widest uppercase italic">Checkout Pesanan</button>
@@ -225,12 +234,22 @@
         let selectedService = 'Dine-in';
         let myOrderIds = JSON.parse(localStorage.getItem('MY_ORDERS') || '[]');
         let syncInterval;
+        let searchTimeout;
 
         window.onload = () => {
             lucide.createIcons();
             syncData();
             updateHeaderUI();
             startPolling(15000);
+            
+            const searchInput = document.getElementById('searchInput');
+            if(searchInput) {
+                searchInput.oninput = (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => renderMenu(e.target.value), 300);
+                };
+            }
+
             setTimeout(() => { 
                 const splash = document.getElementById('splashScreen');
                 if(splash) splash.style.opacity = '0'; 
@@ -288,13 +307,21 @@
             
             startPolling(tab === 'track' ? 6000 : 15000);
             if(tab === 'track') renderTracking();
+            else renderMenu();
             lucide.createIcons();
         }
 
-        function renderMenu() {
+        function renderMenu(keyword = '') {
             const grid = document.getElementById('menuGrid');
             if(!grid || activeTab !== 'menu' || !DB.menu) return;
-            grid.innerHTML = DB.menu.filter(m => activeCategory === 'All' || m.Category === activeCategory).map((m, idx) => `
+            
+            const filtered = DB.menu.filter(m => {
+                const matchesCat = activeCategory === 'All' || m.Category === activeCategory;
+                const matchesKeyword = m.Name.toLowerCase().includes(keyword.toLowerCase());
+                return matchesCat && matchesKeyword;
+            });
+
+            grid.innerHTML = filtered.map((m, idx) => `
                 <div class="food-card bg-white p-5 rounded-[35px] shadow-sm border border-slate-50 flex flex-col animate-pop" style="animation-delay: ${idx * 0.05}s">
                     <div onclick="showDetail('${m.ID}')" class="w-full aspect-[4/3] rounded-[25px] overflow-hidden mb-5 relative group bg-slate-100 img-skeleton">
                         <img src="${m.Img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onload="this.parentElement.classList.remove('img-skeleton'); this.style.opacity='1'" style="opacity:0" onerror="this.src='https://placehold.co/400x300?text=RM+Pangkalan'">
@@ -316,7 +343,7 @@
             flyer.style.left = rect.left + 'px'; flyer.style.top = rect.top + 'px';
             document.body.appendChild(flyer);
             
-            const target = document.getElementById('locationLabel'); // Target ke area meja/lokasi di sidebar
+            const target = document.getElementById('locationLabel');
             if(target) {
                 const tRect = target.getBoundingClientRect();
                 setTimeout(() => { flyer.style.left = (tRect.left + tRect.width/2) + 'px'; flyer.style.top = (tRect.top + tRect.height/2) + 'px'; flyer.style.transform = 'scale(0.1) rotate(360deg)'; flyer.style.opacity = '0'; }, 10);
@@ -326,7 +353,14 @@
 
         function addToCart(id) { 
             const item = DB.menu.find(m => m.ID == id); 
-            if (item) { cart.push({...item, cartId: Date.now()}); updateCartUI(); if(Swal.isVisible()) renderReview(); } 
+            if (item) { 
+                cart.push({...item, cartId: Date.now()}); 
+                updateCartUI(); 
+                if(Swal.isVisible()) renderReview(); 
+                
+                const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000, timerProgressBar: true });
+                Toast.fire({ icon: 'success', title: 'Menu ditambahkan' });
+            } 
         }
 
         function removeFromCartOne(id) { 
@@ -361,8 +395,9 @@
                 </div>`).join('');
             
             const sub = cart.reduce((s, i) => s + Number(i.Price), 0);
-            tot.innerText = `Rp ${sub.toLocaleString()}`;
-            if(mt) mt.innerText = `Rp ${sub.toLocaleString()}`;
+            const totalWithService = sub + 1500;
+            tot.innerText = `Rp ${totalWithService.toLocaleString()}`;
+            if(mt) mt.innerText = `Rp ${totalWithService.toLocaleString()}`;
             if(mc) mc.innerText = cart.length;
             lucide.createIcons();
         }
@@ -372,7 +407,8 @@
             if(!container) return; 
 
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
-            const total = cart.reduce((s, i) => s + Number(i.Price), 0);
+            const subtotalMenu = cart.reduce((s, i) => s + Number(i.Price), 0);
+            const total = subtotalMenu + 1500;
             const name = document.getElementById('inputName')?.value || localStorage.getItem('LAST_CUST_NAME') || '';
             const table = document.getElementById('inputTable')?.value || '';
             
@@ -395,7 +431,7 @@
 
                     <div class="space-y-3 max-h-[160px] overflow-y-auto no-scrollbar py-1">
                         ${Object.values(grouped).map(i => `
-                            <div class="order-card-row">
+                            <div class="order-card-row shadow-sm">
                                 <div class="qty-pill">
                                     <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-sm">-</button>
                                     <span class="text-xs font-black">x${i.qty}</span>
@@ -422,7 +458,7 @@
                     </div>
 
                     <div class="pt-6 border-t flex justify-between items-center">
-                        <span class="text-[11px] font-black text-slate-400 uppercase italic">TOTAL PESANAN</span>
+                        <span class="text-[11px] font-black text-slate-400 uppercase italic">TOTAL + LAYANAN</span>
                         <span class="text-4xl font-black text-violet-600 tracking-tighter">Rp ${total.toLocaleString()}</span>
                     </div>
 
@@ -455,7 +491,7 @@
         async function processFinalOrder(u) {
             Swal.fire({ title: 'Kirim Pesanan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             const oid = 'ORD-' + Math.floor(Date.now()/1000).toString().slice(-6);
-            const sub = cart.reduce((s,i)=>s+Number(i.Price),0);
+            const sub = cart.reduce((s,i)=>s+Number(i.Price),0) + 1500;
             try {
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'addOrder', id: oid, items: cart.map(i => i.Name).join(', '), total: sub, role: u.n, type: `${selectedService} [${selectedPayment}]` }) });
                 myOrderIds.unshift(oid); localStorage.setItem('MY_ORDERS', JSON.stringify(myOrderIds));
@@ -472,7 +508,7 @@
             list.innerHTML = myOrders.reverse().map(trx => {
                 let sid = trx.Status === 'Pending' ? 1 : (trx.Status === 'Cooking' ? 2 : 3);
                 return `<div onclick="showReceipt('${trx.ID}')" class="bg-white p-6 rounded-[40px] shadow-sm border border-slate-100 mb-6 animate-pop cursor-pointer">
-                    <div class="flex justify-between items-center mb-6"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Order #${trx.ID.slice(-4)}</span><div class="px-4 py-1 rounded-full bg-violet-50 text-violet-600 text-[9px] font-black italic">PROSES</div></div>
+                    <div class="flex justify-between items-center mb-6"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Order #${trx.ID.slice(-4)}</span><div class="px-4 py-1 rounded-full bg-violet-50 text-violet-600 text-[9px] font-black italic uppercase">Lihat Receipt</div></div>
                     <div class="flex gap-2 mb-6">${['Pending','Cooking','Ready'].map((s,i)=>`<div class="track-step ${i+1<=sid?'active':''}"><div class="track-line ${i===2?'hidden':''} ${i+1<sid?'!bg-violet-600':''}"></div><div class="track-circle"></div><span class="text-[8px] font-black uppercase mt-1 opacity-50 ${i+1<=sid?'opacity-100':''}">${s}</span></div>`).join('')}</div>
                     <p class="text-xs font-bold text-slate-700 line-clamp-1 italic">${trx.Items}</p></div>`;
             }).join('');
@@ -481,23 +517,73 @@
 
         function showReceipt(id) {
             const trx = DB.transactions.find(t => t.ID === id); if(!trx) return;
-            Swal.fire({ title: 'Receipt Digital', html: `<div class="text-left font-mono text-xs p-6 bg-slate-50 rounded-2xl"><div class="flex justify-between"><span>ID:</span><span>${trx.ID}</span></div><hr class="my-3 border-dashed"><div>${trx.Items}</div><hr class="my-3 border-dashed"><div class="flex justify-between font-bold text-violet-600 text-lg"><span>TOTAL:</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div></div>`, confirmButtonText: 'OKE', confirmButtonColor: '#7c3aed' });
+            const appUrl = window.location.href;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(appUrl)}`;
+
+            Swal.fire({ 
+                title: 'Digital Receipt', 
+                html: `
+                <div class="receipt-container text-left font-mono text-[11px]">
+                    <div class="text-center font-bold text-base mb-1">RM PANGKALAN</div>
+                    <div class="text-center mb-4 text-[9px]">Jl. Raya Pangkalan No. 123<br>Telp: (021) 12345678</div>
+                    
+                    <div class="flex justify-between uppercase"><span>ORDER ID:</span><span>${trx.ID}</span></div>
+                    <div class="flex justify-between uppercase"><span>TANGGAL:</span><span>${new Date(trx.Date).toLocaleString('id-ID')}</span></div>
+                    
+                    <div class="receipt-dashed"></div>
+                    <div>
+                        ${trx.Items.split(',').map(i => `
+                            <div class="flex justify-between mb-1">
+                                <span class="max-w-[150px] overflow-hidden truncate italic uppercase">${i.trim()}</span>
+                                <span>x1</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="receipt-dashed"></div>
+                    
+                    <div class="flex justify-between font-bold text-sm uppercase"><span>TOTAL:</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div>
+                    
+                    <div class="text-center mt-6">
+                        <img src="${qrUrl}" class="receipt-qr" alt="QR Code">
+                        <p class="text-[8px] font-bold mt-2 uppercase tracking-tighter">Pesan lagi lewat link di atas!</p>
+                    </div>
+                    
+                    <div class="mt-4 text-center text-[9px] italic border-t pt-4">Simpan struk ini sebagai bukti pembayaran.<br>Terima kasih atas kunjungan Anda!</div>
+                </div>`, 
+                confirmButtonText: 'TUTUP', confirmButtonColor: '#7c3aed' 
+            });
         }
 
         function showDetail(id) {
             const m = DB.menu.find(x => x.ID == id); if(!m) return;
-            Swal.fire({ title: `<div class="text-2xl font-black italic tracking-tighter">${m.Name}</div>`, html: `<div class="text-left"><div class="rounded-[30px] overflow-hidden mb-6 h-48 sm:h-64"><img src="${m.Img}" class="w-full h-full object-cover"></div><p class="text-slate-500 text-sm mb-6 font-medium">${m.Description}</p><div class="text-2xl font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</div></div>`, showConfirmButton: true, confirmButtonText: 'Order', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4' } }).then((r) => { if (r.isConfirmed) addToCart(id); });
+            Swal.fire({ title: `<div class="text-2xl font-black italic tracking-tighter">${m.Name}</div>`, html: `<div class="text-left"><div class="rounded-[30px] overflow-hidden mb-6 h-48 sm:h-64"><img src="${m.Img}" class="w-full h-full object-cover"></div><p class="text-slate-500 text-sm mb-6 font-medium">${m.Description || 'Hidangan lezat khas Pangkalan.'}</p><div class="text-2xl font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</div></div>`, showConfirmButton: true, confirmButtonText: 'Tambah ke Pesanan', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4' } }).then((r) => { if (r.isConfirmed) addToCart(id); });
         }
 
         function updateHeaderUI() {
             const name = localStorage.getItem('LAST_CUST_NAME') || 'Pelanggan';
             const welcomeMsg = document.getElementById('welcomeMsg');
+            const avatar = document.getElementById('userAvatar');
             if(welcomeMsg) welcomeMsg.innerText = `Hey, ${name}`;
+            if(avatar) avatar.src = `https://ui-avatars.com/api/?name=${name}&background=7c3aed&color=fff&rounded=true`;
         }
 
-        function filterMenu(cat) { activeCategory = cat; document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.id === `cat-${cat.toLowerCase()}`)); renderMenu(); }
-        function changeName() { Swal.fire({ title: 'Nama Profil', input: 'text', confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed && r.value) { localStorage.setItem('LAST_CUST_NAME', r.value); updateHeaderUI(); } }); }
-        function changeLocation() { Swal.fire({ title: 'Pilih Meja', input: 'select', inputOptions: {'Meja 01':'Meja 01','Meja 02':'Meja 02','Area Tunggu':'Area Tunggu'}, confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed) document.getElementById('locationLabel').innerText = r.value; }); }
+        function filterMenu(cat) { 
+            activeCategory = cat; 
+            document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.id === `cat-${cat.toLowerCase()}`)); 
+            renderMenu(); 
+        }
+        
+        function changeName() { 
+            Swal.fire({ title: 'Nama Profil', input: 'text', confirmButtonColor: '#7c3aed' }).then(r => { 
+                if(r.isConfirmed && r.value) { localStorage.setItem('LAST_CUST_NAME', r.value); updateHeaderUI(); } 
+            }); 
+        }
+        
+        function changeLocation() { 
+            Swal.fire({ title: 'Pilih Meja', input: 'select', inputOptions: {'Meja 01':'Meja 01','Meja 02':'Meja 02','Area Tunggu':'Area Tunggu'}, confirmButtonColor: '#7c3aed' }).then(r => { 
+                if(r.isConfirmed) document.getElementById('locationLabel').innerText = r.value; 
+            }); 
+        }
     </script>
 </body>
 </html>
