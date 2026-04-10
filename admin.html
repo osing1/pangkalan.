@@ -50,9 +50,9 @@
             display: flex; align-items: center; justify-content: center; padding: 15px;
         }
         
-        /* State Management Classes */
-        [inert] { pointer-events: none; user-select: none; filter: blur(4px); opacity: 0.5; }
-        #loginOverlay[inert] { opacity: 0; visibility: hidden; }
+        /* Focus & Interaction Management */
+        [inert] { pointer-events: none; user-select: none; filter: blur(4px); opacity: 0.5; transition: all 0.3s; }
+        #loginOverlay[inert] { opacity: 0; visibility: hidden; pointer-events: none; }
         
         /* Modal Refinement */
         .swal2-popup.detail-modal { border-radius: 50px !important; padding: 1.25rem 0.2rem !important; width: 98% !important; max-width: 500px !important; }
@@ -86,7 +86,7 @@
                 
                 <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-4">MASUK KE PANEL</button>
             </div>
-            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest italic leading-none">Enterprise Cloud POS v7.0</p>
+            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest italic leading-none">Enterprise Cloud POS v7.1</p>
         </div>
     </div>
 
@@ -235,11 +235,11 @@
             const content = document.getElementById('mainContent');
 
             if (user) {
-                // Blur focused element to prevent aria-hidden conflicts
-                if (document.activeElement) document.activeElement.blur();
+                // Focus management: release focus before hiding
+                if (overlay.contains(document.activeElement)) document.activeElement.blur();
                 
                 overlay.classList.add('hidden');
-                overlay.setAttribute('inert', ''); // Better than aria-hidden for focus management
+                overlay.setAttribute('inert', ''); 
                 
                 sidebar.classList.remove('hidden');
                 sidebar.removeAttribute('inert');
@@ -262,6 +262,9 @@
                 if(!localStorage.getItem('RM_API_URL')) {
                     document.getElementById('apiSetupSection').classList.remove('hidden');
                 }
+
+                // Autofocus first field
+                setTimeout(() => document.getElementById('loginUser')?.focus(), 100);
             }
         }
 
@@ -280,9 +283,8 @@
             btn.disabled = true;
 
             try {
-                // Using GET to avoid complex CORS preflight issues
                 const res = await fetch(`${targetApi}?action=getData`);
-                if (!res.ok) throw new Error('CORS or Network Error');
+                if (!res.ok) throw new Error('Network Error');
                 
                 const data = await res.json();
                 const validUser = data.users.find(u => u.Username === user && u.Password === pass && u.Role === 'Owner');
@@ -301,8 +303,8 @@
             } catch (e) {
                 Swal.fire({ 
                     icon: 'warning', 
-                    title: 'Kesalahan Koneksi (CORS)', 
-                    html: `<div class="text-left text-xs leading-relaxed">Gagal menghubungi server. Pastikan:<br>1. Menu <b>Deploy</b> di Google Script set ke <b>Anyone</b>.<br>2. Klik <b>New Version</b> saat update.<br>3. URL API sudah benar.</div>`,
+                    title: 'Kesalahan Koneksi', 
+                    html: `<div class="text-left text-xs leading-relaxed">Sistem tidak dapat menghubungi API. Mohon periksa:<br>1. Akses Deploy diatur ke <b>Anyone</b>.<br>2. Klik <b>New Version</b>.<br>3. URL API sudah benar.</div>`,
                     customClass: {popup: 'rounded-[35px]'} 
                 });
             } finally {
