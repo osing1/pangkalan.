@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RM Pangkalan | Owner Center</title>
     
+    <!-- Framework & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,20 +15,25 @@
         :root { --primary: #7c3aed; --bg: #f3f4f9; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; -webkit-tap-highlight-color: transparent; }
         
+        /* Layout Sidebar */
         .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
         .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
         
+        /* Navigation */
         .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
         .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         
+        /* Cards & Tables */
         .card-pro { background: white; border-radius: 35px; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); }
         .table-header { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 20px; background: #f8fafc; }
         
+        /* Live Indicator */
         .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
         .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
 
+        /* Inputs */
         .admin-input {
             width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px;
             padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
@@ -38,42 +44,49 @@
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
+        /* Security Overlays */
         #loginOverlay {
             position: fixed; inset: 0; background: var(--primary); z-index: 10000;
             display: flex; align-items: center; justify-content: center; padding: 15px;
         }
+        
+        /* State Management Classes */
+        [inert] { pointer-events: none; user-select: none; filter: blur(4px); opacity: 0.5; }
+        #loginOverlay[inert] { opacity: 0; visibility: hidden; }
+        
+        /* Modal Refinement */
+        .swal2-popup.detail-modal { border-radius: 50px !important; padding: 1.25rem 0.2rem !important; width: 98% !important; max-width: 500px !important; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
     <!-- LOGIN SCREEN -->
-    <div id="loginOverlay" class="hidden">
+    <div id="loginOverlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
         <div class="bg-white p-8 md:p-12 rounded-[50px] shadow-2xl w-full max-w-md text-center animate-pop">
             <div class="bg-violet-100 w-20 h-20 rounded-[30px] flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="shield-check" class="text-violet-600 w-10 h-10"></i>
             </div>
-            <h2 class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Admin Access</h2>
+            <h2 id="loginTitle" class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Admin Access</h2>
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Management System RM Pangkalan</p>
             
             <div class="space-y-4">
-                <!-- API Setup if empty -->
                 <div id="apiSetupSection" class="hidden pb-4 mb-4 border-b border-dashed">
                     <p class="text-[9px] font-black text-red-500 uppercase mb-2">Konfigurasi API Diperlukan:</p>
                     <input type="text" id="loginApiUrl" placeholder="Paste URL Apps Script di sini..." class="admin-input border-red-100 bg-red-50/30">
                 </div>
 
                 <div class="text-left">
-                    <label class="text-[9px] font-black text-slate-400 uppercase ml-3">Username</label>
+                    <label for="loginUser" class="text-[9px] font-black text-slate-400 uppercase ml-3">Username</label>
                     <input type="text" id="loginUser" placeholder="Username owner" class="admin-input mt-1">
                 </div>
                 <div class="text-left">
-                    <label class="text-[9px] font-black text-slate-400 uppercase ml-3">Password</label>
+                    <label for="loginPass" class="text-[9px] font-black text-slate-400 uppercase ml-3">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="admin-input mt-1">
                 </div>
                 
                 <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-4">MASUK KE PANEL</button>
             </div>
-            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest">Enterprise Cloud POS v6.5</p>
+            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest italic leading-none">Enterprise Cloud POS v7.0</p>
         </div>
     </div>
 
@@ -81,7 +94,7 @@
     <aside id="mainSidebar" class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
         <div class="p-6 lg:p-10 z-10 flex flex-col items-center lg:items-start w-full">
             <div class="logo-box mb-14 flex flex-col items-center lg:items-start text-center lg:text-left">
-                <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1">PANGKALAN</span>
+                <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1 uppercase">Pangkalan</span>
                 <span class="text-[8px] lg:text-[10px] font-bold uppercase tracking-[3px] opacity-70 italic">Admin Center</span>
             </div>
             
@@ -110,8 +123,8 @@
     <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
         <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 bg-white/50 backdrop-blur-md">
             <div>
-                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase">Dashboard</h1>
-                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Management System</p>
+                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase tracking-tighter">Dashboard</h1>
+                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 leading-none">Enterprise Management</p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="syncData()" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
@@ -121,20 +134,20 @@
 
         <div class="flex-1 overflow-y-auto no-scrollbar p-3 md:p-6 lg:p-8 space-y-6 md:space-y-8 pb-32">
             
-            <!-- SECTION: DASHBOARD -->
+            <!-- Dashboard Section -->
             <div id="section-dashboard" class="space-y-6 animate-pop">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                     <div class="card-pro p-8 border-l-[12px] border-violet-600">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendapatan Hari Ini</p>
-                        <h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">Rp 0</h2>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Pendapatan Hari Ini</p>
+                        <h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">Rp 0</h2>
                     </div>
                     <div class="card-pro p-8 border-l-[12px] border-orange-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Pesanan</p>
-                        <h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">0</h2>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Pesanan</p>
+                        <h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">0</h2>
                     </div>
                     <div class="card-pro p-8 border-l-[12px] border-blue-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Menu Aktif</p>
-                        <h2 id="stat-menu" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">0</h2>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Menu Aktif</p>
+                        <h2 id="stat-menu" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">0</h2>
                     </div>
                 </div>
 
@@ -143,7 +156,7 @@
                         <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
                         <div>
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Cloud API Configuration</h3>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Endpoint utama sinkronisasi database</p>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 leading-none">Endpoint utama sinkronisasi database</p>
                         </div>
                     </div>
                     <div class="flex flex-col lg:flex-row gap-4">
@@ -153,7 +166,7 @@
                 </section>
             </div>
 
-            <!-- SECTION: MENU LIST -->
+            <!-- Menu Section -->
             <div id="section-menu" class="hidden animate-pop">
                 <section class="card-pro overflow-hidden">
                     <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -176,7 +189,7 @@
                 </section>
             </div>
 
-            <!-- SECTION: STAFF LIST -->
+            <!-- Staff Section -->
             <div id="section-staff" class="hidden animate-pop">
                 <section class="card-pro overflow-hidden">
                     <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -202,7 +215,6 @@
     </main>
 
     <script>
-        // URL Default jika localStorage kosong
         const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
         let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API;
         let DB = { menu: [], transactions: [], users: [] };
@@ -213,29 +225,43 @@
             checkAuth();
             updateClock();
             setInterval(updateClock, 1000);
-            
-            // Tampilkan URL saat ini di input konfigurasi
             document.getElementById('apiInput').value = API_URL;
-            
-            // Jika benar-benar baru pertama kali tanpa localStorage sama sekali, tampilkan setup (opsional)
-            if(!localStorage.getItem('RM_API_URL')) {
-                // Tetap menggunakan DEFAULT_API namun tunjukkan bahwa ini bisa diganti
-                console.log("Using Default API Integration");
-            }
         };
 
         function checkAuth() {
             const user = sessionStorage.getItem('ADMIN_AUTH');
+            const overlay = document.getElementById('loginOverlay');
+            const sidebar = document.getElementById('mainSidebar');
+            const content = document.getElementById('mainContent');
+
             if (user) {
-                document.getElementById('loginOverlay').classList.add('hidden');
-                document.getElementById('mainSidebar').classList.remove('hidden');
-                document.getElementById('mainContent').classList.remove('hidden');
+                // Blur focused element to prevent aria-hidden conflicts
+                if (document.activeElement) document.activeElement.blur();
+                
+                overlay.classList.add('hidden');
+                overlay.setAttribute('inert', ''); // Better than aria-hidden for focus management
+                
+                sidebar.classList.remove('hidden');
+                sidebar.removeAttribute('inert');
+                
+                content.classList.remove('hidden');
+                content.removeAttribute('inert');
+                
                 document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
                 syncData();
             } else {
-                document.getElementById('loginOverlay').classList.remove('hidden');
-                document.getElementById('mainSidebar').classList.add('hidden');
-                document.getElementById('mainContent').classList.add('hidden');
+                overlay.classList.remove('hidden');
+                overlay.removeAttribute('inert');
+                
+                sidebar.classList.add('hidden');
+                sidebar.setAttribute('inert', '');
+                
+                content.classList.add('hidden');
+                content.setAttribute('inert', '');
+                
+                if(!localStorage.getItem('RM_API_URL')) {
+                    document.getElementById('apiSetupSection').classList.remove('hidden');
+                }
             }
         }
 
@@ -243,23 +269,25 @@
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
             const tempApi = document.getElementById('loginApiUrl')?.value.trim();
-            
-            // Gunakan API yang sudah ada atau yang baru dimasukkan di login screen
             const targetApi = tempApi || API_URL;
             
             if(!targetApi || !targetApi.includes('google.com')) {
-                return Swal.fire('Konfigurasi Gagal', 'Masukkan URL Google Apps Script yang valid terlebih dahulu.', 'error');
+                return Swal.fire('Error', 'Masukkan URL API yang valid.', 'error');
             }
 
-            document.getElementById('loginBtn').innerText = 'MEMVERIFIKASI...';
+            const btn = document.getElementById('loginBtn');
+            btn.innerText = 'MEMVERIFIKASI...';
+            btn.disabled = true;
+
             try {
+                // Using GET to avoid complex CORS preflight issues
                 const res = await fetch(`${targetApi}?action=getData`);
-                const data = await res.json();
+                if (!res.ok) throw new Error('CORS or Network Error');
                 
+                const data = await res.json();
                 const validUser = data.users.find(u => u.Username === user && u.Password === pass && u.Role === 'Owner');
                 
                 if (validUser) {
-                    // Update API_URL jika baru dimasukkan
                     if(tempApi) {
                         localStorage.setItem('RM_API_URL', tempApi);
                         API_URL = tempApi;
@@ -268,12 +296,18 @@
                     sessionStorage.setItem('ADMIN_AUTH', user);
                     checkAuth();
                 } else {
-                    Swal.fire('Gagal', 'Username/Password salah atau Anda tidak memiliki akses Owner.', 'error');
+                    Swal.fire({ icon: 'error', title: 'Login Gagal', text: 'Kredensial salah atau role bukan Owner.', customClass: {popup: 'rounded-[35px]'} });
                 }
             } catch (e) {
-                Swal.fire('Koneksi Gagal', 'Sistem tidak dapat menghubungi server. Pastikan URL API benar.', 'error');
+                Swal.fire({ 
+                    icon: 'warning', 
+                    title: 'Kesalahan Koneksi (CORS)', 
+                    html: `<div class="text-left text-xs leading-relaxed">Gagal menghubungi server. Pastikan:<br>1. Menu <b>Deploy</b> di Google Script set ke <b>Anyone</b>.<br>2. Klik <b>New Version</b> saat update.<br>3. URL API sudah benar.</div>`,
+                    customClass: {popup: 'rounded-[35px]'} 
+                });
             } finally {
-                document.getElementById('loginBtn').innerText = 'MASUK KE PANEL';
+                btn.innerText = 'MASUK KE PANEL';
+                btn.disabled = false;
             }
         }
 
@@ -290,10 +324,12 @@
         function switchTab(tab) {
             activeTab = tab;
             ['dashboard', 'menu', 'staff'].forEach(t => {
-                document.getElementById(`section-${t}`).classList.toggle('hidden', t !== tab);
-                document.getElementById(`nav-${t}`).classList.toggle('active', t === tab);
+                const section = document.getElementById(`section-${t}`);
+                const nav = document.getElementById(`nav-${t}`);
+                if(section) section.classList.toggle('hidden', t !== tab);
+                if(nav) nav.classList.toggle('active', t === tab);
             });
-            document.getElementById('tabTitle').innerText = tab;
+            document.getElementById('tabTitle').innerText = tab.toUpperCase();
             lucide.createIcons();
         }
 
@@ -326,20 +362,24 @@
 
         function renderMenuTable() {
             const tbody = document.getElementById('menuTableBody');
+            if(!tbody) return;
             tbody.innerHTML = DB.menu.map(m => `
                 <tr class="hover:bg-slate-50 transition-all">
                     <td class="p-6 font-mono text-[10px] text-slate-400 uppercase tracking-tighter">#${m.ID}</td>
                     <td class="p-6">
                         <div class="flex items-center gap-4">
                             <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100'}" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-100" onerror="this.src='https://placehold.co/100?text=Menu'">
-                            <div><p class="font-black text-slate-800 text-xs uppercase">${m.Name}</p><p class="text-[9px] font-bold text-violet-500 uppercase">${m.Category}</p></div>
+                            <div class="min-w-0">
+                                <p class="font-black text-slate-800 text-xs uppercase truncate italic leading-none">${m.Name}</p>
+                                <p class="text-[9px] font-bold text-violet-500 uppercase tracking-widest mt-1 leading-none">${m.Category}</p>
+                            </div>
                         </div>
                     </td>
                     <td class="p-6 font-black text-slate-700 text-sm italic tracking-tighter">Rp ${Number(m.Price).toLocaleString()}</td>
                     <td class="p-6">
                         <div class="flex gap-2 justify-end">
-                            <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                            <button onclick="deleteData('Menu', '${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button onclick="deleteData('Menu', '${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -349,6 +389,7 @@
 
         function renderStaffTable() {
             const tbody = document.getElementById('staffTableBody');
+            if(!tbody) return;
             tbody.innerHTML = DB.users.map(u => `
                 <tr class="hover:bg-slate-50 transition-all">
                     <td class="p-6 font-black text-slate-800 text-xs uppercase italic tracking-widest">${u.Username}</td>
@@ -392,15 +433,15 @@
                     <input id="m-name" class="admin-input" placeholder="Nama Menu" value="${item.Name}">
                     <input id="m-price" type="number" class="admin-input" placeholder="Harga" value="${item.Price}">
                     <select id="m-cat" class="admin-input">
-                        <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>https://github.com/osing1/pangkalan./blob/main/admin.html
+                        <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>
                         <option value="Minuman" ${item.Category === 'Minuman' ? 'selected' : ''}>Minuman</option>
                         <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
                     </select>
-                    <input id="m-img" class="admin-input" placeholder="URL Gambar Unsplash" value="${item.Img}">
+                    <input id="m-img" class="admin-input" placeholder="URL Gambar (Unsplash/Imgur)" value="${item.Img}">
                 </div>`,
                 showCancelButton: true, confirmButtonColor: '#7c3aed',
                 customClass: { popup: 'rounded-[50px] p-6', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
-                preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, img: document.getElementById('m-img').value, description: item.Description || 'RM Pangkalan Signature', rating: '5.0', available: true })
+                preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, img: document.getElementById('m-img').value, description: item.Description || 'Cita rasa khas Pangkalan', rating: '5.0', available: true })
             });
             if(form) {
                 Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading() });
