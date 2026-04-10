@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodMeal | Cashier POS System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        :root { --primary: #7c3aed; --bg: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; }
+        
+        .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; }
+        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        .nav-item:hover, .nav-item.active { color: white; background: rgba(255,255,255,0.1); }
+        
+        .order-card { background: white; border-radius: 35px; border: 1.5px solid #f1f5f9; transition: 0.3s; }
+        .order-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(124, 58, 237, 0.08); }
+        
+        .status-badge { padding: 6px 14px; border-radius: 12px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-unpaid { background: #fef2f2; color: #ef4444; }
+        .status-paid { background: #f0fdf4; color: #16a34a; }
+        
+        .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
+        .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .receipt-container { background: #fff; padding: 20px; font-family: 'Courier New', Courier, monospace; border-radius: 10px; color: #000; }
+        .receipt-dashed { border-top: 2px dashed #ddd; margin: 12px 0; }
+    </style>
+</head>
+<body class="overflow-hidden flex h-screen">
+
+    <!-- SIDEBAR -->
+    <aside class="hidden md:flex flex-col w-72 sidebar-purple m-4 mr-0 shadow-2xl text-white">
+        <div class="p-8">
+            <div class="bg-white/10 p-5 rounded-3xl border border-white/15 mb-10 text-center">
+                <span class="text-2xl font-black italic tracking-tighter">CASHIER.</span>
+                <p class="text-[9px] font-bold uppercase tracking-[3px] opacity-60">RM Pangkalan</p>
+            </div>
+            <nav class="space-y-4">
+                <div class="nav-item active flex items-center gap-4 p-4 font-bold"><i data-lucide="layout-dashboard"></i> Dashboard</div>
+                <div class="nav-item flex items-center gap-4 p-4 font-bold opacity-60"><i data-lucide="file-text"></i> Laporan</div>
+                <div class="nav-item flex items-center gap-4 p-4 font-bold opacity-60"><i data-lucide="settings"></i> Pengaturan</div>
+            </nav>
+        </div>
+        <div class="mt-auto p-8">
+            <div class="bg-white/10 p-5 rounded-2xl border border-white/10 w-full">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="live-dot"></div>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-violet-100">POS Online</span>
+                </div>
+                <div id="digitalClock" class="text-xl font-black tracking-widest">00:00:00</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <!-- Header -->
+        <header class="h-24 px-8 flex items-center justify-between flex-shrink-0 bg-white border-b border-slate-100">
+            <div>
+                <h1 class="text-2xl font-black text-slate-800 italic leading-none">Manajemen Kasir</h1>
+                <p id="todayDate" class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">10 April 2026</p>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Pendapatan Hari Ini</p>
+                    <h3 id="todayRevenue" class="text-xl font-black text-violet-600 tracking-tighter">Rp 0</h3>
+                </div>
+                <button onclick="fetchData()" class="p-3 bg-slate-100 rounded-2xl text-slate-500 active:rotate-180 transition-all"><i data-lucide="refresh-cw"></i></button>
+                <div class="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center text-white font-black">KA</div>
+            </div>
+        </header>
+
+        <!-- Orders Grid -->
+        <div class="flex-1 overflow-y-auto no-scrollbar p-8">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="text-sm font-black text-slate-400 uppercase tracking-[2px]">Pesanan Masuk</h2>
+                <div class="flex gap-2">
+                    <span class="bg-white border px-4 py-2 rounded-full text-[10px] font-black">Smua</span>
+                    <span class="bg-violet-600 text-white px-4 py-2 rounded-full text-[10px] font-black shadow-lg">Belum Bayar</span>
+                </div>
+            </div>
+            
+            <div id="cashierGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
+                <!-- Data akan dimuat di sini -->
+                <div class="col-span-full py-32 text-center opacity-30 italic">Menghubungkan ke database...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let transactions = [];
+
+        window.onload = () => {
+            lucide.createIcons();
+            fetchData();
+            setInterval(fetchData, 15000);
+            updateClock();
+            setInterval(updateClock, 1000);
+            document.getElementById('todayDate').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        };
+
+        function updateClock() {
+            const el = document.getElementById('digitalClock');
+            if(el) el.innerText = new Date().toLocaleTimeString('id-ID', { hour12: false });
+        }
+
+        async function fetchData() {
+            try {
+                const res = await fetch(`${API_URL}?action=getData`);
+                const data = await res.json();
+                transactions = data.transactions;
+                renderCashier();
+            } catch (e) { console.error("Sync Error:", e); }
+        }
+
+        function renderCashier() {
+            const grid = document.getElementById('cashierGrid');
+            const revenueEl = document.getElementById('todayRevenue');
+            
+            // Urutkan dari yang terbaru
+            const sorted = [...transactions].reverse();
+            
+            // Hitung Pendapatan (Status Cook/Ready biasanya dianggap sudah bayar/pasti bayar)
+            const revenue = transactions.reduce((acc, curr) => acc + Number(curr.Total), 0);
+            revenueEl.innerText = `Rp ${revenue.toLocaleString()}`;
+
+            if (sorted.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-32 text-center text-slate-400 font-bold italic">Belum ada pesanan masuk.</div>`;
+                return;
+            }
+
+            grid.innerHTML = sorted.map(trx => {
+                const isPaid = trx.Status !== 'Pending';
+                const timeStr = new Date(trx.Date).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                <div class="order-card p-8 flex flex-col animate-pop">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic">Order #${trx.ID.slice(-4)}</span>
+                            <h3 class="text-lg font-extrabold text-slate-800 leading-none mt-1">${trx.Role}</h3>
+                        </div>
+                        <span class="status-badge ${isPaid ? 'status-paid' : 'status-unpaid'}">${trx.Status === 'Pending' ? 'Belum Bayar' : 'Dibayar'}</span>
+                    </div>
+
+                    <div class="flex-1 mb-8">
+                        <p class="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-2">Item Masakan:</p>
+                        <p class="text-xs font-bold text-slate-600 leading-relaxed uppercase italic">${trx.Items}</p>
+                        <div class="mt-4 flex items-center justify-between pt-4 border-t border-slate-50">
+                            <span class="text-[10px] font-black text-slate-400 uppercase italic">${trx.Type}</span>
+                            <span class="text-[10px] font-black text-slate-400">${timeStr}</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-6 border-t border-slate-100 flex flex-col gap-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-black text-slate-400 uppercase italic">Total</span>
+                            <span class="text-xl font-black text-violet-600 tracking-tighter">Rp ${Number(trx.Total).toLocaleString()}</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="showReceipt('${trx.ID}')" class="p-4 bg-slate-100 rounded-2xl hover:bg-slate-200 transition-all"><i data-lucide="printer" class="w-4 h-4 text-slate-600"></i></button>
+                            ${trx.Status === 'Pending' ? `
+                                <button onclick="confirmPayment('${trx.ID}')" class="flex-1 py-4 bg-violet-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-violet-200 active:scale-95 transition-all">Konfirmasi Bayar</button>
+                            ` : `
+                                <button disabled class="flex-1 py-4 bg-slate-100 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest cursor-not-allowed">Lunas</button>
+                            `}
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        async function confirmPayment(id) {
+            const { isConfirmed } = await Swal.fire({
+                title: 'Konfirmasi Bayar',
+                text: `Selesaikan pembayaran pesanan #${id.slice(-4)}?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#7c3aed',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Sudah Bayar!',
+                customClass: { popup: 'rounded-[40px]' }
+            });
+
+            if (isConfirmed) {
+                Swal.fire({ title: 'Memproses...', didOpen: () => Swal.showLoading() });
+                try {
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify({ action: 'updateOrderStatus', id: id, status: 'Cooking' })
+                    });
+                    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Pesanan dikirim ke dapur!', timer: 1500 });
+                    fetchData();
+                } catch (e) { Swal.fire('Gagal', 'Kesalahan database.', 'error'); }
+            }
+        }
+
+        function showReceipt(id) {
+            const trx = transactions.find(t => t.ID === id);
+            if(!trx) return;
+            const appUrl = window.location.href;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(appUrl)}`;
+
+            Swal.fire({
+                title: 'Struk POS',
+                html: `
+                <div class="receipt-container text-left">
+                    <div class="text-center font-black text-xl mb-1 italic">RM PANGKALAN</div>
+                    <div class="text-center text-[10px] mb-4">Jl. Raya Pangkalan No. 123<br>Telp: (021) 12345678</div>
+                    <div class="flex justify-between text-[11px]"><span>ID: ${trx.ID}</span><span>${new Date(trx.Date).toLocaleDateString()}</span></div>
+                    <div class="receipt-dashed"></div>
+                    <div class="space-y-1">
+                        ${trx.Items.split(',').map(i => `<div class="flex justify-between text-[11px] uppercase"><span>${i.trim()}</span><span>x1</span></div>`).join('')}
+                    </div>
+                    <div class="receipt-dashed"></div>
+                    <div class="flex justify-between font-black text-base italic uppercase"><span>Total</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div>
+                    <div class="text-center mt-6">
+                        <img src="${qrUrl}" class="w-32 h-32 mx-auto mb-2 border p-1" alt="QR Code">
+                        <p class="text-[9px] font-bold uppercase tracking-tighter">Scan untuk Pesan Kembali</p>
+                    </div>
+                    <div class="mt-4 text-center text-[10px] italic pt-4 border-t uppercase font-bold text-slate-400">Terima Kasih</div>
+                </div>`,
+                confirmButtonText: 'CETAK STRUK',
+                confirmButtonColor: '#7c3aed',
+                customClass: { popup: 'rounded-[30px]' }
+            });
+        }
+    </script>
+</body>
+</html>
