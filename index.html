@@ -21,212 +21,224 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1f2937; -webkit-tap-highlight-color: transparent; }
         
         #splashScreen { 
-            position: fixed; inset: 0; background: var(--primary); z-index: 5000; 
+            position: fixed; inset: 0; background: var(--primary); z-index: 9000; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
 
+        /* --- SIDEBAR PRO DESIGN --- */
         .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
-        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 15px; }
-        .nav-item:hover { color: white; background: rgba(255,255,255,0.1); }
-        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
+        
+        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         
         .cat-card { 
-            background: white; border-radius: 20px; padding: 16px; min-width: 90px; 
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            background: white; border-radius: 22px; padding: 12px; min-width: 85px; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
             cursor: pointer; transition: 0.3s; border: 2px solid transparent;
         }
         .cat-card.active { border-color: var(--primary); background: #fdfbff; }
-        .cat-card .icon-box { background: #f3f4f6; border-radius: 12px; padding: 8px; transition: 0.3s; }
+        .cat-card .icon-box { background: #f3f4f6; border-radius: 14px; padding: 10px; transition: 0.3s; }
         .cat-card.active .icon-box { background: var(--primary); color: white; }
         
-        .food-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; overflow: hidden; }
-        .food-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.1); }
+        .food-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; overflow: hidden; border: 1px solid #f1f5f9; background: white; border-radius: 35px; }
+        .food-card:hover { transform: translateY(-8px); box-shadow: 0 25px 35px -10px rgba(124, 58, 237, 0.15); }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         
-        #mobileCart { box-shadow: 0 -10px 30px rgba(0,0,0,0.15); transform: translateY(150%); transition: transform 0.5s; z-index: 100; }
-        #mobileCart.active { transform: translateY(0); }
+        /* --- SIDE DRAWER --- */
+        #cartDrawer { transition: visibility 0.3s; visibility: hidden; }
+        #cartDrawer.active { visibility: visible; }
+        #drawerOverlay { transition: opacity 0.3s ease; opacity: 0; }
+        #cartDrawer.active #drawerOverlay { opacity: 1; }
+        #drawerContent { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); }
+        #cartDrawer.active #drawerContent { transform: translateX(0); }
 
-        .fly-item {
-            position: fixed; z-index: 4000; pointer-events: none;
-            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: white; width: 45px; height: 45px; border-radius: 50%;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: center;
+        /* --- MODERN PRO MODAL --- */
+        .swal2-popup.detail-modal { 
+            border-radius: 50px !important; 
+            padding: 1.25rem 0.2rem !important; 
+            width: 98% !important; 
+            max-width: 500px !important; 
         }
 
-        .swal2-popup.detail-modal { border-radius: 50px !important; padding: 2.5rem !important; width: 95% !important; max-width: 550px !important; }
-        
+        .checkout-input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px 18px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; }
+        .checkout-input-pro:focus { border-color: var(--primary); background: white; }
+
         .service-option, .payment-option {
-            cursor: pointer; border-radius: 22px; background: #fff; border: 2px solid #f1f5f9;
-            transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px;
+            cursor: pointer; border-radius: 20px; background: #fff; border: 2.5px solid #f1f5f9;
+            transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px;
         }
-        .service-option.active, .payment-option.active { border-color: #7c3aed; background-color: #fdfbff; box-shadow: 0 8px 20px -5px rgba(124, 58, 237, 0.15); }
+        .service-option.active, .payment-option.active { border-color: #7c3aed; background-color: #fdfbff; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.1); }
 
         .order-card-row {
-            background: #fff; border-radius: 25px; padding: 14px 20px; border: 1px solid #f1f5f9;
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+            background: #fff; border-radius: 22px; padding: 10px 14px; border: 1.5px solid #f1f5f9;
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 8px;
         }
 
-        .qty-pill {
-            background: #f8fafc; border-radius: 18px; border: 1px solid #e2e8f0;
-            display: flex; align-items: center; gap: 12px; padding: 8px 14px;
+        .qty-pill-small {
+            background: #f8fafc; border-radius: 14px; border: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 8px; padding: 6px 10px; flex-shrink: 0;
         }
 
-        .checkout-input {
-            width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 25px;
-            padding: 18px 24px; font-size: 15px; outline: none; transition: 0.2s;
-            font-weight: 600; color: #1e293b;
-        }
-        .checkout-input:focus { border-color: #7c3aed; background: white; box-shadow: 0 0 0 5px rgba(124, 58, 237, 0.05); }
-
-        .track-step { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; }
-        .track-line { position: absolute; height: 3px; width: 100%; background: #e5e7eb; top: 12px; left: 50%; z-index: 0; }
-        .track-circle { width: 26px; height: 26px; border-radius: 50%; background: #e5e7eb; border: 4px solid white; z-index: 10; position: relative; transition: 0.4s; }
-        .track-step.active .track-circle { background: var(--primary); box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.2); }
-        .track-step.active .track-line { background: var(--primary); }
-
-        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; position: relative; }
+        .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
         .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
 
-        .img-skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; }
-        @keyframes skeleton-pulse { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+        .skeleton { background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%); background-size: 200% 100%; animation: skeleton-pulse 1.5s infinite; }
 
-        .error-box {
-            background: #fef2f2; border: 1px solid #fee2e2; border-radius: 20px;
-            padding: 16px; display: flex; align-items: center; gap: 12px;
-            color: #ef4444; font-size: 14px; font-weight: 700; margin-top: 20px;
+        /* --- TRACKING UI --- */
+        .track-card {
+            background: #fff; border-radius: 35px; padding: 24px; border: none;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.04); margin-bottom: 16px;
         }
+        .track-step-container { display: flex; align-items: center; justify-content: space-between; margin: 20px 0; }
+        .track-step { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; z-index: 10; }
+        .track-line { position: absolute; height: 3px; width: 100%; background: #f1f5f9; top: 12px; left: 50%; z-index: 0; }
+        .track-circle { width: 24px; height: 24px; border-radius: 50%; background: #f1f5f9; border: 5px solid white; box-shadow: 0 0 0 1px #f1f5f9; transition: 0.4s; }
+        .track-step.active .track-circle { background: var(--primary); }
+        .track-step.active .track-line { background: var(--primary); }
+        .track-label { font-size: 9px; font-weight: 800; color: #94a3b8; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .track-step.active .track-label { color: var(--primary); }
 
-        .swal-title-custom { font-size: 32px; font-weight: 800; font-style: italic; letter-spacing: -1.5px; color: #1e293b; }
-
-        .receipt-container { background: #fff; padding: 25px; font-family: 'Courier New', Courier, monospace; color: #333; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); border-radius: 10px; }
-        .receipt-dashed { border-top: 2px dashed #ddd; margin: 15px 0; }
-        .receipt-qr { width: 120px; height: 120px; margin: 20px auto; border: 5px solid #fff; outline: 1px solid #eee; }
+        .status-pill { padding: 6px 14px; border-radius: 14px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-pending { background: #fff7ed; color: #ea580c; }
+        .status-cooking { background: #fefce8; color: #ca8a04; }
+        .status-ready { background: #f0fdf4; color: #16a34a; }
     </style>
 </head>
 <body class="overflow-hidden">
 
     <div id="splashScreen">
         <div class="bg-white p-6 rounded-[40px] shadow-2xl animate-bounce mb-6"><i data-lucide="utensils" class="w-12 h-12 text-violet-600"></i></div>
-        <h1 class="text-white text-3xl font-black italic tracking-tighter">FoodMeal.</h1>
+        <h1 class="text-white text-3xl font-black italic tracking-tighter uppercase">FoodMeal.</h1>
         <p class="text-violet-200 text-[10px] mt-2 uppercase font-black tracking-[4px]">RM Pangkalan</p>
     </div>
 
     <div class="flex h-screen overflow-hidden">
         <!-- SIDEBAR -->
-        <aside class="hidden lg:flex flex-col w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white">
-            <div class="p-8 z-10">
-                <div class="text-3xl font-black italic mb-12">FoodMeal.</div>
-                <nav class="space-y-3">
-                    <div onclick="switchTab('menu')" id="side-nav-menu" class="nav-item active flex items-center gap-4 px-6 py-4 font-bold transition-all"><i data-lucide="layout-grid"></i> Dashboard</div>
-                    <div onclick="switchTab('track')" id="side-nav-track" class="nav-item flex items-center gap-4 px-6 py-4 font-bold transition-all"><i data-lucide="clock"></i> Lacak Pesanan</div>
-                    <a href="admin.html" class="nav-item flex items-center gap-4 px-6 py-4 font-bold opacity-70 transition-all"><i data-lucide="settings"></i> Panel Admin</a>
+        <aside class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
+            <div class="p-6 lg:p-10 z-10 flex flex-col items-center lg:items-start w-full">
+                <div class="logo-box mb-14 flex flex-col items-center lg:items-start text-center lg:text-left">
+                    <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1">PANGKALAN</span>
+                    <span class="text-[8px] lg:text-[10px] font-bold uppercase tracking-[3px] opacity-70 italic">Food Meal</span>
+                </div>
+                <nav class="space-y-6 w-full">
+                    <div onclick="switchTab('menu')" id="side-nav-menu" class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-grid"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
+                    <div onclick="switchTab('track')" id="side-nav-track" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="clock"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">History</span></div>
+                    <a href="admin.html" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold opacity-60"><i data-lucide="settings"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Admin</span></a>
                 </nav>
             </div>
-            <div class="mt-auto p-6 z-10">
-                <div class="bg-white/10 p-5 rounded-[30px] border border-white/20">
-                    <div class="flex items-center justify-between mb-2">
-                        <p class="text-[10px] font-black opacity-70 uppercase tracking-widest">Koneksi Cloud</p>
-                        <div id="statusIndicator" class="live-dot"></div>
+            
+            <div class="mt-auto p-6 z-10 flex flex-col items-center lg:items-start gap-4">
+                <div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10 w-full overflow-hidden">
+                    <div id="statusIndicator" class="live-dot flex-shrink-0"></div>
+                    <div class="flex flex-col min-w-0">
+                        <span id="syncStatus" class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">Online</span>
+                        <span id="digitalClock" class="hidden lg:block text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
                     </div>
-                    <p id="syncStatus" class="text-xs font-black italic tracking-tighter">Syncing...</p>
                 </div>
             </div>
         </aside>
 
-        <main class="flex-1 flex flex-col min-w-0 bg-transparent">
-            <header class="h-24 px-8 flex items-center justify-between flex-shrink-0">
+        <main class="flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
+            <!-- Header -->
+            <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0">
                 <div id="headerInfo">
-                    <h2 class="text-xl font-extrabold text-slate-800" id="welcomeMsg">Hey, Pelanggan!</h2>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest italic">Pesan rasa autentik RM Pangkalan</p>
+                    <h2 class="text-lg md:text-xl font-extrabold text-slate-800 leading-none mb-1" id="welcomeMsg">Hey, Pelanggan!</h2>
+                    <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest italic opacity-70">Cita rasa autentik RM Pangkalan</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <div id="searchBox" class="relative hidden md:block">
-                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300"></i>
-                        <input type="text" id="searchInput" placeholder="Cari hidangan..." class="bg-white h-12 rounded-2xl pl-12 pr-4 text-sm shadow-sm border-none outline-none focus:ring-2 focus:ring-violet-200">
-                    </div>
-                    <button onclick="syncData(true)" class="p-3 bg-white rounded-xl shadow-sm text-violet-600 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
-                    <div class="w-12 h-12 rounded-2xl overflow-hidden shadow-sm border-4 border-white cursor-pointer hover:border-violet-100 transition-colors" onclick="changeName()">
+                <div class="flex items-center gap-3">
+                    <button onclick="syncData(true)" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-50 active:scale-90 transition-all"><i data-lucide="refresh-cw" class="w-4.5 h-4.5"></i></button>
+                    <button onclick="toggleDrawer(true)" class="relative p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-50 xl:hidden">
+                        <i data-lucide="shopping-bag" class="w-4.5 h-4.5 md:w-5 md:h-5"></i>
+                        <span id="cartBadge" class="absolute -top-0.5 -right-0.5 bg-pink-500 text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
+                    </button>
+                    <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl overflow-hidden shadow-sm border-2 border-white cursor-pointer hover:border-violet-100 ml-1" onclick="changeName()">
                         <img id="userAvatar" src="https://ui-avatars.com/api/?name=Guest&background=7c3aed&color=fff" class="w-full h-full object-cover">
                     </div>
                 </div>
             </header>
 
-            <div id="tabMenu" class="flex-1 overflow-y-auto no-scrollbar px-8 pb-32">
-                <section class="bg-slate-900 h-48 rounded-[40px] relative overflow-hidden mb-10 group shadow-2xl">
-                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1000" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
-                    <div class="relative z-10 p-10 h-full flex flex-col justify-center max-w-md text-white">
-                        <h3 class="text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">PANGKALAN20</span></h3>
+            <div id="tabMenu" class="flex-1 overflow-y-auto no-scrollbar px-3 md:px-6 lg:px-8 pb-32">
+                <section class="bg-slate-900 h-36 md:h-44 lg:h-48 rounded-[35px] md:rounded-[40px] relative overflow-hidden mb-6 group shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700">
+                    <div class="relative z-10 p-6 md:p-10 h-full flex flex-col justify-center max-w-md text-white">
+                        <h3 class="text-xl md:text-3xl font-black italic leading-tight uppercase tracking-tighter">Voucher Makan.<br><span class="text-violet-400">PANGKALAN20</span></h3>
                     </div>
                 </section>
 
-                <section class="mb-10">
-                    <div class="flex gap-6 overflow-x-auto no-scrollbar pb-4" id="categoryContainer">
-                        <div onclick="filterMenu('All')" class="cat-card active" id="cat-all"><div class="icon-box"><i data-lucide="layout-grid"></i></div><span class="text-[11px] font-black uppercase">Semua</span></div>
-                        <div onclick="filterMenu('Paket')" class="cat-card" id="cat-paket"><div class="icon-box"><i data-lucide="users"></i></div><span class="text-[11px] font-black uppercase">Paket</span></div>
-                        <div onclick="filterMenu('Makanan')" class="cat-card" id="cat-makanan"><div class="icon-box"><i data-lucide="sandwich"></i></div><span class="text-[11px] font-black uppercase">Makan</span></div>
-                        <div onclick="filterMenu('Minuman')" class="cat-card" id="cat-minuman"><div class="icon-box"><i data-lucide="cup-soda"></i></div><span class="text-[11px] font-black uppercase">Minum</span></div>
+                <section class="mb-6">
+                    <div class="flex gap-2.5 md:gap-4 lg:gap-6 overflow-x-auto no-scrollbar pb-2" id="categoryContainer">
+                        <div onclick="filterMenu('All')" class="cat-card active" id="cat-all"><div class="icon-box"><i data-lucide="layout-grid" class="w-4 h-4"></i></div><span class="text-[9px] font-black uppercase tracking-tighter">Semua</span></div>
+                        <div onclick="filterMenu('Paket')" class="cat-card" id="cat-paket"><div class="icon-box"><i data-lucide="users" class="w-4 h-4"></i></div><span class="text-[9px] font-black uppercase tracking-tighter">Paket</span></div>
+                        <div onclick="filterMenu('Makanan')" class="cat-card" id="cat-makanan"><div class="icon-box"><i data-lucide="sandwich" class="w-4 h-4"></i></div><span class="text-[9px] font-black uppercase tracking-tighter">Makan</span></div>
+                        <div onclick="filterMenu('Minuman')" class="cat-card" id="cat-minuman"><div class="icon-box"><i data-lucide="cup-soda" class="w-4 h-4"></i></div><span class="text-[9px] font-black uppercase tracking-tighter">Minum</span></div>
                     </div>
                 </section>
 
-                <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+                <div id="menuGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8"></div>
             </div>
 
-            <div id="tabTrack" class="hidden flex-1 overflow-y-auto no-scrollbar px-8 pb-10">
-                <div class="max-w-2xl mx-auto space-y-6" id="orderTrackingList"></div>
+            <div id="tabTrack" class="hidden flex-1 overflow-y-auto no-scrollbar px-3 md:px-6 lg:px-8 pb-32">
+                <div class="max-w-2xl mx-auto space-y-4" id="orderTrackingList"></div>
             </div>
         </main>
 
-        <aside id="rightPanel" class="hidden xl:flex flex-col w-[420px] m-4 ml-0 bg-white rounded-[40px] shadow-2xl overflow-hidden">
-            <div class="p-8 pb-4">
-                <div class="mb-8 bg-slate-50 p-6 rounded-[35px] border border-slate-100 flex items-center gap-4">
-                    <div class="bg-violet-600 p-3 rounded-2xl text-white shadow-lg"><i data-lucide="map-pin"></i></div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Meja / Lokasi</p>
-                        <p class="text-sm font-bold text-slate-800 truncate" id="locationLabel">Area Tunggu</p>
-                    </div>
-                    <button class="bg-white p-2 rounded-xl text-violet-600 shadow-sm border border-slate-100" onclick="changeLocation()"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+        <!-- Right Panel Desktop -->
+        <aside id="rightPanel" class="hidden xl:flex flex-col w-[380px] m-4 ml-0 bg-white rounded-[40px] shadow-2xl overflow-hidden border border-slate-50">
+            <div class="p-8 pb-4 text-center">
+                <div class="bg-violet-600 p-8 rounded-[35px] text-white relative overflow-hidden mb-8 shadow-xl shadow-violet-100">
+                    <h4 class="text-xl font-black italic uppercase tracking-tighter leading-none mb-1">Keranjang</h4>
+                    <p class="text-[9px] font-bold opacity-60 uppercase tracking-widest">RM PANGKALAN</p>
+                    <i data-lucide="shopping-bag" class="absolute -right-4 -bottom-4 w-24 h-24 opacity-10"></i>
                 </div>
-                <h5 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6 px-1">Order Menu</h5>
             </div>
-            <div id="cartItems" class="flex-1 px-8 overflow-y-auto no-scrollbar space-y-4"></div>
-            <div class="p-8 bg-slate-50 border-t space-y-2">
-                <div class="flex justify-between items-center px-1"><span class="text-[10px] font-bold text-slate-400 uppercase">Service Fee</span><span class="text-[10px] font-black text-slate-400">Rp 1.500</span></div>
-                <div class="flex justify-between items-center mb-6 pt-2 border-t border-slate-100">
-                    <span class="text-sm font-black text-slate-800 uppercase tracking-widest">Total</span>
-                    <span id="totalCart" class="text-3xl font-black text-violet-600 tracking-tighter">Rp 0</span>
+            <div id="cartItems" class="flex-1 px-8 overflow-y-auto no-scrollbar space-y-3"></div>
+            <div class="p-8 bg-slate-50 border-t">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xs font-black text-slate-400 uppercase tracking-widest italic">Total Tagihan</span>
+                    <span id="totalCart" class="text-2xl font-black text-violet-600">Rp 0</span>
                 </div>
-                <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-2xl shadow-violet-200 active:scale-95 transition-all text-xs tracking-widest uppercase italic">Checkout Pesanan</button>
+                <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-[25px] font-black shadow-lg uppercase text-xs italic tracking-widest active:scale-95 transition-all">Pesan Sekarang</button>
             </div>
         </aside>
     </div>
 
-    <!-- Mobile UI Floating Cart -->
-    <div id="mobileCart" class="xl:hidden fixed bottom-24 left-4 right-4 bg-white p-5 rounded-[35px] shadow-2xl border border-slate-50">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div id="mobileCartIcon" class="w-14 h-14 bg-violet-600 rounded-2xl flex items-center justify-center text-white relative shadow-lg shadow-violet-200"><i data-lucide="shopping-bag" class="w-6 h-6"></i><span id="mobileCount" class="absolute -top-2 -right-2 bg-pink-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-white">0</span></div>
-                <div><p id="mobileTotal" class="text-lg font-black text-violet-600">Rp 0</p><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest uppercase">Pesan Sekarang</p></div>
+    <!-- SIDE DRAWER -->
+    <div id="cartDrawer" class="fixed inset-0 z-[100]">
+        <div id="drawerOverlay" class="absolute inset-0 bg-black/30 backdrop-blur-sm" onclick="toggleDrawer(false)"></div>
+        <div id="drawerContent" class="absolute right-0 top-0 bottom-0 w-[90%] max-w-sm bg-white shadow-2xl flex flex-col rounded-l-[45px]">
+            <div class="p-8 border-b flex items-center justify-between">
+                <h3 class="text-xl font-black italic text-slate-800 tracking-tighter uppercase">Keranjang</h3>
+                <button onclick="toggleDrawer(false)" class="p-2 bg-slate-100 rounded-full text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <button onclick="openCheckoutModal()" class="bg-violet-600 text-white px-8 py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest active:scale-95 shadow-lg shadow-violet-100 italic">Pay Now</button>
+            <div id="cartItemsMobile" class="flex-1 overflow-y-auto no-scrollbar p-6 space-y-4"></div>
+            <div class="p-8 bg-slate-50 border-t">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xs font-black text-slate-400 uppercase italic tracking-widest">Total</span>
+                    <span id="totalCartMobile" class="text-2xl font-black text-violet-600">Rp 0</span>
+                </div>
+                <button onclick="openCheckoutModal()" class="w-full bg-violet-600 text-white py-5 rounded-2xl font-black shadow-lg uppercase text-xs italic tracking-widest active:scale-95">Bayar Sekarang</button>
+            </div>
         </div>
     </div>
 
-    <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white p-4 px-10 flex justify-between items-center border-t border-slate-100 z-50 rounded-t-[40px] shadow-2xl">
-        <button onclick="switchTab('menu')" id="nav-menu" class="text-violet-600 flex flex-col items-center gap-1 transition-all"><i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[9px] font-bold">Dash</span></button>
-        <button onclick="switchTab('track')" id="nav-track" class="text-slate-300 flex flex-col items-center gap-1 transition-all"><i data-lucide="clock" class="w-6 h-6"></i><span class="text-[9px] font-bold">Lacak</span></button>
-        <a href="admin.html" class="text-slate-300 flex flex-col items-center gap-1"><i data-lucide="user" class="w-6 h-6"></i><span class="text-[9px] font-bold">Admin</span></a>
+    <!-- Bottom Nav -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md p-3 px-10 flex justify-between items-center border-t border-slate-100 z-50 rounded-t-[35px] shadow-2xl">
+        <button onclick="switchTab('menu')" id="nav-menu" class="text-violet-600 flex flex-col items-center gap-1 transition-all"><i data-lucide="layout-grid" class="w-6 h-6"></i><span class="text-[9px] font-black uppercase tracking-tighter">Dash</span></button>
+        <button onclick="switchTab('track')" id="nav-track" class="text-slate-300 flex flex-col items-center gap-1 transition-all"><i data-lucide="clock" class="w-6 h-6"></i><span class="text-[9px] font-bold uppercase tracking-tighter">Lacak</span></button>
+        <a href="admin.html" class="text-slate-300 flex flex-col items-center gap-1"><i data-lucide="user" class="w-6 h-6"></i><span class="text-[9px] font-black uppercase tracking-tighter">Admin</span></a>
     </nav>
 
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
-        
         let DB = { menu: [], transactions: [] };
-        let lastDataHash = "";
+        let lastTrxHash = "";
         let cart = [];
         let activeCategory = 'All';
         let activeTab = 'menu';
@@ -234,28 +246,27 @@
         let selectedService = 'Dine-in';
         let myOrderIds = JSON.parse(localStorage.getItem('MY_ORDERS') || '[]');
         let syncInterval;
-        let searchTimeout;
 
         window.onload = () => {
             lucide.createIcons();
-            syncData();
+            const cache = localStorage.getItem('RM_DATA_CACHE');
+            if(cache) { DB = JSON.parse(cache); renderMenu(); setTimeout(hideSplash, 300); }
+            syncData(true);
             updateHeaderUI();
             startPolling(15000);
-            
-            const searchInput = document.getElementById('searchInput');
-            if(searchInput) {
-                searchInput.oninput = (e) => {
-                    clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(() => renderMenu(e.target.value), 300);
-                };
-            }
-
-            setTimeout(() => { 
-                const splash = document.getElementById('splashScreen');
-                if(splash) splash.style.opacity = '0'; 
-                setTimeout(() => { if(splash) splash.style.display = 'none'; }, 700); 
-            }, 1500);
+            updateClock();
+            setInterval(updateClock, 1000);
         };
+
+        function updateClock() {
+            const el = document.getElementById('digitalClock');
+            if(el) el.innerText = new Date().toLocaleTimeString('id-ID', { hour12: false });
+        }
+
+        function hideSplash() {
+            const s = document.getElementById('splashScreen');
+            if(s) { s.style.opacity = '0'; setTimeout(() => s.style.display = 'none', 400); }
+        }
 
         function startPolling(ms) {
             if(syncInterval) clearInterval(syncInterval);
@@ -266,18 +277,22 @@
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 const data = await res.json();
-                const newHash = JSON.stringify(data);
-                if (force || newHash !== lastDataHash) {
-                    lastDataHash = newHash; DB = data;
+                const newHash = JSON.stringify(data.transactions);
+                if (force || newHash !== lastTrxHash) {
+                    lastTrxHash = newHash;
+                    DB = data;
+                    localStorage.setItem('RM_DATA_CACHE', JSON.stringify(data));
                     const syncEl = document.getElementById('syncStatus');
-                    if(syncEl) syncEl.innerText = 'Connected';
-                    renderMenu();
-                    if(activeTab === 'track') renderTracking();
+                    if(syncEl) syncEl.innerText = 'Online';
+                    if (activeTab === 'menu') renderMenu();
+                    if (activeTab === 'track') renderTracking();
                     checkOrderStatus();
+                    hideSplash();
                 }
             } catch (e) { 
                 const syncEl = document.getElementById('syncStatus');
                 if(syncEl) syncEl.innerText = 'Offline'; 
+                hideSplash();
             }
         }
 
@@ -293,297 +308,212 @@
 
         function switchTab(tab) {
             activeTab = tab;
-            const menuTab = document.getElementById('tabMenu');
-            const trackTab = document.getElementById('tabTrack');
-            if(!menuTab || !trackTab) return;
+            document.getElementById('tabMenu').classList.toggle('hidden', tab !== 'menu');
+            document.getElementById('tabTrack').classList.toggle('hidden', tab !== 'track');
+            document.getElementById('side-nav-menu')?.classList.toggle('active', tab === 'menu');
+            document.getElementById('side-nav-track')?.classList.toggle('active', tab === 'track');
+            
+            const nm = document.getElementById('nav-menu'), nt = document.getElementById('nav-track');
+            if(nm) nm.classList.replace(tab === 'menu' ? 'text-slate-300' : 'text-violet-600', tab === 'menu' ? 'text-violet-600' : 'text-slate-300');
+            if(nt) nt.classList.replace(tab === 'track' ? 'text-slate-300' : 'text-violet-600', tab === 'track' ? 'text-violet-600' : 'text-slate-300');
 
-            menuTab.classList.toggle('hidden', tab !== 'menu');
-            trackTab.classList.toggle('hidden', tab !== 'track');
-            
-            const sideMenu = document.getElementById('side-nav-menu');
-            const sideTrack = document.getElementById('side-nav-track');
-            if(sideMenu) sideMenu.classList.toggle('active', tab === 'menu');
-            if(sideTrack) sideTrack.classList.toggle('active', tab === 'track');
-            
-            startPolling(tab === 'track' ? 6000 : 15000);
+            startPolling(tab === 'track' ? 3000 : 15000);
             if(tab === 'track') renderTracking();
-            else renderMenu();
             lucide.createIcons();
         }
 
-        function renderMenu(keyword = '') {
+        function renderMenu() {
             const grid = document.getElementById('menuGrid');
-            if(!grid || activeTab !== 'menu' || !DB.menu) return;
-            
-            const filtered = DB.menu.filter(m => {
-                const matchesCat = activeCategory === 'All' || m.Category === activeCategory;
-                const matchesKeyword = m.Name.toLowerCase().includes(keyword.toLowerCase());
-                return matchesCat && matchesKeyword;
-            });
-
-            grid.innerHTML = filtered.map((m, idx) => `
-                <div class="food-card bg-white p-5 rounded-[35px] shadow-sm border border-slate-50 flex flex-col animate-pop" style="animation-delay: ${idx * 0.05}s">
-                    <div onclick="showDetail('${m.ID}')" class="w-full aspect-[4/3] rounded-[25px] overflow-hidden mb-5 relative group bg-slate-100 img-skeleton">
-                        <img src="${m.Img}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onload="this.parentElement.classList.remove('img-skeleton'); this.style.opacity='1'" style="opacity:0" onerror="this.src='https://placehold.co/400x300?text=RM+Pangkalan'">
-                        ${m.Rating ? `<span class="absolute top-3 left-3 bg-white/90 px-3 py-1 rounded-xl text-[8px] font-black flex items-center gap-1 shadow-sm"><i data-lucide="star" class="w-2.5 h-2.5 text-orange-400 fill-orange-400"></i> ${m.Rating}</span>` : ''}
+            if(!grid || activeTab !== 'menu' || !DB.menu || DB.menu.length === 0) return;
+            grid.innerHTML = DB.menu.filter(m => activeCategory === 'All' || m.Category === activeCategory).map((m, idx) => `
+                <div class="food-card p-4 flex flex-col animate-pop" style="animation-delay: ${idx * 0.03}s">
+                    <div onclick="showDetail('${m.ID}')" class="w-full aspect-[4/3] rounded-[22px] overflow-hidden mb-4 relative group bg-slate-100">
+                        <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=400&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300?text=RM+Pangkalan'">
                     </div>
-                    <h4 class="font-extrabold text-sm text-slate-800 line-clamp-1 italic">${m.Name}</h4>
-                    <p class="text-[9px] font-bold text-slate-400 mt-1 mb-4 line-clamp-2">${m.Description || 'Cita rasa autentik.'}</p>
+                    <h4 class="font-extrabold text-[13px] text-slate-800 line-clamp-1 italic uppercase tracking-tighter leading-none mb-1">${m.Name}</h4>
+                    <p class="text-[9px] font-medium text-slate-400 mt-1 mb-4 line-clamp-2 leading-relaxed opacity-60">${m.Description}</p>
                     <div class="mt-auto flex items-center justify-between">
-                        <span class="text-sm font-black text-violet-600">Rp ${Number(m.Price).toLocaleString()}</span>
-                        <button onclick="triggerAddToCart(event, '${m.ID}')" class="bg-violet-600 text-white w-10 h-10 rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-transform"><i data-lucide="plus"></i></button>
+                        <span class="text-sm font-black text-violet-600 italic tracking-tighter">Rp ${Number(m.Price).toLocaleString()}</span>
+                        <button onclick="addToCart('${m.ID}')" class="bg-violet-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-lg active:scale-90 transition-transform"><i data-lucide="plus" class="w-4 h-4"></i></button>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
-        }
-
-        function triggerAddToCart(event, id) {
-            const btn = event.currentTarget, rect = btn.getBoundingClientRect();
-            const flyer = document.createElement('div'); flyer.className = 'fly-item'; flyer.innerHTML = '🥘';
-            flyer.style.left = rect.left + 'px'; flyer.style.top = rect.top + 'px';
-            document.body.appendChild(flyer);
-            
-            const target = document.getElementById('locationLabel');
-            if(target) {
-                const tRect = target.getBoundingClientRect();
-                setTimeout(() => { flyer.style.left = (tRect.left + tRect.width/2) + 'px'; flyer.style.top = (tRect.top + tRect.height/2) + 'px'; flyer.style.transform = 'scale(0.1) rotate(360deg)'; flyer.style.opacity = '0'; }, 10);
-            }
-            setTimeout(() => { flyer.remove(); addToCart(id); }, 800);
         }
 
         function addToCart(id) { 
             const item = DB.menu.find(m => m.ID == id); 
             if (item) { 
-                cart.push({...item, cartId: Date.now()}); 
-                updateCartUI(); 
+                cart.push({...item, cartId: Date.now()}); updateCartUI(); 
                 if(Swal.isVisible()) renderReview(); 
-                
-                const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000, timerProgressBar: true });
-                Toast.fire({ icon: 'success', title: 'Menu ditambahkan' });
+                const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 800 });
+                Toast.fire({ icon: 'success', title: 'Berhasil ditambahkan' });
             } 
         }
 
-        function removeFromCartOne(id) { 
-            const idx = cart.findLastIndex(i => i.ID == id); 
-            if (idx > -1) cart.splice(idx, 1); updateCartUI(); if(Swal.isVisible()) renderReview(); 
-        }
+        function removeFromCartOne(id) { const idx = cart.findLastIndex(i => i.ID == id); if (idx > -1) cart.splice(idx, 1); updateCartUI(); if(Swal.isVisible()) renderReview(); }
         
         function updateCartUI() {
-            const list = document.getElementById('cartItems'), tot = document.getElementById('totalCart'), mb = document.getElementById('mobileCart'), mt = document.getElementById('mobileTotal'), mc = document.getElementById('mobileCount');
-            if(!list || !tot) return;
-
+            const lists = [document.getElementById('cartItems'), document.getElementById('cartItemsMobile')];
+            const totals = [document.getElementById('totalCart'), document.getElementById('totalCartMobile')];
+            const badge = document.getElementById('cartBadge');
+            
             if (cart.length === 0) { 
-                list.innerHTML = `<div id="emptyCart" class="flex flex-col items-center justify-center py-20 opacity-20 italic text-xs font-bold"><i data-lucide="shopping-cart" class="mb-2"></i> Keranjang Kosong</div>`; 
-                tot.innerText = 'Rp 0'; 
-                if(mb) mb.classList.remove('active');
-                lucide.createIcons(); 
-                return; 
+                lists.forEach(l => { if(l) l.innerHTML = `<div class="py-20 opacity-20 text-center flex flex-col items-center justify-center gap-3 italic tracking-widest text-[10px] font-bold"><i data-lucide="shopping-cart" class="w-10 h-10"></i> KOSONG</div>`; });
+                totals.forEach(t => { if(t) t.innerText = 'Rp 0'; });
+                if(badge) badge.classList.add('hidden');
+                lucide.createIcons(); return; 
             }
             
-            if(mb) mb.classList.add('active');
+            if(badge) { badge.innerText = cart.length; badge.classList.remove('hidden'); }
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
-            
-            list.innerHTML = Object.values(grouped).map(i => `
-                <div class="order-card-row bg-slate-50 border-none shadow-sm">
-                    <div class="qty-pill bg-white">
-                        <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-sm">-</button>
-                        <span class="text-xs font-black">x${i.qty}</span>
-                        <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-black text-sm">+</button>
+            const html = Object.values(grouped).map(i => `
+                <div class="order-card-row bg-slate-50/50 border-slate-100 shadow-sm animate-pop">
+                    <div class="qty-pill-small bg-white">
+                        <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-xs hover:scale-125 transition-transform">-</button>
+                        <span class="text-xs font-black w-3 text-center">${i.qty}</span>
+                        <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-black text-xs hover:scale-125 transition-transform">+</button>
                     </div>
-                    <p class="flex-1 px-4 text-xs font-bold text-slate-800 truncate uppercase text-center">${i.Name}</p>
-                    <span class="text-[13px] font-black text-violet-600 w-24 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
+                    <p class="flex-1 px-1.5 text-[11px] font-bold text-slate-800 truncate uppercase text-center tracking-tighter leading-none">${i.Name}</p>
+                    <span class="text-[11px] font-black text-violet-600 w-16 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
                 </div>`).join('');
             
+            lists.forEach(l => { if(l) l.innerHTML = html; });
             const sub = cart.reduce((s, i) => s + Number(i.Price), 0);
-            const totalWithService = sub + 1500;
-            tot.innerText = `Rp ${totalWithService.toLocaleString()}`;
-            if(mt) mt.innerText = `Rp ${totalWithService.toLocaleString()}`;
-            if(mc) mc.innerText = cart.length;
+            totals.forEach(t => { if(t) t.innerText = `Rp ${sub.toLocaleString()}`; });
             lucide.createIcons();
         }
 
         function renderReview() {
             const container = document.getElementById('reviewContent');
             if(!container) return; 
-
             const grouped = cart.reduce((acc, i) => { if(!acc[i.ID]) acc[i.ID] = {...i, qty: 0}; acc[i.ID].qty++; return acc; }, {});
-            const subtotalMenu = cart.reduce((s, i) => s + Number(i.Price), 0);
-            const total = subtotalMenu + 1500;
-            const name = document.getElementById('inputName')?.value || localStorage.getItem('LAST_CUST_NAME') || '';
+            const sub = cart.reduce((s, i) => s + Number(i.Price), 0);
+            const total = sub + 1500;
+            const name = localStorage.getItem('LAST_CUST_NAME') || '';
             const table = document.getElementById('inputTable')?.value || '';
             
             container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-5">
-                        <div onclick="selectedService='Dine-in';renderReview()" class="service-option ${selectedService==='Dine-in'?'active':''}">
-                            <span class="text-[11px] font-extrabold uppercase italic text-slate-700">Makan Sini</span>
-                        </div>
-                        <div onclick="selectedService='Take-away';renderReview()" class="service-option ${selectedService==='Take-away'?'active':''}">
-                            <i data-lucide="shopping-bag" class="w-6 h-6 mb-1 text-slate-700"></i>
-                            <span class="text-[11px] font-extrabold uppercase italic text-slate-700">Bawa Pulang</span>
-                        </div>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-2 gap-3 mb-2">
+                        <div onclick="selectedService='Dine-in';renderReview()" class="service-option ${selectedService==='Dine-in'?'active':''}"><span class="text-[10px] font-black uppercase italic text-slate-700">Makan Sini</span></div>
+                        <div onclick="selectedService='Take-away';renderReview()" class="service-option ${selectedService==='Take-away'?'active':''}"><i data-lucide="shopping-bag" class="w-4 h-4 mb-0.5 text-slate-500"></i><span class="text-[10px] font-black uppercase italic text-slate-700">Bawa Pulang</span></div>
                     </div>
-
-                    <div class="space-y-4">
-                        <input type="text" id="inputName" placeholder="Nama Anda" value="${name}" class="checkout-input">
-                        ${selectedService === 'Dine-in' ? `<input type="number" id="inputTable" placeholder="No Meja" value="${table}" class="checkout-input">` : ''}
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="inputName" placeholder="Nama Anda" value="${name}" class="checkout-input-pro">
+                        <input type="number" id="inputTable" placeholder="No Meja" value="${table}" class="checkout-input-pro" ${selectedService === 'Take-away' ? 'disabled style="opacity: 0.3"' : ''}>
                     </div>
-
-                    <div class="space-y-3 max-h-[160px] overflow-y-auto no-scrollbar py-1">
-                        ${Object.values(grouped).map(i => `
-                            <div class="order-card-row shadow-sm">
-                                <div class="qty-pill">
-                                    <button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-sm">-</button>
-                                    <span class="text-xs font-black">x${i.qty}</span>
-                                    <button onclick="addToCart('${i.ID}')" class="text-violet-600 font-black text-sm">+</button>
-                                </div>
-                                <p class="flex-1 px-4 text-xs font-bold text-slate-800 truncate uppercase text-center">${i.Name}</p>
-                                <span class="text-[13px] font-black text-violet-600 w-24 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span>
-                            </div>`).join('')}
+                    <div class="space-y-2 max-h-[160px] overflow-y-auto no-scrollbar py-1">
+                        ${Object.values(grouped).map(i => `<div class="order-card-row"><div class="qty-pill-small"><button onclick="removeFromCartOne('${i.ID}')" class="text-red-500 font-black text-[10px]">-</button><span class="text-[11px] font-black">${i.qty}</span><button onclick="addToCart('${i.ID}')" class="text-violet-600 font-black text-[10px]">+</button></div><p class="flex-1 px-1 text-[11px] font-bold text-slate-800 truncate uppercase text-center tracking-tighter">${i.Name}</p><span class="text-[12px] font-black text-violet-600 w-16 text-right">Rp ${(i.Price*i.qty).toLocaleString()}</span></div>`).join('')}
                     </div>
-
-                    <div class="grid grid-cols-3 gap-4">
-                        <div onclick="selectedPayment='Tunai';renderReview()" class="payment-option ${selectedPayment==='Tunai'?'active':''}">
-                            <i data-lucide="banknote" class="w-6 h-6 mb-2 ${selectedPayment==='Tunai'?'text-green-600':'text-slate-300'}"></i>
-                            <span class="text-[9px] font-black uppercase text-slate-500 italic">Tunai</span>
-                        </div>
-                        <div onclick="selectedPayment='QRIS';renderReview()" class="payment-option ${selectedPayment==='QRIS'?'active':''}">
-                            <i data-lucide="qr-code" class="w-6 h-6 mb-2 ${selectedPayment==='QRIS'?'text-blue-600':'text-slate-300'}"></i>
-                            <span class="text-[9px] font-black uppercase text-slate-500 italic">QRIS</span>
-                        </div>
-                        <div onclick="selectedPayment='Bank';renderReview()" class="payment-option ${selectedPayment==='Bank'?'active':''}">
-                            <i data-lucide="credit-card" class="w-6 h-6 mb-2 ${selectedPayment==='Bank'?'text-violet-600':'text-slate-300'}"></i>
-                            <span class="text-[9px] font-black uppercase text-slate-500 italic">Bank</span>
-                        </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div onclick="selectedPayment='Tunai';renderReview()" class="payment-option ${selectedPayment==='Tunai'?'active':''}"><i data-lucide="banknote" class="w-5 h-5 mb-1 ${selectedPayment==='Tunai'?'text-green-600':'text-slate-300'}"></i><span class="text-[8px] font-black uppercase italic">Tunai</span></div>
+                        <div onclick="selectedPayment='QRIS';renderReview()" class="payment-option ${selectedPayment==='QRIS'?'active':''}"><i data-lucide="qr-code" class="w-5 h-5 mb-1 ${selectedPayment==='QRIS'?'text-blue-600':'text-slate-300'}"></i><span class="text-[8px] font-black uppercase italic">QRIS</span></div>
+                        <div onclick="selectedPayment='Bank';renderReview()" class="payment-option ${selectedPayment==='Bank'?'active':''}"><i data-lucide="credit-card" class="w-5 h-5 mb-1 ${selectedPayment==='Bank'?'text-violet-600':'text-slate-300'}"></i><span class="text-[8px] font-black uppercase italic text-center">Bank</span></div>
                     </div>
-
-                    <div class="pt-6 border-t flex justify-between items-center">
-                        <span class="text-[11px] font-black text-slate-400 uppercase italic">TOTAL + LAYANAN</span>
-                        <span class="text-4xl font-black text-violet-600 tracking-tighter">Rp ${total.toLocaleString()}</span>
-                    </div>
-
-                    <div id="validationMsg" class="error-box hidden">
-                        <i data-lucide="alert-circle" class="w-5 h-5"></i>
-                        <span id="validationTxt">Mohon lengkapi data pemesan</span>
-                    </div>
+                    <div class="pt-4 border-t flex justify-between items-center"><span class="text-[10px] font-black text-slate-400 uppercase italic">TOTAL + SERVICE</span><span class="text-3xl font-black text-violet-600 tracking-tighter">Rp ${total.toLocaleString()}</span></div>
                 </div>`;
             lucide.createIcons();
         }
 
         function openCheckoutModal() {
             if (cart.length === 0) return;
+            toggleDrawer(false);
             Swal.fire({
-                title: '<div class="swal-title-custom">Review Pesanan</div>',
-                html: `<div id="reviewContent"></div>`,
+                title: '<div class="swal-title-pro uppercase tracking-tighter">Review Pesanan</div>', html: `<div id="reviewContent"></div>`,
                 showCancelButton: true, confirmButtonText: 'Proses Pesanan', cancelButtonText: 'Cancel',
-                confirmButtonColor: '#7c3aed', cancelButtonColor: '#64748b',
-                reverseButtons: true,
-                customClass: { popup: 'detail-modal', confirmButton: 'rounded-[22px] font-black py-5 px-10 order-2', cancelButton: 'rounded-[22px] font-black py-5 px-10 order-1' },
+                confirmButtonColor: '#7c3aed', cancelButtonColor: '#64748b', reverseButtons: true,
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-[18px] font-black py-4 px-10 order-2 text-xs uppercase italic shadow-lg shadow-violet-100', cancelButton: 'rounded-[18px] font-black py-4 px-10 order-1 text-xs uppercase italic' },
                 didOpen: () => renderReview(),
                 preConfirm: () => {
-                    const n = document.getElementById('inputName')?.value, t = document.getElementById('inputTable')?.value, v = document.getElementById('validationMsg');
-                    if(!n) { if(v){ v.classList.remove('hidden'); v.querySelector('#validationTxt').innerText = 'Nama wajib diisi!';} return false; }
+                    const n = document.getElementById('inputName')?.value, t = document.getElementById('inputTable')?.value;
+                    if(!n) { Swal.showValidationMessage('Nama wajib diisi!'); return false; }
                     localStorage.setItem('LAST_CUST_NAME', n); return { n, t };
                 }
             }).then((res) => { if (res.isConfirmed) processFinalOrder(res.value); });
         }
 
-        async function processFinalOrder(u) {
-            Swal.fire({ title: 'Kirim Pesanan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        async function processFinalOrder(data) {
+            Swal.fire({ title: 'Mengirim Pesanan...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             const oid = 'ORD-' + Math.floor(Date.now()/1000).toString().slice(-6);
-            const sub = cart.reduce((s,i)=>s+Number(i.Price),0) + 1500;
             try {
-                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'addOrder', id: oid, items: cart.map(i => i.Name).join(', '), total: sub, role: u.n, type: `${selectedService} [${selectedPayment}]` }) });
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ 
+                    action: 'addOrder', id: oid, items: cart.map(i => i.Name).join(', '), 
+                    total: cart.reduce((s,i)=>s+Number(i.Price),0) + 1500, 
+                    role: data.n, type: `${selectedService} ${data.t ? '[Meja '+data.t+'] ' : ''}[${selectedPayment}]` 
+                }) });
                 myOrderIds.unshift(oid); localStorage.setItem('MY_ORDERS', JSON.stringify(myOrderIds));
                 cart = []; updateCartUI(); switchTab('track');
-                Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Pesanan terkirim.', timer: 3000 });
-            } catch (e) { Swal.fire('Gagal', 'Error Cloud', 'error'); }
+                Swal.fire({ icon: 'success', title: 'Berhasil!', timer: 2000 });
+            } catch (e) { Swal.fire('Gagal', 'Terjadi kesalahan jaringan.', 'error'); }
         }
 
         function renderTracking() {
             const list = document.getElementById('orderTrackingList'); if(!list) return;
             const myOrders = DB.transactions.filter(t => myOrderIds.includes(t.ID));
-            if (myOrders.length === 0) { list.innerHTML = `<div class="py-20 text-center text-slate-300 italic font-bold">Belum ada pesanan aktif.</div>`; return; }
+            if (myOrders.length === 0) { list.innerHTML = `<div class="py-20 text-center flex flex-col items-center justify-center gap-4 text-slate-300 italic font-bold uppercase tracking-widest text-[10px]"><i data-lucide="clock" class="w-10 h-10 opacity-20"></i> Belum ada pesanan aktif.</div>`; lucide.createIcons(); return; }
             
             list.innerHTML = myOrders.reverse().map(trx => {
-                let sid = trx.Status === 'Pending' ? 1 : (trx.Status === 'Cooking' ? 2 : 3);
-                return `<div onclick="showReceipt('${trx.ID}')" class="bg-white p-6 rounded-[40px] shadow-sm border border-slate-100 mb-6 animate-pop cursor-pointer">
-                    <div class="flex justify-between items-center mb-6"><span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Order #${trx.ID.slice(-4)}</span><div class="px-4 py-1 rounded-full bg-violet-50 text-violet-600 text-[9px] font-black italic uppercase">Lihat Receipt</div></div>
-                    <div class="flex gap-2 mb-6">${['Pending','Cooking','Ready'].map((s,i)=>`<div class="track-step ${i+1<=sid?'active':''}"><div class="track-line ${i===2?'hidden':''} ${i+1<sid?'!bg-violet-600':''}"></div><div class="track-circle"></div><span class="text-[8px] font-black uppercase mt-1 opacity-50 ${i+1<=sid?'opacity-100':''}">${s}</span></div>`).join('')}</div>
-                    <p class="text-xs font-bold text-slate-700 line-clamp-1 italic">${trx.Items}</p></div>`;
+                let currentStep = trx.Status === 'Pending' ? 1 : (trx.Status === 'Cooking' ? 2 : 3);
+                let statusClass = trx.Status === 'Pending' ? 'status-pending' : (trx.Status === 'Cooking' ? 'status-cooking' : 'status-ready');
+                
+                return `
+                <div class="track-card animate-pop shadow-md">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Order #${trx.ID.slice(-4)}</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="status-pill ${statusClass}">${trx.Status}</span>
+                                <span class="text-[10px] font-bold text-slate-300">|</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase">${new Date(trx.Date).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})}</span>
+                            </div>
+                        </div>
+                        <span class="text-sm font-black text-violet-600 italic tracking-tighter">Rp ${Number(trx.Total).toLocaleString()}</span>
+                    </div>
+
+                    <div class="track-step-container">
+                        ${['Antre','Masak','Saji'].map((s,i)=>`
+                            <div class="track-step ${i+1 <= currentStep ? 'active' : ''}">
+                                ${i < 2 ? `<div class="track-line ${i+1 < currentStep ? '!bg-violet-600' : ''}"></div>` : ''}
+                                <div class="track-circle"></div>
+                                <span class="track-label">${s}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100/50">
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 opacity-50 italic">Items:</p>
+                        <p class="text-[11px] font-bold text-slate-700 leading-relaxed uppercase tracking-tight italic">${trx.Items}</p>
+                        <div class="mt-2 pt-2 border-t border-slate-200 flex justify-between items-center">
+                            <span class="text-[8px] font-black text-slate-400 uppercase italic opacity-70">${trx.Type}</span>
+                            <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300"></i>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
             lucide.createIcons();
         }
 
-        function showReceipt(id) {
-            const trx = DB.transactions.find(t => t.ID === id); if(!trx) return;
-            const appUrl = window.location.href;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(appUrl)}`;
-
-            Swal.fire({ 
-                title: 'Digital Receipt', 
-                html: `
-                <div class="receipt-container text-left font-mono text-[11px]">
-                    <div class="text-center font-bold text-base mb-1">RM PANGKALAN</div>
-                    <div class="text-center mb-4 text-[9px]">Jl. Raya Pangkalan No. 123<br>Telp: (021) 12345678</div>
-                    
-                    <div class="flex justify-between uppercase"><span>ORDER ID:</span><span>${trx.ID}</span></div>
-                    <div class="flex justify-between uppercase"><span>TANGGAL:</span><span>${new Date(trx.Date).toLocaleString('id-ID')}</span></div>
-                    
-                    <div class="receipt-dashed"></div>
-                    <div>
-                        ${trx.Items.split(',').map(i => `
-                            <div class="flex justify-between mb-1">
-                                <span class="max-w-[150px] overflow-hidden truncate italic uppercase">${i.trim()}</span>
-                                <span>x1</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                    <div class="receipt-dashed"></div>
-                    
-                    <div class="flex justify-between font-bold text-sm uppercase"><span>TOTAL:</span><span>Rp ${Number(trx.Total).toLocaleString()}</span></div>
-                    
-                    <div class="text-center mt-6">
-                        <img src="${qrUrl}" class="receipt-qr" alt="QR Code">
-                        <p class="text-[8px] font-bold mt-2 uppercase tracking-tighter">Pesan lagi lewat link di atas!</p>
-                    </div>
-                    
-                    <div class="mt-4 text-center text-[9px] italic border-t pt-4">Simpan struk ini sebagai bukti pembayaran.<br>Terima kasih atas kunjungan Anda!</div>
-                </div>`, 
-                confirmButtonText: 'TUTUP', confirmButtonColor: '#7c3aed' 
-            });
-        }
-
-        function showDetail(id) {
-            const m = DB.menu.find(x => x.ID == id); if(!m) return;
-            Swal.fire({ title: `<div class="text-2xl font-black italic tracking-tighter">${m.Name}</div>`, html: `<div class="text-left"><div class="rounded-[30px] overflow-hidden mb-6 h-48 sm:h-64"><img src="${m.Img}" class="w-full h-full object-cover"></div><p class="text-slate-500 text-sm mb-6 font-medium">${m.Description || 'Hidangan lezat khas Pangkalan.'}</p><div class="text-2xl font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</div></div>`, showConfirmButton: true, confirmButtonText: 'Tambah ke Pesanan', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4' } }).then((r) => { if (r.isConfirmed) addToCart(id); });
-        }
-
         function updateHeaderUI() {
             const name = localStorage.getItem('LAST_CUST_NAME') || 'Pelanggan';
-            const welcomeMsg = document.getElementById('welcomeMsg');
-            const avatar = document.getElementById('userAvatar');
-            if(welcomeMsg) welcomeMsg.innerText = `Hey, ${name}`;
-            if(avatar) avatar.src = `https://ui-avatars.com/api/?name=${name}&background=7c3aed&color=fff&rounded=true`;
+            const el = document.getElementById('welcomeMsg'); if(el) el.innerText = `Hey, ${name}`;
+            const av = document.getElementById('userAvatar'); if(av) av.src = `https://ui-avatars.com/api/?name=${name}&background=7c3aed&color=fff&rounded=true`;
         }
 
-        function filterMenu(cat) { 
-            activeCategory = cat; 
-            document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.id === `cat-${cat.toLowerCase()}`)); 
-            renderMenu(); 
+        function filterMenu(cat) { activeCategory = cat; document.querySelectorAll('.cat-card').forEach(c => c.classList.toggle('active', c.id === `cat-${cat.toLowerCase()}`)); renderMenu(); }
+        function changeName() { Swal.fire({ title: 'Ganti Nama', input: 'text', confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed && r.value) { localStorage.setItem('LAST_CUST_NAME', r.value); updateHeaderUI(); } }); }
+        function changeLocation() { Swal.fire({ title: 'Lokasi', input: 'select', inputOptions: {'Meja 01':'Meja 01','Meja 02':'Meja 02','Area Tunggu':'Area Tunggu'}, confirmButtonColor: '#7c3aed' }).then(r => { if(r.isConfirmed) document.getElementById('locationLabel').innerText = r.value; }); }
+        
+        function showDetail(id) { 
+            const m = DB.menu.find(x => x.ID == id); if(!m) return; 
+            Swal.fire({ 
+                title: `<div class="text-xl font-black italic uppercase tracking-tighter">${m.Name}</div>`, 
+                html: `<div class="text-left"><img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=600&q=80'}" class="w-full h-48 rounded-[25px] object-cover mb-4 shadow-lg"><p class="text-slate-500 text-xs font-medium leading-relaxed mb-4">${m.Description || 'RM Pangkalan.'}</p><div class="flex justify-between items-center bg-violet-50 p-4 rounded-2xl border border-violet-100"><span class="text-[10px] font-black text-violet-400 uppercase italic">Harga Satuan</span><span class="text-xl font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</span></div></div>`, 
+                showConfirmButton: true, confirmButtonText: 'Order', confirmButtonColor: '#7c3aed', 
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-bold py-4 w-full text-xs uppercase italic' } 
+            }).then((r) => { if (r.isConfirmed) addToCart(id); }); 
         }
         
-        function changeName() { 
-            Swal.fire({ title: 'Nama Profil', input: 'text', confirmButtonColor: '#7c3aed' }).then(r => { 
-                if(r.isConfirmed && r.value) { localStorage.setItem('LAST_CUST_NAME', r.value); updateHeaderUI(); } 
-            }); 
-        }
-        
-        function changeLocation() { 
-            Swal.fire({ title: 'Pilih Meja', input: 'select', inputOptions: {'Meja 01':'Meja 01','Meja 02':'Meja 02','Area Tunggu':'Area Tunggu'}, confirmButtonColor: '#7c3aed' }).then(r => { 
-                if(r.isConfirmed) document.getElementById('locationLabel').innerText = r.value; 
-            }); 
-        }
+        function toggleDrawer(open) { const dr = document.getElementById('cartDrawer'); if(dr) open ? dr.classList.add('active') : dr.classList.remove('active'); updateCartUI(); }
     </script>
 </body>
 </html>
