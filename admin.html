@@ -202,7 +202,9 @@
     </main>
 
     <script>
-        let API_URL = localStorage.getItem('RM_API_URL') || '';
+        // URL Default jika localStorage kosong
+        const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API;
         let DB = { menu: [], transactions: [], users: [] };
         let activeTab = 'dashboard';
 
@@ -212,10 +214,13 @@
             updateClock();
             setInterval(updateClock, 1000);
             
-            if(!API_URL) {
-                document.getElementById('apiSetupSection').classList.remove('hidden');
-            } else {
-                document.getElementById('apiInput').value = API_URL;
+            // Tampilkan URL saat ini di input konfigurasi
+            document.getElementById('apiInput').value = API_URL;
+            
+            // Jika benar-benar baru pertama kali tanpa localStorage sama sekali, tampilkan setup (opsional)
+            if(!localStorage.getItem('RM_API_URL')) {
+                // Tetap menggunakan DEFAULT_API namun tunjukkan bahwa ini bisa diganti
+                console.log("Using Default API Integration");
             }
         };
 
@@ -239,8 +244,8 @@
             const pass = document.getElementById('loginPass').value.trim();
             const tempApi = document.getElementById('loginApiUrl')?.value.trim();
             
-            // If API_URL is missing, use the one from input
-            const targetApi = API_URL || tempApi;
+            // Gunakan API yang sudah ada atau yang baru dimasukkan di login screen
+            const targetApi = tempApi || API_URL;
             
             if(!targetApi || !targetApi.includes('google.com')) {
                 return Swal.fire('Konfigurasi Gagal', 'Masukkan URL Google Apps Script yang valid terlebih dahulu.', 'error');
@@ -248,18 +253,17 @@
 
             document.getElementById('loginBtn').innerText = 'MEMVERIFIKASI...';
             try {
-                // Fetch current data to verify user
                 const res = await fetch(`${targetApi}?action=getData`);
                 const data = await res.json();
                 
                 const validUser = data.users.find(u => u.Username === user && u.Password === pass && u.Role === 'Owner');
                 
                 if (validUser) {
-                    // Success: Save API URL if it was provided now
-                    if(!API_URL) {
-                        localStorage.setItem('RM_API_URL', targetApi);
-                        API_URL = targetApi;
-                        document.getElementById('apiInput').value = targetApi;
+                    // Update API_URL jika baru dimasukkan
+                    if(tempApi) {
+                        localStorage.setItem('RM_API_URL', tempApi);
+                        API_URL = tempApi;
+                        document.getElementById('apiInput').value = tempApi;
                     }
                     sessionStorage.setItem('ADMIN_AUTH', user);
                     checkAuth();
@@ -388,7 +392,7 @@
                     <input id="m-name" class="admin-input" placeholder="Nama Menu" value="${item.Name}">
                     <input id="m-price" type="number" class="admin-input" placeholder="Harga" value="${item.Price}">
                     <select id="m-cat" class="admin-input">
-                        <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>
+                        <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>https://github.com/osing1/pangkalan./blob/main/admin.html
                         <option value="Minuman" ${item.Category === 'Minuman' ? 'selected' : ''}>Minuman</option>
                         <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
                     </select>
