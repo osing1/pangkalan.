@@ -14,7 +14,6 @@
         :root { --primary: #7c3aed; --bg: #f3f4f9; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; -webkit-tap-highlight-color: transparent; }
         
-        /* --- SIDEBAR REFINEMENT --- */
         .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
         .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
         
@@ -23,30 +22,63 @@
         .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
         
         .card-pro { background: white; border-radius: 35px; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); }
-        
         .table-header { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 20px; background: #f8fafc; }
         
         .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
         .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        
-        /* --- INPUT FIELD PRO --- */
         .admin-input {
             width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px;
             padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
         }
         .admin-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.05); }
 
+        .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+        #loginOverlay {
+            position: fixed; inset: 0; background: var(--primary); z-index: 10000;
+            display: flex; align-items: center; justify-content: center; padding: 15px;
+        }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- SIDEBAR - iPad/Desktop -->
-    <aside class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
+    <!-- LOGIN SCREEN -->
+    <div id="loginOverlay" class="hidden">
+        <div class="bg-white p-8 md:p-12 rounded-[50px] shadow-2xl w-full max-w-md text-center animate-pop">
+            <div class="bg-violet-100 w-20 h-20 rounded-[30px] flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="shield-check" class="text-violet-600 w-10 h-10"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Admin Access</h2>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Management System RM Pangkalan</p>
+            
+            <div class="space-y-4">
+                <!-- API Setup if empty -->
+                <div id="apiSetupSection" class="hidden pb-4 mb-4 border-b border-dashed">
+                    <p class="text-[9px] font-black text-red-500 uppercase mb-2">Konfigurasi API Diperlukan:</p>
+                    <input type="text" id="loginApiUrl" placeholder="Paste URL Apps Script di sini..." class="admin-input border-red-100 bg-red-50/30">
+                </div>
+
+                <div class="text-left">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-3">Username</label>
+                    <input type="text" id="loginUser" placeholder="Username owner" class="admin-input mt-1">
+                </div>
+                <div class="text-left">
+                    <label class="text-[9px] font-black text-slate-400 uppercase ml-3">Password</label>
+                    <input type="password" id="loginPass" placeholder="••••••••" class="admin-input mt-1">
+                </div>
+                
+                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-4">MASUK KE PANEL</button>
+            </div>
+            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest">Enterprise Cloud POS v6.5</p>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside id="mainSidebar" class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
         <div class="p-6 lg:p-10 z-10 flex flex-col items-center lg:items-start w-full">
             <div class="logo-box mb-14 flex flex-col items-center lg:items-start text-center lg:text-left">
                 <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1">PANGKALAN</span>
@@ -54,9 +86,9 @@
             </div>
             
             <nav class="space-y-6 w-full">
-                <div class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
-                <div class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold opacity-60"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Menu List</span></div>
-                <div class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold opacity-60"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Staff</span></div>
+                <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
+                <div onclick="switchTab('menu')" id="nav-menu" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Menu List</span></div>
+                <div onclick="switchTab('staff')" id="nav-staff" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Staff List</span></div>
             </nav>
         </div>
         
@@ -64,107 +96,209 @@
             <div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10 w-full overflow-hidden">
                 <div id="statusIndicator" class="live-dot flex-shrink-0"></div>
                 <div class="flex flex-col min-w-0">
-                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">System Online</span>
+                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">Online</span>
                     <span id="digitalClock" class="hidden lg:block text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
                 </div>
             </div>
-            <a href="index.html" class="flex items-center justify-center gap-3 bg-white/10 w-full p-4 rounded-2xl font-bold hover:bg-white/20 transition-all border border-white/10">
-                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Exit</span>
-            </a>
+            <button onclick="handleLogout()" class="flex items-center justify-center gap-3 bg-white/10 w-full p-4 rounded-2xl font-bold hover:bg-white/20 transition-all border border-white/10">
+                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="hidden lg:block text-xs uppercase tracking-widest text-white">Logout</span>
+            </button>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
+    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
         <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 bg-white/50 backdrop-blur-md">
             <div>
-                <h1 class="text-xl md:text-2xl font-black text-slate-800 italic leading-none">Owner Control</h1>
-                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Konfigurasi Cloud & Inventaris Menu</p>
+                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase">Dashboard</h1>
+                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Management System</p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="syncData()" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
-                <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white font-black text-sm">OW</div>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white font-black text-sm" id="userInitial">OW</div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto no-scrollbar p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+        <div class="flex-1 overflow-y-auto no-scrollbar p-3 md:p-6 lg:p-8 space-y-6 md:space-y-8 pb-32">
             
-            <!-- API Configuration Section -->
-            <section class="card-pro p-6 md:p-10 animate-pop">
-                <div class="flex items-center gap-4 mb-8">
-                    <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
-                    <div>
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Cloud API Configuration</h3>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">Endpoint utama sinkronisasi database</p>
+            <!-- SECTION: DASHBOARD -->
+            <div id="section-dashboard" class="space-y-6 animate-pop">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <div class="card-pro p-8 border-l-[12px] border-violet-600">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pendapatan Hari Ini</p>
+                        <h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">Rp 0</h2>
+                    </div>
+                    <div class="card-pro p-8 border-l-[12px] border-orange-500">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Pesanan</p>
+                        <h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">0</h2>
+                    </div>
+                    <div class="card-pro p-8 border-l-[12px] border-blue-500">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Menu Aktif</p>
+                        <h2 id="stat-menu" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic">0</h2>
                     </div>
                 </div>
-                <div class="flex flex-col lg:flex-row gap-4">
-                    <input type="text" id="apiInput" placeholder="Paste URL Google Apps Script di sini..." class="admin-input flex-1">
-                    <button onclick="saveApi()" class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg shadow-violet-100 active:scale-95 transition-all uppercase text-xs italic tracking-widest">SIMPAN API</button>
-                </div>
-            </section>
 
-            <!-- Menu Management Section -->
-            <section class="card-pro overflow-hidden animate-pop" style="animation-delay: 0.1s">
-                <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <div>
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Daftar Menu Aktif</h3>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Total: <span id="menuCount">0</span> Masakan</p>
+                <section class="card-pro p-6 md:p-10">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
+                        <div>
+                            <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Cloud API Configuration</h3>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1">Endpoint utama sinkronisasi database</p>
+                        </div>
                     </div>
-                    <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">+ TAMBAH MENU</button>
-                </div>
-                
-                <div class="overflow-x-auto no-scrollbar">
-                    <table class="w-full text-left">
-                        <thead>
-                            <tr>
-                                <th class="table-header w-20">ID</th>
-                                <th class="table-header">Informasi Menu</th>
-                                <th class="table-header">Harga</th>
-                                <th class="table-header text-right">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="menuTableBody" class="divide-y divide-slate-50">
-                            <!-- Data Row Example -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="emptyState" class="hidden py-24 text-center opacity-30 italic font-bold uppercase tracking-widest text-xs">
-                    <i data-lucide="database" class="mx-auto mb-4 w-10 h-10"></i>
-                    Belum Ada Data Terhubung
-                </div>
-            </section>
+                    <div class="flex flex-col lg:flex-row gap-4">
+                        <input type="text" id="apiInput" placeholder="URL Google Apps Script..." class="admin-input flex-1">
+                        <button onclick="saveApi()" class="bg-violet-600 text-white px-10 py-4 rounded-2xl font-black shadow-lg uppercase text-xs italic tracking-widest">UPDATE API</button>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SECTION: MENU LIST -->
+            <div id="section-menu" class="hidden animate-pop">
+                <section class="card-pro overflow-hidden">
+                    <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic">Inventory Menu</h3>
+                        <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl">+ TAMBAH MENU</button>
+                    </div>
+                    <div class="overflow-x-auto no-scrollbar">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th class="table-header w-20">ID</th>
+                                    <th class="table-header">Menu</th>
+                                    <th class="table-header">Harga</th>
+                                    <th class="table-header text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="menuTableBody" class="divide-y divide-slate-50"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SECTION: STAFF LIST -->
+            <div id="section-staff" class="hidden animate-pop">
+                <section class="card-pro overflow-hidden">
+                    <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic">Staff Access Control</h3>
+                        <button onclick="openStaffForm()" class="w-full sm:w-auto bg-violet-600 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-violet-100">+ TAMBAH STAFF</button>
+                    </div>
+                    <div class="overflow-x-auto no-scrollbar">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr>
+                                    <th class="table-header">Username</th>
+                                    <th class="table-header">Role Access</th>
+                                    <th class="table-header text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="staffTableBody" class="divide-y divide-slate-50"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
         </div>
     </main>
 
     <script>
         let API_URL = localStorage.getItem('RM_API_URL') || '';
-        let DB = { menu: [] };
+        let DB = { menu: [], transactions: [], users: [] };
+        let activeTab = 'dashboard';
 
         window.onload = () => {
             lucide.createIcons();
-            document.getElementById('apiInput').value = API_URL;
-            if(API_URL) syncData();
-            else document.getElementById('emptyState').classList.remove('hidden');
-            
+            checkAuth();
             updateClock();
             setInterval(updateClock, 1000);
+            
+            if(!API_URL) {
+                document.getElementById('apiSetupSection').classList.remove('hidden');
+            } else {
+                document.getElementById('apiInput').value = API_URL;
+            }
         };
+
+        function checkAuth() {
+            const user = sessionStorage.getItem('ADMIN_AUTH');
+            if (user) {
+                document.getElementById('loginOverlay').classList.add('hidden');
+                document.getElementById('mainSidebar').classList.remove('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
+                syncData();
+            } else {
+                document.getElementById('loginOverlay').classList.remove('hidden');
+                document.getElementById('mainSidebar').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('hidden');
+            }
+        }
+
+        async function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const tempApi = document.getElementById('loginApiUrl')?.value.trim();
+            
+            // If API_URL is missing, use the one from input
+            const targetApi = API_URL || tempApi;
+            
+            if(!targetApi || !targetApi.includes('google.com')) {
+                return Swal.fire('Konfigurasi Gagal', 'Masukkan URL Google Apps Script yang valid terlebih dahulu.', 'error');
+            }
+
+            document.getElementById('loginBtn').innerText = 'MEMVERIFIKASI...';
+            try {
+                // Fetch current data to verify user
+                const res = await fetch(`${targetApi}?action=getData`);
+                const data = await res.json();
+                
+                const validUser = data.users.find(u => u.Username === user && u.Password === pass && u.Role === 'Owner');
+                
+                if (validUser) {
+                    // Success: Save API URL if it was provided now
+                    if(!API_URL) {
+                        localStorage.setItem('RM_API_URL', targetApi);
+                        API_URL = targetApi;
+                        document.getElementById('apiInput').value = targetApi;
+                    }
+                    sessionStorage.setItem('ADMIN_AUTH', user);
+                    checkAuth();
+                } else {
+                    Swal.fire('Gagal', 'Username/Password salah atau Anda tidak memiliki akses Owner.', 'error');
+                }
+            } catch (e) {
+                Swal.fire('Koneksi Gagal', 'Sistem tidak dapat menghubungi server. Pastikan URL API benar.', 'error');
+            } finally {
+                document.getElementById('loginBtn').innerText = 'MASUK KE PANEL';
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('ADMIN_AUTH');
+            location.reload();
+        }
 
         function updateClock() {
             const el = document.getElementById('digitalClock');
             if(el) el.innerText = new Date().toLocaleTimeString('id-ID', { hour12: false });
         }
 
+        function switchTab(tab) {
+            activeTab = tab;
+            ['dashboard', 'menu', 'staff'].forEach(t => {
+                document.getElementById(`section-${t}`).classList.toggle('hidden', t !== tab);
+                document.getElementById(`nav-${t}`).classList.toggle('active', t === tab);
+            });
+            document.getElementById('tabTitle').innerText = tab;
+            lucide.createIcons();
+        }
+
         function saveApi() {
             const url = document.getElementById('apiInput').value.trim();
-            if(!url.includes('google.com')) {
-                return Swal.fire({ icon: 'error', title: 'URL Tidak Valid', text: 'Gunakan URL Web App dari Google Apps Script.', customClass: {popup: 'rounded-[35px]'} });
-            }
+            if(!url.includes('google.com')) return Swal.fire('Error', 'URL tidak valid.', 'error');
             localStorage.setItem('RM_API_URL', url);
             API_URL = url;
-            Swal.fire({ icon: 'success', title: 'Berhasil Disimpan', text: 'Sistem siap mensinkronkan data.', timer: 2000, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+            Swal.fire({ icon: 'success', title: 'API Diperbarui', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
             syncData();
         }
 
@@ -172,41 +306,36 @@
             if(!API_URL) return;
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
-                const data = await res.json();
-                DB = data;
+                DB = await res.json();
+                renderStats();
                 renderMenuTable();
-                document.getElementById('emptyState').classList.add('hidden');
-            } catch (e) { 
-                console.error(e);
-                document.getElementById('emptyState').classList.remove('hidden');
-            }
+                renderStaffTable();
+            } catch (e) { console.error("Sync error:", e); }
+        }
+
+        function renderStats() {
+            const revenue = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' ? Number(t.Total) : 0), 0);
+            document.getElementById('stat-revenue').innerText = `Rp ${revenue.toLocaleString()}`;
+            document.getElementById('stat-orders').innerText = DB.transactions.length;
+            document.getElementById('stat-menu').innerText = DB.menu.length;
         }
 
         function renderMenuTable() {
             const tbody = document.getElementById('menuTableBody');
-            document.getElementById('menuCount').innerText = DB.menu.length;
-            
             tbody.innerHTML = DB.menu.map(m => `
-                <tr class="hover:bg-slate-50 transition-all group">
-                    <td class="p-6 font-mono text-[10px] text-slate-400">#${m.ID}</td>
+                <tr class="hover:bg-slate-50 transition-all">
+                    <td class="p-6 font-mono text-[10px] text-slate-400 uppercase tracking-tighter">#${m.ID}</td>
                     <td class="p-6">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-2xl bg-slate-100 overflow-hidden border border-slate-100 flex-shrink-0 shadow-sm">
-                                <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100&q=80'}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                            </div>
-                            <div class="min-w-0">
-                                <p class="font-black text-slate-800 uppercase text-xs truncate">${m.Name}</p>
-                                <p class="text-[9px] font-bold text-violet-500 uppercase tracking-wider">${m.Category}</p>
-                            </div>
+                            <img src="${m.Img.includes('?') ? m.Img : m.Img+'?w=100'}" class="w-12 h-12 rounded-2xl object-cover shadow-sm border border-slate-100" onerror="this.src='https://placehold.co/100?text=Menu'">
+                            <div><p class="font-black text-slate-800 text-xs uppercase">${m.Name}</p><p class="text-[9px] font-bold text-violet-500 uppercase">${m.Category}</p></div>
                         </div>
                     </td>
-                    <td class="p-6">
-                        <span class="font-black text-slate-700 text-sm tracking-tighter italic">Rp ${Number(m.Price).toLocaleString()}</span>
-                    </td>
+                    <td class="p-6 font-black text-slate-700 text-sm italic tracking-tighter">Rp ${Number(m.Price).toLocaleString()}</td>
                     <td class="p-6">
                         <div class="flex gap-2 justify-end">
-                            <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                            <button onclick="deleteMenu('${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button onclick="deleteData('Menu', '${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -214,79 +343,92 @@
             lucide.createIcons();
         }
 
-        async function openMenuForm(id = null) {
-            const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Math.floor(Date.now()/1000).toString().slice(-4), Name:'', Category:'Makanan', Price:0, Description:'', Img:'' };
-            
-            const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-2xl tracking-tighter uppercase">${id ? 'Ubah Menu' : 'Menu Baru'}</span>`,
-                html: `
-                    <div class="space-y-4 p-2 text-left">
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Nama Masakan</label>
-                        <input id="m-name" class="admin-input mt-1" placeholder="Contoh: Ayam Bakar" value="${item.Name}"></div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Harga (Rp)</label>
-                            <input id="m-price" type="number" class="admin-input mt-1" placeholder="25000" value="${item.Price}"></div>
-                            <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">Kategori</label>
-                            <select id="m-cat" class="admin-input mt-1">
-                                <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>
-                                <option value="Minuman" ${item.Category === 'Minuman' ? 'selected' : ''}>Minuman</option>
-                                <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
-                            </select></div>
+        function renderStaffTable() {
+            const tbody = document.getElementById('staffTableBody');
+            tbody.innerHTML = DB.users.map(u => `
+                <tr class="hover:bg-slate-50 transition-all">
+                    <td class="p-6 font-black text-slate-800 text-xs uppercase italic tracking-widest">${u.Username}</td>
+                    <td class="p-6"><span class="px-4 py-1.5 bg-violet-50 text-violet-600 rounded-xl text-[9px] font-black uppercase tracking-widest border border-violet-100">${u.Role}</span></td>
+                    <td class="p-6">
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="openStaffForm('${u.Username}')" class="p-3 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            <button onclick="deleteData('User', '${u.Username}')" class="p-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1">URL Gambar (Unsplash)</label>
-                        <input id="m-img" class="admin-input mt-1" placeholder="Paste link gambar di sini..." value="${item.Img}"></div>
-                    </div>`,
-                showCancelButton: true,
-                confirmButtonColor: '#7c3aed',
-                confirmButtonText: 'SIMPAN DATA',
-                cancelButtonText: 'BATAL',
-                customClass: { popup: 'rounded-[50px] p-6', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic', cancelButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
-                preConfirm: () => {
-                    const n = document.getElementById('m-name').value;
-                    const p = document.getElementById('m-price').value;
-                    if(!n || !p) return Swal.showValidationMessage('Nama & Harga wajib diisi!');
-                    return {
-                        action: 'updateMenu',
-                        id: item.ID,
-                        name: n,
-                        category: document.getElementById('m-cat').value,
-                        price: p,
-                        description: item.Description || 'Menu autentik RM Pangkalan',
-                        img: document.getElementById('m-img').value || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c',
-                        rating: '5.0', available: true
-                    };
-                }
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        async function deleteData(type, id) {
+            const { isConfirmed } = await Swal.fire({ 
+                title: `<span class="italic uppercase font-black tracking-tighter">Hapus ${type}?</span>`, 
+                text: "Data yang dihapus tidak dapat dipulihkan.", 
+                icon: 'warning', 
+                showCancelButton: true, 
+                confirmButtonColor: '#ef4444', 
+                confirmButtonText: 'YA, HAPUS!', 
+                customClass: { popup: 'rounded-[40px] p-8', confirmButton: 'rounded-2xl font-black py-4 px-10' } 
             });
-            
-            if(form) {
-                Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
+            if(isConfirmed) {
+                Swal.fire({ title: 'Menghapus...', didOpen: () => Swal.showLoading(), allowOutsideClick: false });
                 try {
-                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) });
-                    Swal.fire({ icon: 'success', title: 'Tersimpan!', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: `delete${type}`, id: id, username: id }) });
                     syncData();
-                } catch (e) { Swal.fire('Gagal', 'Terjadi kesalahan jaringan', 'error'); }
+                    Swal.fire({ icon: 'success', title: 'Terhapus!', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+                } catch (e) { Swal.fire('Gagal', 'Gagal menghapus data di cloud.', 'error'); }
             }
         }
 
-        async function deleteMenu(id) {
-            const { isConfirmed } = await Swal.fire({
-                title: 'Hapus Menu?',
-                text: "Data yang dihapus tidak bisa dikembalikan.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Ya, Hapus!',
-                customClass: { popup: 'rounded-[40px]' }
+        async function openMenuForm(id = null) {
+            const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Math.floor(Date.now()/1000).toString().slice(-4), Name:'', Category:'Makanan', Price:0, Description:'', Img:'' };
+            const { value: form } = await Swal.fire({
+                title: `<span class="italic font-black text-2xl tracking-tighter uppercase">${id ? 'Ubah Menu' : 'Menu Baru'}</span>`,
+                html: `<div class="space-y-4 p-2 text-left">
+                    <input id="m-name" class="admin-input" placeholder="Nama Menu" value="${item.Name}">
+                    <input id="m-price" type="number" class="admin-input" placeholder="Harga" value="${item.Price}">
+                    <select id="m-cat" class="admin-input">
+                        <option value="Makanan" ${item.Category === 'Makanan' ? 'selected' : ''}>Makanan</option>
+                        <option value="Minuman" ${item.Category === 'Minuman' ? 'selected' : ''}>Minuman</option>
+                        <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
+                    </select>
+                    <input id="m-img" class="admin-input" placeholder="URL Gambar Unsplash" value="${item.Img}">
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed',
+                customClass: { popup: 'rounded-[50px] p-6', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
+                preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, img: document.getElementById('m-img').value, description: item.Description || 'RM Pangkalan Signature', rating: '5.0', available: true })
             });
-            
-            if(isConfirmed) {
-                Swal.fire({ title: 'Menghapus...', didOpen: () => Swal.showLoading() });
-                try {
-                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'deleteMenu', id: id }) });
-                    syncData();
-                    Swal.fire({ icon: 'success', title: 'Terhapus!', timer: 1500, showConfirmButton: false });
-                } catch (e) { Swal.fire('Gagal', 'Error database', 'error'); }
+            if(form) {
+                Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading() });
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); 
+                syncData(); 
+                Swal.close();
+            }
+        }
+
+        async function openStaffForm(user = null) {
+            const staff = user ? DB.users.find(u => u.Username === user) : { Username: '', Password: '', Role: 'Waiters' };
+            const { value: form } = await Swal.fire({
+                title: `<span class="italic font-black text-2xl tracking-tighter uppercase">${user ? 'Ubah Staff' : 'Staff Baru'}</span>`,
+                html: `<div class="space-y-4 p-2 text-left">
+                    <input id="s-user" class="admin-input" placeholder="Username" value="${staff.Username}" ${user ? 'readonly' : ''}>
+                    <input id="s-pass" type="text" class="admin-input" placeholder="Password" value="${staff.Password}">
+                    <select id="s-role" class="admin-input">
+                        <option value="Owner" ${staff.Role === 'Owner' ? 'selected' : ''}>Owner</option>
+                        <option value="Kasir" ${staff.Role === 'Kasir' ? 'selected' : ''}>Kasir</option>
+                        <option value="Waiters" ${staff.Role === 'Waiters' ? 'selected' : ''}>Waiters</option>
+                        <option value="Koki" ${staff.Role === 'Koki' ? 'selected' : ''}>Koki</option>
+                    </select>
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed',
+                customClass: { popup: 'rounded-[50px] p-6', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
+                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value })
+            });
+            if(form) {
+                Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading() });
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); 
+                syncData(); 
+                Swal.close();
             }
         }
     </script>
