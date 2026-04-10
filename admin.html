@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RM Pangkalan | Owner Center Enterprise</title>
     
+    <!-- PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#7c3aed">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3448/3448609.png">
+
     <!-- Frameworks -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -20,34 +26,35 @@
         :root { --primary: #7c3aed; --bg: #f3f4f9; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #1e293b; -webkit-tap-highlight-color: transparent; }
         
-        /* Layout */
-        .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; position: relative; overflow: hidden; }
-        .logo-box { background: rgba(255,255,255,0.1); border-radius: 25px; padding: 20px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
+        /* Layout Optimization */
+        .sidebar-purple { background: var(--primary); border-radius: 0 40px 40px 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .logo-box { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 15px; border: 1px solid rgba(255,255,255,0.15); width: 100%; }
         
-        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 20px; }
+        /* Navigation Items */
+        .nav-item { color: rgba(255,255,255,0.6); transition: 0.3s; cursor: pointer; border-radius: 18px; display: flex; align-items: center; justify-content: center; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         
-        .card-pro { background: white; border-radius: 35px; border: 1px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); }
-        .table-header { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 20px; background: #f8fafc; }
+        .card-pro { background: white; border-radius: 30px; border: 1.5px solid #f1f5f9; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.02); overflow: hidden; }
+        .table-header { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; padding: 16px; background: #f8fafc; }
         
-        /* Ultra-Thin Padding for Modals */
+        /* Mobile Form / Modal Ultra-Thin Padding */
         .swal2-popup.detail-modal { 
-            border-radius: 50px !important; 
-            padding: 1.25rem 0.1rem !important; /* MINIMIZED PADDING AS REQUESTED */
-            width: 98% !important; 
-            max-width: 550px !important; 
+            border-radius: 40px !important; 
+            padding: 1.5rem 0.1rem !important; /* ULTRA MINIMAL PADDING */
+            width: 96% !important; 
+            max-width: 500px !important; 
         }
 
         .admin-input {
-            width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px;
-            padding: 14px 18px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
+            width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 16px;
+            padding: 12px 16px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s;
         }
         .admin-input:focus { border-color: var(--primary); background: white; }
 
-        .live-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; position: relative; }
-        .live-dot::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.8); opacity: 0; } }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; position: relative; }
+        .live-dot::after { content: ''; position: absolute; inset: -3px; border-radius: 50%; border: 2px solid #22c55e; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -57,7 +64,18 @@
             position: fixed; inset: 0; background: var(--primary); z-index: 10000;
             display: flex; align-items: center; justify-content: center; padding: 15px;
         }
-        [inert] { pointer-events: none; user-select: none; filter: blur(6px); opacity: 0.4; }
+        
+        [inert] { pointer-events: none; user-select: none; filter: blur(4px); opacity: 0.4; }
+
+        /* Responsive Sidebar */
+        @media (max-width: 768px) {
+            .mobile-bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; background: white; height: 75px; z-index: 50; padding: 0 20px; border-top: 1px solid #f1f5f9; border-radius: 30px 30px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.05); }
+            .sidebar-hidden { display: none; }
+            .content-full { padding-bottom: 100px; }
+        }
+        
+        .tab-btn-mobile { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #94a3b8; font-weight: 800; font-size: 9px; text-transform: uppercase; }
+        .tab-btn-mobile.active { color: var(--primary); }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -68,144 +86,161 @@
             <div class="bg-violet-100 w-20 h-20 rounded-[30px] flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="shield-check" class="text-violet-600 w-10 h-10"></i>
             </div>
-            <h2 class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Admin Access</h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-10">Owner RM Pangkalan Enterprise</p>
+            <h2 class="text-2xl md:text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">Owner Access</h2>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-10 italic">Management Enterprise System</p>
             
             <div class="space-y-4">
-                <div class="text-left">
+                <div class="text-left px-2">
                     <label class="text-[9px] font-black text-slate-400 uppercase ml-3 tracking-widest">Username</label>
                     <input type="text" id="loginUser" placeholder="owner" class="admin-input mt-1">
                 </div>
-                <div class="text-left">
+                <div class="text-left px-2">
                     <label class="text-[9px] font-black text-slate-400 uppercase ml-3 tracking-widest">Password</label>
                     <input type="password" id="loginPass" placeholder="••••••••" class="admin-input mt-1">
                 </div>
                 <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[22px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-6">MASUK KE PANEL</button>
             </div>
-            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest italic">Enterprise Cloud POS v8.5</p>
+            <p class="mt-8 text-[9px] font-bold text-slate-300 uppercase tracking-widest">V9.0 Stable Enterprise</p>
         </div>
     </div>
 
-    <!-- SIDEBAR -->
-    <aside id="mainSidebar" class="hidden md:flex flex-col w-24 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white transition-all">
+    <!-- SIDEBAR - Desktop/Tablet Slim -->
+    <aside id="mainSidebar" class="sidebar-hidden md:flex flex-col w-20 lg:w-72 sidebar-purple m-4 mr-0 flex-shrink-0 shadow-2xl text-white">
         <div class="p-6 lg:p-10 z-10 flex flex-col items-center lg:items-start w-full">
             <div class="logo-box mb-14 flex flex-col items-center lg:items-start text-center lg:text-left">
-                <span class="text-lg lg:text-2xl font-black italic tracking-tighter leading-none mb-1 uppercase">Pangkalan</span>
-                <span class="text-[8px] lg:text-[10px] font-bold uppercase tracking-[3px] opacity-70 italic">Admin Center</span>
+                <span class="text-xl lg:text-2xl font-black italic tracking-tighter leading-none mb-1 uppercase">PANGKALAN</span>
+                <span class="hidden lg:block text-[8px] font-bold uppercase tracking-[3px] opacity-70 italic">Owner Center</span>
             </div>
             
             <nav class="space-y-4 w-full">
-                <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
-                <div onclick="switchTab('menu')" id="nav-menu" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Daftar Menu</span></div>
-                <div onclick="switchTab('sales')" id="nav-sales" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="file-text"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Riwayat Sales</span></div>
-                <div onclick="switchTab('staff')" id="nav-staff" class="nav-item flex items-center justify-center lg:justify-start gap-4 p-4 font-bold transition-all"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Karyawan</span></div>
+                <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active p-4 font-bold transition-all gap-4 lg:justify-start"><i data-lucide="layout-dashboard"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Dashboard</span></div>
+                <div onclick="switchTab('menu')" id="nav-menu" class="nav-item p-4 font-bold transition-all gap-4 lg:justify-start"><i data-lucide="utensils"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Daftar Menu</span></div>
+                <div onclick="switchTab('sales')" id="nav-sales" class="nav-item p-4 font-bold transition-all gap-4 lg:justify-start"><i data-lucide="file-text"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Riwayat Sales</span></div>
+                <div onclick="switchTab('staff')" id="nav-staff" class="nav-item p-4 font-bold transition-all gap-4 lg:justify-start"><i data-lucide="users"></i> <span class="hidden lg:block text-xs uppercase tracking-widest">Karyawan</span></div>
             </nav>
         </div>
         
         <div class="mt-auto p-6 z-10 flex flex-col items-center lg:items-start gap-4">
             <div class="flex items-center gap-3 bg-white/10 px-4 py-3 rounded-2xl border border-white/10 w-full overflow-hidden">
-                <div id="statusIndicator" class="live-dot flex-shrink-0"></div>
-                <div class="flex flex-col min-w-0">
-                    <span class="hidden lg:block text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic leading-none">System Online</span>
-                    <span id="digitalClock" class="hidden lg:block text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
+                <div class="live-dot flex-shrink-0"></div>
+                <div class="hidden lg:flex flex-col min-w-0">
+                    <span class="text-[9px] font-black uppercase tracking-tighter text-violet-100 opacity-60 italic">Online</span>
+                    <span id="digitalClock" class="text-[11px] font-black tracking-widest text-white mt-0.5">00:00:00</span>
                 </div>
             </div>
             <button onclick="handleLogout()" class="flex items-center justify-center gap-3 bg-white/10 w-full p-4 rounded-2xl font-bold hover:bg-white/20 transition-all border border-white/10 text-white">
-                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="hidden lg:block text-xs uppercase tracking-widest text-white">Logout</span>
+                <i data-lucide="log-out" class="w-5 h-5"></i> <span class="hidden lg:block text-[10px] uppercase tracking-widest">Logout</span>
             </button>
         </div>
     </aside>
 
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="hidden mobile-bottom-nav">
+        <button onclick="switchTab('dashboard')" id="btn-m-dashboard" class="tab-btn-mobile active"><i data-lucide="layout-dashboard"></i><span>Dash</span></button>
+        <button onclick="switchTab('menu')" id="btn-m-menu" class="tab-btn-mobile"><i data-lucide="utensils"></i><span>Menu</span></button>
+        <button onclick="switchTab('sales')" id="btn-m-sales" class="tab-btn-mobile"><i data-lucide="file-text"></i><span>Sales</span></button>
+        <button onclick="switchTab('staff')" id="btn-m-staff" class="tab-btn-mobile"><i data-lucide="users"></i><span>Staff</span></button>
+        <button onclick="handleLogout()" class="tab-btn-mobile text-red-400"><i data-lucide="log-out"></i><span>Keluar</span></button>
+    </nav>
+
     <!-- MAIN CONTENT -->
-    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden">
-        <header class="h-20 md:h-24 px-4 md:px-6 lg:px-8 flex items-center justify-between flex-shrink-0 bg-white/50 backdrop-blur-md border-b border-slate-100">
-            <div>
-                <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic leading-none uppercase tracking-tighter">DASHBOARD</h1>
-                <p class="text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 leading-none">Enterprise Management System</p>
-            </div>
+    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 bg-transparent overflow-hidden content-full">
+        <header class="h-16 md:h-24 px-4 md:px-8 flex items-center justify-between flex-shrink-0 bg-white/80 backdrop-blur-md border-b border-slate-100">
             <div class="flex items-center gap-3">
-                <button onclick="syncData()" class="p-2.5 md:p-3 bg-white rounded-xl shadow-sm text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
-                <div class="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-slate-900 flex items-center justify-center text-white font-black text-sm" id="userInitial">OW</div>
+                <div class="md:hidden bg-violet-600 text-white p-2 rounded-xl font-black italic text-xs">RM.</div>
+                <div>
+                    <h1 id="tabTitle" class="text-base md:text-xl font-black text-slate-800 italic uppercase tracking-tighter">DASHBOARD</h1>
+                    <p class="hidden sm:block text-[9px] text-slate-400 font-bold uppercase tracking-widest leading-none mt-1">Enterprise POS System</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <div class="hidden sm:flex flex-col text-right mr-2">
+                     <span id="mobileClock" class="text-[10px] font-black text-slate-400 md:hidden">00:00:00</span>
+                </div>
+                <button onclick="syncData()" class="p-2 md:p-3 bg-slate-50 rounded-xl text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-4 md:w-5 h-4 md:h-5"></i></button>
+                <div class="w-9 md:w-11 h-9 md:h-11 rounded-xl bg-slate-900 flex items-center justify-center text-white font-black text-xs" id="userInitial">OW</div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto no-scrollbar p-3 md:p-6 lg:p-8 space-y-6 md:space-y-8 pb-32">
+        <div class="flex-1 overflow-y-auto no-scrollbar p-3 md:p-6 lg:p-8 space-y-5 md:space-y-8">
             
             <!-- SECTION: DASHBOARD -->
             <div id="section-dashboard" class="space-y-6 animate-pop">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    <div class="card-pro p-8 border-l-[12px] border-violet-600">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Total Omzet</p>
-                        <h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">Rp 0</h2>
+                    <div class="card-pro p-6 md:p-8 border-l-[10px] border-violet-600 flex items-center justify-between">
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Omzet Hari Ini</p>
+                            <h2 id="stat-revenue" class="text-xl md:text-2xl font-black text-slate-800 mt-1 tracking-tighter italic">Rp 0</h2>
+                        </div>
+                        <i data-lucide="banknote" class="text-slate-100 w-10 h-10"></i>
                     </div>
-                    <div class="card-pro p-8 border-l-[12px] border-orange-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Transaksi Sukses</p>
-                        <h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">0</h2>
+                    <div class="card-pro p-6 md:p-8 border-l-[10px] border-orange-500 flex items-center justify-between">
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Total Order</p>
+                            <h2 id="stat-orders" class="text-xl md:text-2xl font-black text-slate-800 mt-1 tracking-tighter italic">0</h2>
+                        </div>
+                        <i data-lucide="shopping-cart" class="text-slate-100 w-10 h-10"></i>
                     </div>
-                    <div class="card-pro p-8 border-l-[12px] border-blue-500">
-                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest italic leading-none">Menu Aktif</p>
-                        <h2 id="stat-menu" class="text-2xl md:text-3xl font-black text-slate-800 mt-2 tracking-tighter italic leading-none">0</h2>
+                    <div class="card-pro p-6 md:p-8 border-l-[10px] border-blue-500 flex items-center justify-between">
+                        <div>
+                            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Menu Aktif</p>
+                            <h2 id="stat-menu" class="text-xl md:text-2xl font-black text-slate-800 mt-1 tracking-tighter italic">0</h2>
+                        </div>
+                        <i data-lucide="utensils-cross" class="text-slate-100 w-10 h-10"></i>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Export Box -->
-                    <section class="card-pro p-8 bg-slate-900 text-white">
-                        <h3 class="text-xs font-black uppercase tracking-widest mb-4">Export Rekap Penjualan</h3>
-                        <p class="text-[10px] text-slate-400 mb-8 uppercase font-bold leading-relaxed">Unduh data transaksi RM Pangkalan dalam format digital untuk pelaporan bulanan.</p>
-                        <div class="flex flex-wrap gap-4">
-                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 p-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 active:scale-95 transition-all"><i data-lucide="file-spreadsheet"></i> Excel (.xlsx)</button>
-                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 p-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 active:scale-95 transition-all"><i data-lucide="file-text"></i> PDF Report</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+                    <!-- Export Management -->
+                    <section class="card-pro p-6 md:p-8 bg-slate-900 text-white relative overflow-hidden">
+                        <i data-lucide="download-cloud" class="absolute -right-4 -bottom-4 w-32 h-32 opacity-5"></i>
+                        <h3 class="text-xs font-black uppercase tracking-widest mb-2 italic">Export Laporan Digital</h3>
+                        <p class="text-[10px] text-slate-400 mb-6 uppercase font-bold leading-relaxed">Arsip data transaksi dalam format .XLSX atau .PDF</p>
+                        <div class="flex gap-3">
+                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"><i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Excel</button>
+                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 h-14 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 transition-all"><i data-lucide="file-text" class="w-4 h-4"></i> PDF</button>
                         </div>
                     </section>
                     
-                    <!-- Top Products (Missing in previous version) -->
-                    <section class="card-pro p-8">
-                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6">Menu Terlaris</h3>
-                        <div id="topProductsList" class="space-y-4">
-                            <!-- Items auto generated -->
-                            <p class="text-center py-4 text-xs italic text-slate-300">Menghitung data...</p>
+                    <!-- Popular Menu -->
+                    <section class="card-pro p-6 md:p-8">
+                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-4 italic">Menu Terlaris</h3>
+                        <div id="topProductsList" class="space-y-2">
+                            <p class="text-center py-4 text-[10px] font-bold text-slate-300 uppercase tracking-widest">Sedang Menghitung...</p>
                         </div>
                     </section>
                 </div>
 
-                <!-- API Config -->
-                <section class="card-pro p-6 md:p-10">
-                    <div class="flex items-center gap-4 mb-8">
-                        <div class="bg-violet-100 p-3 rounded-2xl text-violet-600 shadow-sm"><i data-lucide="link-2"></i></div>
-                        <div>
-                            <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Sistem API & Drive</h3>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase mt-1 leading-none">Pengaturan Folder ID & Endpoint Apps Script</p>
+                <!-- API Configuration (Small on mobile) -->
+                <section class="card-pro p-6 md:p-8">
+                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic">Konfigurasi Cloud</h3>
+                    <div class="space-y-4">
+                        <div class="space-y-1.5">
+                            <label class="text-[9px] font-black uppercase text-slate-400 ml-2">API Endpoint</label>
+                            <input type="text" id="apiInput" class="admin-input" placeholder="Google Apps Script URL">
                         </div>
+                        <div class="space-y-1.5">
+                            <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Media Folder ID</label>
+                            <input type="text" id="folderIdInput" class="admin-input" placeholder="G-Drive Folder ID">
+                        </div>
+                        <button onclick="saveConfig()" class="w-full bg-violet-600 text-white h-14 rounded-2xl font-black text-[10px] uppercase italic tracking-widest shadow-lg active:scale-95 transition-all">Simpan Konfigurasi</button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Main API URL</label>
-                            <input type="text" id="apiInput" class="admin-input" placeholder="URL Apps Script">
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[9px] font-black uppercase text-slate-400 ml-2">Drive Folder ID</label>
-                            <input type="text" id="folderIdInput" class="admin-input" placeholder="ID Folder Drive">
-                        </div>
-                    </div>
-                    <button onclick="saveConfig()" class="w-full bg-violet-600 text-white mt-6 py-4 rounded-2xl font-black text-xs uppercase italic tracking-widest shadow-lg">UPDATE CONFIG</button>
                 </section>
             </div>
 
             <!-- SECTION: MENU LIST -->
             <div id="section-menu" class="hidden animate-pop">
-                <section class="card-pro overflow-hidden">
-                    <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic leading-none">Inventory Masakan</h3>
-                        <button onclick="openMenuForm()" class="w-full sm:w-auto bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all active:scale-95">+ TAMBAH MENU</button>
+                <section class="card-pro">
+                    <div class="p-5 md:p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/50">
+                        <h3 class="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest italic">Inventory</h3>
+                        <button onclick="openMenuForm()" class="bg-slate-900 text-white px-5 py-2.5 rounded-xl font-black text-[9px] md:text-[10px] uppercase tracking-widest">+ TAMBAH</button>
                     </div>
                     <div class="overflow-x-auto no-scrollbar">
-                        <table id="menuTable" class="w-full text-left">
+                        <!-- Table for desktop, Card view for mobile managed by CSS/JS -->
+                        <table class="w-full text-left hidden md:table">
                             <thead>
                                 <tr>
-                                    <th class="table-header w-12">ID</th>
                                     <th class="table-header">Masakan</th>
-                                    <th class="table-header">Deskripsi</th>
                                     <th class="table-header">Harga</th>
                                     <th class="table-header">Status</th>
                                     <th class="table-header text-right">Aksi</th>
@@ -213,58 +248,34 @@
                             </thead>
                             <tbody id="menuTableBody" class="divide-y divide-slate-50"></tbody>
                         </table>
+                        <!-- Card View for Mobile -->
+                        <div id="menuMobileList" class="md:hidden divide-y divide-slate-50"></div>
                     </div>
                 </section>
             </div>
 
-            <!-- SECTION: SALES HISTORY (New) -->
+            <!-- SECTION: SALES HISTORY -->
             <div id="section-sales" class="hidden animate-pop">
-                <section class="card-pro overflow-hidden">
-                    <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <div>
-                            <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic leading-none">Riwayat Transaksi</h3>
-                            <p class="text-[9px] text-slate-400 font-bold mt-1 uppercase">Log Pesanan Real-time</p>
-                        </div>
-                        <div class="flex gap-2">
-                             <button onclick="syncData()" class="bg-slate-100 p-3 rounded-xl"><i data-lucide="refresh-cw" class="w-4 h-4"></i></button>
-                        </div>
+                <section class="card-pro">
+                    <div class="p-5 md:p-8 border-b border-slate-50 flex items-center justify-between">
+                        <h3 class="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest italic">Riwayat Transaksi</h3>
+                        <div class="text-[9px] font-black text-slate-400 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-tighter">Live Audit</div>
                     </div>
-                    <div class="overflow-x-auto no-scrollbar">
-                        <table id="salesTable" class="w-full text-left">
-                            <thead>
-                                <tr>
-                                    <th class="table-header w-12">ID</th>
-                                    <th class="table-header">Waktu</th>
-                                    <th class="table-header">Pelanggan</th>
-                                    <th class="table-header">Item Pesanan</th>
-                                    <th class="table-header">Total</th>
-                                    <th class="table-header">Metode</th>
-                                </tr>
-                            </thead>
-                            <tbody id="salesTableBody" class="divide-y divide-slate-50"></tbody>
-                        </table>
+                    <div id="salesListContainer" class="divide-y divide-slate-50 max-h-[600px] overflow-y-auto no-scrollbar">
+                        <!-- Transaksi cards/table -->
                     </div>
                 </section>
             </div>
 
             <!-- SECTION: STAFF LIST -->
             <div id="section-staff" class="hidden animate-pop">
-                <section class="card-pro overflow-hidden">
-                    <div class="p-6 md:p-8 border-b border-slate-50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest italic leading-none">Kontrol Akses Staff</h3>
-                        <button onclick="openStaffForm()" class="w-full sm:w-auto bg-violet-600 text-white px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-violet-100 transition-all active:scale-95">+ TAMBAH STAFF</button>
+                <section class="card-pro">
+                    <div class="p-5 md:p-8 border-b border-slate-50 flex items-center justify-between">
+                        <h3 class="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest italic">Akses Karyawan</h3>
+                        <button onclick="openStaffForm()" class="bg-violet-600 text-white px-5 py-2.5 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-lg">+ STAFF</button>
                     </div>
-                    <div class="overflow-x-auto no-scrollbar">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr>
-                                    <th class="table-header">Username</th>
-                                    <th class="table-header">Role Access</th>
-                                    <th class="table-header text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="staffTableBody" class="divide-y divide-slate-50"></tbody>
-                        </table>
+                    <div id="staffListContainer" class="divide-y divide-slate-50">
+                        <!-- Staff list cards -->
                     </div>
                 </section>
             </div>
@@ -294,13 +305,13 @@
             if (user) {
                 if (document.activeElement) document.activeElement.blur();
                 overlay.style.display = 'none'; overlay.setAttribute('inert', ''); 
-                document.getElementById('mainSidebar').classList.remove('hidden');
+                document.getElementById('mainSidebar').classList.remove('sidebar-hidden');
                 document.getElementById('mainContent').classList.remove('hidden');
                 document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
                 syncData();
             } else {
                 overlay.style.display = 'flex'; overlay.removeAttribute('inert');
-                document.getElementById('mainSidebar').classList.add('hidden');
+                document.getElementById('mainSidebar').classList.add('sidebar-hidden');
                 document.getElementById('mainContent').classList.add('hidden');
             }
         }
@@ -309,6 +320,7 @@
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
             const btn = document.getElementById('loginBtn');
+            if(!user || !pass) return Swal.fire('Error', 'Input tidak boleh kosong.', 'error');
             btn.innerText = 'VERIFIKASI...'; btn.disabled = true;
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
@@ -317,21 +329,27 @@
                 if (validUser) {
                     sessionStorage.setItem('ADMIN_AUTH', validUser.Username);
                     checkAuth();
-                } else { Swal.fire('Gagal', 'Role Owner tidak ditemukan.', 'error'); }
-            } catch (e) { Swal.fire('Error', 'Koneksi API gagal.', 'error'); }
+                } else { Swal.fire('Gagal', 'Kredensial tidak valid.', 'error'); }
+            } catch (e) { Swal.fire('Error', 'Gagal terhubung ke Cloud.', 'error'); }
             finally { btn.innerText = 'MASUK KE PANEL'; btn.disabled = false; }
         }
 
         function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
-        function updateClock() { const el = document.getElementById('digitalClock'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }
+        function updateClock() { 
+            const time = new Date().toLocaleTimeString('id-ID', {hour12:false});
+            if(document.getElementById('digitalClock')) document.getElementById('digitalClock').innerText = time;
+            if(document.getElementById('mobileClock')) document.getElementById('mobileClock').innerText = time;
+        }
 
         function switchTab(tab) {
             activeTab = tab;
             ['dashboard', 'menu', 'sales', 'staff'].forEach(t => {
                 const section = document.getElementById(`section-${t}`);
                 const nav = document.getElementById(`nav-${t}`);
+                const btnM = document.getElementById(`btn-m-${t}`);
                 if(section) section.classList.toggle('hidden', t !== tab);
                 if(nav) nav.classList.toggle('active', t === tab);
+                if(btnM) btnM.classList.toggle('active', t === tab);
             });
             document.getElementById('tabTitle').innerText = tab.toUpperCase();
             lucide.createIcons();
@@ -342,7 +360,7 @@
             const fid = document.getElementById('folderIdInput').value.trim();
             localStorage.setItem('RM_API_URL', url); API_URL = url;
             localStorage.setItem('RM_FOLDER_ID', fid); FOLDER_ID = fid;
-            Swal.fire({ icon: 'success', title: 'Config Update', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
+            Swal.fire({ icon: 'success', title: 'Berhasil Update', text: 'Konfigurasi Cloud Disimpan', timer: 1500, showConfirmButton: false, customClass: {popup: 'rounded-[35px]'} });
             syncData();
         }
 
@@ -350,7 +368,7 @@
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 DB = await res.json();
-                renderStats(); renderMenuTable(); renderSalesTable(); renderStaffTable(); renderTopProducts();
+                renderStats(); renderMenuTable(); renderSalesList(); renderStaffList(); renderTopProducts();
             } catch (e) { console.error(e); }
         }
 
@@ -364,107 +382,122 @@
         function renderTopProducts() {
             const container = document.getElementById('topProductsList');
             const itemCounts = {};
-            DB.transactions.forEach(t => {
-                t.Items.split(',').forEach(i => {
-                    const name = i.trim();
-                    itemCounts[name] = (itemCounts[name] || 0) + 1;
-                });
-            });
+            DB.transactions.forEach(t => t.Items.split(',').forEach(i => { const name = i.trim(); itemCounts[name] = (itemCounts[name] || 0) + 1; }));
             const sorted = Object.entries(itemCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
             container.innerHTML = sorted.map(([name, count]) => `
-                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
-                    <span class="text-xs font-black text-slate-700 uppercase italic truncate w-48">${name}</span>
-                    <span class="bg-violet-600 text-white text-[10px] font-black px-3 py-1 rounded-lg italic">${count}x</span>
+                <div class="flex items-center justify-between p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <span class="text-[10px] md:text-xs font-black text-slate-700 uppercase italic truncate w-32 md:w-48">${name}</span>
+                    <span class="bg-violet-600 text-white text-[9px] font-black px-3 py-1 rounded-lg">${count}x</span>
                 </div>
             `).join('');
-            if(sorted.length === 0) container.innerHTML = '<p class="text-center py-4 text-xs text-slate-300 uppercase">Belum ada transaksi</p>';
+            if(sorted.length === 0) container.innerHTML = '<p class="text-center py-4 text-[10px] text-slate-300 font-bold uppercase tracking-widest">Belum ada transaksi</p>';
         }
 
         function renderMenuTable() {
             const tbody = document.getElementById('menuTableBody');
-            tbody.innerHTML = DB.menu.map(m => `
+            const mobileList = document.getElementById('menuMobileList');
+            
+            const rowsHtml = DB.menu.map(m => `
                 <tr class="hover:bg-slate-50 transition-all">
                     <td class="p-6 font-mono text-[9px] text-slate-400">#${m.ID}</td>
                     <td class="p-6">
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3">
                             <img src="${m.Img.includes('?') ? m.Img : (m.Img.length < 50 ? 'https://lh3.googleusercontent.com/d/'+m.Img : m.Img)}" class="w-10 h-10 rounded-xl object-cover shadow-sm" onerror="this.src='https://placehold.co/100?text=Food'">
                             <p class="font-black text-slate-800 text-xs uppercase italic truncate w-32">${m.Name}</p>
                         </div>
                     </td>
-                    <td class="p-6"><p class="text-[10px] text-slate-400 italic w-40 truncate">${m.Description || '-'}</p></td>
-                    <td class="p-6 font-black text-slate-700 text-xs italic tracking-tighter">Rp ${Number(m.Price).toLocaleString()}</td>
-                    <td class="p-6"><span class="badge-status ${m.Available ? 'status-ready' : 'status-out'}">${m.Available ? 'Ready' : 'Out'}</span></td>
-                    <td class="p-6">
+                    <td class="p-6 text-[10px] text-slate-400 italic truncate w-32">${m.Description || '-'}</td>
+                    <td class="p-6 font-black text-slate-700 text-xs tracking-tighter">Rp ${Number(m.Price).toLocaleString()}</td>
+                    <td class="p-6"><span class="badge-status ${m.Available ? 'status-ready' : 'status-out'}">${m.Available ? 'READY' : 'OUT'}</span></td>
+                    <td class="p-6 text-right">
                         <div class="flex gap-2 justify-end">
-                            <button onclick="openMenuForm('${m.ID}')" class="p-2.5 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                            <button onclick="deleteData('Menu', '${m.ID}')" class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="openMenuForm('${m.ID}')" class="p-2.5 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="edit-3" class="w-3.5 h-3.5"></i></button>
+                            <button onclick="deleteData('Menu', '${m.ID}')" class="p-2.5 bg-red-50 text-red-600 rounded-xl"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                         </div>
                     </td>
                 </tr>`).join('');
+            
+            const cardsHtml = DB.menu.map(m => `
+                <div class="p-4 flex items-center justify-between gap-4">
+                    <div class="flex items-center gap-4 flex-1 min-w-0">
+                        <img src="${m.Img.includes('?') ? m.Img : (m.Img.length < 50 ? 'https://lh3.googleusercontent.com/d/'+m.Img : m.Img)}" class="w-12 h-12 rounded-2xl object-cover" onerror="this.src='https://placehold.co/100?text=Food'">
+                        <div class="min-w-0">
+                            <p class="font-black text-slate-800 text-xs uppercase italic truncate leading-none mb-1">${m.Name}</p>
+                            <p class="text-[10px] font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="openMenuForm('${m.ID}')" class="p-3 bg-slate-100 rounded-xl"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <button onclick="deleteData('Menu', '${m.ID}')" class="p-3 bg-red-50 text-red-600 rounded-xl"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`).join('');
+
+            tbody.innerHTML = rowsHtml;
+            mobileList.innerHTML = cardsHtml;
             lucide.createIcons();
         }
 
-        function renderSalesTable() {
-            const tbody = document.getElementById('salesTableBody');
-            tbody.innerHTML = DB.transactions.slice().reverse().map(t => `
-                <tr class="hover:bg-slate-50 transition-all text-xs">
-                    <td class="p-6 font-mono text-slate-400 uppercase">#${t.ID.slice(-4)}</td>
-                    <td class="p-6 font-bold text-slate-400 italic">${new Date(t.Date).toLocaleString('id-ID', {hour12:false})}</td>
-                    <td class="p-6 font-black text-slate-700 uppercase italic">${t.Role}</td>
-                    <td class="p-6"><p class="text-[10px] font-bold text-slate-500 uppercase leading-relaxed w-64">${t.Items}</p></td>
-                    <td class="p-6 font-black text-violet-600 italic">Rp ${Number(t.Total).toLocaleString()}</td>
-                    <td class="p-6"><span class="bg-slate-100 px-3 py-1 rounded-lg text-[9px] font-black uppercase text-slate-400">${t.Type.split(' ')[0]}</span></td>
-                </tr>`).join('');
+        function renderSalesList() {
+            const container = document.getElementById('salesListContainer');
+            container.innerHTML = DB.transactions.slice().reverse().map(t => `
+                <div class="p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 group">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-[9px] font-black text-slate-300 uppercase">#${t.ID.slice(-4)}</span>
+                            <span class="text-[10px] font-black text-slate-800 uppercase italic">${t.Role}</span>
+                            <span class="text-[9px] font-bold text-slate-400 uppercase">${new Date(t.Date).toLocaleString('id-ID', {hour:'2-digit', minute:'2-digit'})}</span>
+                        </div>
+                        <p class="text-[11px] font-bold text-slate-500 uppercase leading-relaxed italic line-clamp-1">${t.Items}</p>
+                    </div>
+                    <div class="flex items-center justify-between md:justify-end md:gap-10 border-t md:border-none pt-3 md:pt-0 border-slate-50">
+                        <span class="bg-slate-100 px-3 py-1 rounded-lg text-[9px] font-black uppercase text-slate-400">${t.Type.split(' ')[0]}</span>
+                        <span class="font-black text-violet-600 text-sm italic">Rp ${Number(t.Total).toLocaleString()}</span>
+                    </div>
+                </div>`).join('');
+            if(DB.transactions.length === 0) container.innerHTML = '<div class="py-20 text-center opacity-30 font-black uppercase tracking-widest text-xs italic">Belum Ada Transaksi</div>';
         }
 
-        function renderStaffTable() {
-            const tbody = document.getElementById('staffTableBody');
-            tbody.innerHTML = DB.users.map(u => `
-                <tr class="hover:bg-slate-50 transition-all text-xs">
-                    <td class="p-6 font-black text-slate-800 uppercase italic tracking-widest">${u.Username}</td>
-                    <td class="p-6"><span class="px-4 py-1.5 bg-violet-50 text-violet-600 rounded-xl text-[9px] font-black uppercase tracking-widest">${u.Role}</span></td>
-                    <td class="p-6 text-right">
-                        <button onclick="openStaffForm('${u.Username}')" class="p-2.5 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                    </td>
-                </tr>`).join('');
+        function renderStaffList() {
+            const container = document.getElementById('staffListContainer');
+            container.innerHTML = DB.users.map(u => `
+                <div class="p-5 flex items-center justify-between">
+                    <div>
+                        <p class="font-black text-slate-800 uppercase italic text-xs tracking-widest">${u.Username}</p>
+                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">${u.Role}</p>
+                    </div>
+                    <button onclick="openStaffForm('${u.Username}')" class="p-3 bg-violet-50 text-violet-600 rounded-xl active:scale-95"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                </div>`).join('');
             lucide.createIcons();
         }
 
-        // --- EXPORT LOGIC ---
+        // --- EXPORT ---
         function exportToExcel() {
-            const ws = XLSX.utils.json_to_sheet(DB.transactions);
+            const data = DB.transactions.map(t => ({ ID: t.ID, Waktu: t.Date, Pelanggan: t.Role, Menu: t.Items, Total: t.Total, Tipe: t.Type }));
+            const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Sales History");
-            XLSX.writeFile(wb, `Report_Pangkalan_${new Date().toLocaleDateString()}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Rekap Penjualan");
+            XLSX.writeFile(wb, `RM_PANGKALAN_REKAP_${new Date().getTime()}.xlsx`);
         }
 
         function exportToPDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text("LAPORAN PENJUALAN RM PANGKALAN", 14, 15);
-            doc.setFontSize(10);
-            doc.text(`Dicetak pada: ${new Date().toLocaleString()}`, 14, 22);
-            
-            const tableData = DB.transactions.map(t => [t.ID, new Date(t.Date).toLocaleDateString(), t.Role, t.Items, t.Total]);
-            doc.autoTable({
-                head: [['ID', 'Tanggal', 'Pelanggan', 'Item', 'Total']],
-                body: tableData,
-                startY: 30,
-                theme: 'grid',
-                headStyles: { fillColor: [124, 58, 237] }
-            });
-            doc.save(`Report_Pangkalan_${new Date().getTime()}.pdf`);
+            doc.setFontSize(18); doc.text("RM PANGKALAN - LAPORAN PENJUALAN", 14, 15);
+            doc.setFontSize(10); doc.text(`Tanggal Cetak: ${new Date().toLocaleString()}`, 14, 22);
+            const body = DB.transactions.map(t => [t.ID.slice(-4), new Date(t.Date).toLocaleDateString(), t.Role, t.Total, t.Type]);
+            doc.autoTable({ head: [['ID', 'Tgl', 'Cust', 'Total', 'Tipe']], body: body, startY: 30, headStyles: {fillColor:[124, 58, 237]}, theme:'striped' });
+            doc.save(`Laporan_Pangkalan_${new Date().getTime()}.pdf`);
         }
 
         async function openMenuForm(id = null) {
             const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Math.floor(Date.now()/1000).toString().slice(-4), Name:'', Category:'Makanan', Price:0, Description:'', Img:'', Available: true };
             const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-2xl tracking-tighter uppercase leading-none">${id ? 'Ubah Menu' : 'Menu Baru'}</span>`,
+                title: `<span class="italic font-black text-xl uppercase tracking-tighter">${id ? 'Ubah Menu' : 'Menu Baru'}</span>`,
                 html: `<div class="space-y-4 p-2 text-left">
                     <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Nama Masakan</label>
                     <input id="m-name" class="admin-input mt-1" value="${item.Name}"></div>
                     <div class="grid grid-cols-2 gap-3">
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Harga Jual (Rp)</label>
+                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Harga (Rp)</label>
                         <input id="m-price" type="number" class="admin-input mt-1" value="${item.Price}"></div>
                         <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Kategori</label>
                         <select id="m-cat" class="admin-input mt-1">
@@ -473,29 +506,29 @@
                             <option value="Paket" ${item.Category === 'Paket' ? 'selected' : ''}>Paket</option>
                         </select></div>
                     </div>
-                    <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Deskripsi Masakan</label>
+                    <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Deskripsi (Komplit)</label>
                     <textarea id="m-desc" class="admin-input mt-1 h-20 pt-4 resize-none">${item.Description || ''}</textarea></div>
                     <div class="space-y-2">
-                        <label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Upload/ID Foto</label>
+                        <label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Media Foto</label>
                         <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
                             <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="handleFileUpload(event)">
                             <div id="previewZone" class="flex flex-col items-center gap-2">
-                                ${item.Img ? `<img src="${item.Img.includes('?') ? item.Img : 'https://lh3.googleusercontent.com/d/'+item.Img}" class="w-20 h-20 rounded-xl object-cover border shadow-sm">` : '<i data-lucide="image-plus" class="text-slate-300"></i>'}
-                                <p class="text-[9px] font-bold text-slate-400 uppercase">Pilih File</p>
+                                ${item.Img ? `<img src="${item.Img.includes('?') ? item.Img : 'https://lh3.googleusercontent.com/d/'+item.Img}" class="w-16 h-16 rounded-xl object-cover">` : '<i data-lucide="image-plus" class="text-slate-300"></i>'}
+                                <p class="text-[9px] font-bold text-slate-400 uppercase leading-none">Klik untuk Upload</p>
                             </div>
                         </div>
                         <input id="m-img-val" type="hidden" value="${item.Img}">
                     </div>
                     <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl">
-                        <label class="text-[10px] font-black uppercase text-slate-500 italic">Status Stok:</label>
-                        <select id="m-avail" class="bg-white border rounded-xl px-4 py-2 font-black text-xs">
+                        <label class="text-[10px] font-black uppercase text-slate-500 italic">Stok:</label>
+                        <select id="m-avail" class="bg-white border rounded-xl px-4 py-2 font-black text-[11px]">
                             <option value="true" ${item.Available ? 'selected' : ''}>READY</option>
                             <option value="false" ${!item.Available ? 'selected' : ''}>SOLD OUT</option>
                         </select>
                     </div>
                 </div>`,
                 showCancelButton: true, confirmButtonColor: '#7c3aed',
-                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-black py-4 px-10 text-xs italic' },
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-black py-4 px-10 text-[11px] italic' },
                 didOpen: () => lucide.createIcons(),
                 preConfirm: () => ({
                     action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value,
@@ -512,14 +545,38 @@
         }
 
         function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const file = event.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
                 document.getElementById('m-img-val').value = e.target.result;
-                document.getElementById('previewZone').innerHTML = `<img src="${e.target.result}" class="w-20 h-20 rounded-xl object-cover border-2 border-violet-500 shadow-md">`;
+                document.getElementById('previewZone').innerHTML = `<img src="${e.target.result}" class="w-16 h-16 rounded-xl object-cover border-2 border-violet-500">`;
             };
             reader.readAsDataURL(file);
+        }
+
+        async function openStaffForm(user = null) {
+            const staff = user ? DB.users.find(u => u.Username === user) : { Username: '', Password: '', Role: 'Waiters' };
+            const { value: form } = await Swal.fire({
+                title: `<span class="italic font-black text-xl uppercase tracking-tighter">${user ? 'Ubah Akun' : 'Akun Baru'}</span>`,
+                html: `<div class="space-y-4 p-2 text-left">
+                    <input id="s-user" class="admin-input" placeholder="Username" value="${staff.Username}" ${user ? 'readonly' : ''}>
+                    <input id="s-pass" type="text" class="admin-input" placeholder="Password PIN" value="${staff.Password}">
+                    <select id="s-role" class="admin-input">
+                        <option value="Owner" ${staff.Role === 'Owner' ? 'selected' : ''}>Owner</option>
+                        <option value="Kasir" ${staff.Role === 'Kasir' ? 'selected' : ''}>Kasir</option>
+                        <option value="Waiters" ${staff.Role === 'Waiters' ? 'selected' : ''}>Waiters</option>
+                        <option value="Koki" ${staff.Role === 'Koki' ? 'selected' : ''}>Koki</option>
+                    </select>
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed',
+                customClass: { popup: 'detail-modal', confirmButton: 'rounded-2xl font-black py-4 px-10 text-[11px] italic' },
+                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value })
+            });
+            if(form) {
+                Swal.fire({ title: 'Menyimpan...', didOpen: () => Swal.showLoading() });
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); 
+                syncData(); Swal.close();
+            }
         }
 
         async function deleteData(type, id) {
