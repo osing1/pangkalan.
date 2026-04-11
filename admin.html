@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>RM Pangkalan | Enterprise Owner System</title>
+    <title>RM Pangkalan | Enterprise Owner Center v23.0</title>
     
-    <!-- PWA & Mobile Optimization -->
+    <!-- PWA Meta -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#7c3aed">
@@ -26,11 +26,11 @@
         html, body { background-color: var(--bg) !important; margin: 0; padding: 0; overflow: hidden; height: 100%; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; }
 
-        /* Desktop Sidebar - Absolute Fixed & Sharp */
+        /* Sidebar Desktop - Fixed Height & Absolute Clarity */
         .sidebar-fixed { 
             background: var(--primary); border-radius: 0 45px 45px 0; 
             height: 100vh !important; width: 280px;
-            position: fixed; top: 0; left: 0; z-index: 100;
+            position: fixed; top: 0; left: 0; z-index: 1000;
             box-shadow: 15px 0 40px rgba(124, 58, 237, 0.1);
         }
         .nav-item { color: rgba(255,255,255,0.45); transition: 0.3s; border-radius: 22px; cursor: pointer; display: flex; align-items: center; margin-bottom: 10px; }
@@ -41,15 +41,16 @@
         .card-ent { background: white; border-radius: 35px; border: 1.5px solid #f1f5f9; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.04); overflow: hidden; transition: 0.3s; }
         .card-ent:hover { transform: translateY(-4px); }
 
-        /* Floating Pill Nav Mobile - Clean */
+        /* Mobile Pill Nav - Pure Floating Zero Bleed */
         .bottom-pill-nav {
-            position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 440px; background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(25px); border: 1.5px solid rgba(255, 255, 255, 0.6);
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 440px; background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.6);
             height: 76px; z-index: 9999; border-radius: 38px;
             box-shadow: 0 25px 60px -15px rgba(124, 58, 237, 0.3);
             display: flex; align-items: center; justify-content: space-around; padding: 0 10px;
         }
+
         .tab-pill {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             gap: 2px; color: #94a3b8; font-weight: 800; font-size: 8px; text-transform: uppercase;
@@ -57,10 +58,10 @@
         }
         .tab-pill.active { color: var(--primary); background: rgba(124, 58, 237, 0.08); }
 
-        /* Modal / Form Pro */
+        /* Modal UI / Swiper Pro */
         .swal2-popup.detail-modal { border-radius: 45px !important; padding: 1.2rem 0.05rem !important; width: 98% !important; max-width: 600px !important; }
-        .input-ent { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; }
-        .input-ent:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 5px rgba(124, 58, 237, 0.05); }
+        .input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; }
+        .input-pro:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 5px rgba(124, 58, 237, 0.05); }
 
         .upload-zone { border: 2.5px dashed #e2e8f0; border-radius: 26px; padding: 25px; text-align: center; cursor: pointer; background: #fbfcfe; transition: 0.3s; }
         .upload-zone:hover { border-color: var(--primary); background: #f5f3ff; }
@@ -72,48 +73,51 @@
             .mobile-px-min { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
         }
 
+        /* Focus & Blur Layering */
         .blur-target[inert] { filter: blur(15px); opacity: 0.25; pointer-events: none; transition: 0.4s; }
+        #loginOverlay[inert] { display: none !important; }
+
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
         
-        .ai-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; padding: 8px 16px; border-radius: 14px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); transition: 0.3s; }
-        .ai-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .ai-glow-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; padding: 10px 20px; border-radius: 16px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); transition: 0.3s; }
+        .ai-glow-btn:hover { transform: scale(1.05); }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
-    <!-- SECURITY GATE -->
+    <!-- SECURITY SCREEN -->
     <div id="loginOverlay" class="fixed inset-0 bg-violet-600 z-[10001] flex items-center justify-center p-4">
-        <div class="bg-white p-10 md:p-14 rounded-[65px] shadow-2xl w-full max-w-md text-center animate-pop">
+        <div class="bg-white p-12 rounded-[65px] shadow-2xl w-full max-w-md text-center animate-pop">
             <div class="bg-violet-100 w-24 h-24 rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-sm">
                 <i data-lucide="shield-check" class="text-violet-600 w-12 h-12"></i>
             </div>
             <h2 class="text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">OWNER ACCESS</h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mb-12 italic">Secure Management System</p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mb-12 italic">Secure Management System v23.0</p>
             <div class="space-y-4">
-                <input type="text" id="loginUser" placeholder="Username" class="input-ent">
-                <input type="password" id="loginPass" placeholder="Password" class="input-ent">
-                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[26px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-6">MASUK KE PANEL</button>
+                <input type="text" id="loginUser" placeholder="Username" class="input-pro">
+                <input type="password" id="loginPass" placeholder="Password" class="input-pro">
+                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[26px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-6 uppercase tracking-widest">Otorisasi Panel</button>
             </div>
-            <p class="mt-12 text-[9px] font-bold text-slate-300 uppercase tracking-[2px]">Enterprise v15.5 Final</p>
         </div>
     </div>
 
-    <!-- SIDEBAR DESKTOP -->
+    <!-- DESKTOP SIDEBAR -->
     <aside id="mainSidebar" class="hidden md:flex flex-col sidebar-fixed text-white p-10">
         <div class="mb-16">
-            <span class="text-3xl font-black italic uppercase leading-none block tracking-tighter">PANGKALAN</span>
+            <span class="text-3xl font-black italic uppercase block tracking-tighter leading-none">PANGKALAN</span>
             <span class="text-[10px] font-bold uppercase tracking-[5px] opacity-50 mt-1 block">Enterprise</span>
         </div>
-        <nav class="flex-1 space-y-4">
+        <nav class="flex-1 space-y-4 overflow-y-auto no-scrollbar pb-10">
             <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active p-4 gap-5 transition-all"><i data-lucide="layout-dashboard"></i> <span class="text-[11px] uppercase tracking-widest font-black">Dashboard</span></div>
-            <div onclick="switchTab('menu')" id="nav-menu" class="nav-item p-4 gap-5 transition-all"><i data-lucide="utensils"></i> <span class="text-[11px] uppercase tracking-widest font-black">Manajemen Menu</span></div>
-            <div onclick="switchTab('sales')" id="nav-sales" class="nav-item p-4 gap-5 transition-all"><i data-lucide="file-text"></i> <span class="text-[11px] uppercase tracking-widest font-black">Laporan Sales</span></div>
-            <div onclick="switchTab('staff')" id="nav-staff" class="nav-item p-4 gap-5 transition-all"><i data-lucide="users"></i> <span class="text-[11px] uppercase tracking-widest font-black">Data Karyawan</span></div>
+            <div onclick="switchTab('menu')" id="nav-menu" class="nav-item p-4 gap-5 transition-all"><i data-lucide="utensils"></i> <span class="text-[11px] uppercase tracking-widest font-black">Menu Master</span></div>
+            <div onclick="switchTab('sales')" id="nav-sales" class="nav-item p-4 gap-5 transition-all"><i data-lucide="file-text"></i> <span class="text-[11px] uppercase tracking-widest font-black">Sales Report</span></div>
+            <div onclick="switchTab('staff')" id="nav-staff" class="nav-item p-4 gap-5 transition-all"><i data-lucide="users"></i> <span class="text-[11px] uppercase tracking-widest font-black">HR & SDM</span></div>
+            <div onclick="switchTab('audit')" id="nav-audit" class="nav-item p-4 gap-5 transition-all"><i data-lucide="activity"></i> <span class="text-[11px] uppercase tracking-widest font-black">Audit Logs</span></div>
         </nav>
-        <div class="mt-auto w-full pt-10 border-t border-white/10">
-            <button onclick="handleLogout()" class="w-full bg-white/10 p-5 rounded-3xl font-black text-[10px] uppercase hover:bg-white/20 transition-all text-white">Logout</button>
+        <div class="mt-auto pt-10 border-t border-white/10">
+            <button onclick="handleLogout()" class="w-full bg-white/10 p-5 rounded-3xl font-black text-[10px] uppercase hover:bg-white/20 transition-all text-white">Logout System</button>
         </div>
     </aside>
 
@@ -122,18 +126,21 @@
         <button onclick="switchTab('dashboard')" id="pill-dashboard" class="tab-pill active"><i data-lucide="home" class="w-6 h-6"></i><span>DASH</span></button>
         <button onclick="switchTab('menu')" id="pill-menu" class="tab-pill"><i data-lucide="utensils" class="w-6 h-6"></i><span>MENU</span></button>
         <button onclick="switchTab('sales')" id="pill-sales" class="tab-pill"><i data-lucide="file-text" class="w-6 h-6"></i><span>SALES</span></button>
-        <button onclick="switchTab('staff')" id="pill-staff" class="tab-pill"><i data-lucide="users" class="w-6 h-6"></i><span>STAFF</span></button>
+        <button onclick="switchTab('audit')" id="pill-audit" class="tab-pill"><i data-lucide="activity" class="w-6 h-6"></i><span>LOGS</span></button>
         <button onclick="handleLogout()" class="tab-pill text-red-400"><i data-lucide="log-out" class="w-6 h-6"></i><span>EXIT</span></button>
     </nav>
 
-    <!-- CONTENT CANVAS -->
+    <!-- MAIN CANVAS -->
     <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden main-canvas blur-target" style="background-color: var(--bg);">
         <header class="h-20 md:h-24 px-6 md:px-12 flex items-center justify-between flex-shrink-0 bg-white/90 backdrop-blur-md border-b border-slate-100">
             <div class="flex items-center gap-4">
                 <div class="md:hidden bg-violet-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center font-black italic text-xs shadow-lg">RM</div>
                 <div>
                     <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic uppercase tracking-tighter leading-none">DASHBOARD</h1>
-                    <span id="digitalClock" class="text-[10px] font-black text-slate-400 tracking-widest uppercase mt-1 block">00:00:00 - Online</span>
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <span id="digitalClock" class="text-[10px] font-black text-slate-400 tracking-widest uppercase">00:00:00 - Online</span>
+                    </div>
                 </div>
             </div>
             <div class="flex items-center gap-4">
@@ -144,307 +151,289 @@
 
         <div class="flex-1 overflow-y-auto no-scrollbar mobile-px-min p-4 md:p-12 space-y-8">
             
+            <!-- SECTION: DASHBOARD -->
             <div id="section-dashboard" class="space-y-8 animate-pop">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div class="card-ent p-8 border-l-[15px] border-violet-600"><p class="text-[10px] font-black text-slate-400 uppercase italic">Omzet</p><h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none mt-1 tracking-tighter">Rp 0</h2></div>
-                    <div class="card-ent p-8 border-l-[15px] border-orange-500"><p class="text-[10px] font-black text-slate-400 uppercase italic">Sales</p><h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none mt-1 tracking-tighter">0</h2></div>
-                    <div class="card-ent p-8 border-l-[15px] border-blue-500"><p class="text-[10px] font-black text-slate-400 uppercase italic">Menu</p><h2 id="stat-menu" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none mt-1 tracking-tighter">0</h2></div>
+                    <div class="card-ent p-8 border-l-[15px] border-violet-600"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Total Omzet</p><h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">Rp 0</h2></div>
+                    <div class="card-ent p-8 border-l-[15px] border-orange-500"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Laba Bersih (AI)</p><h2 id="stat-profit" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">Rp 0</h2></div>
+                    <div class="card-ent p-8 border-l-[15px] border-blue-500"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Transaksi Berhasil</p><h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">0</h2></div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section class="card-ent p-10 bg-gradient-to-br from-violet-900 to-indigo-900 text-white relative group">
-                        <div class="flex items-center justify-between mb-4"><h3 class="text-sm font-black uppercase tracking-widest italic">Analis Bisnis AI</h3><i data-lucide="sparkles" class="w-6 h-6 text-yellow-400 animate-pulse"></i></div>
-                        <p class="text-[11px] text-violet-200 mb-8 leading-relaxed uppercase font-bold italic">Gunakan AI Gemini untuk menganalisa performa penjualan dan strategi promosi minggu ini.</p>
-                        <button onclick="analyzeBusinessAI()" class="w-full bg-white/10 hover:bg-white text-white hover:text-violet-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">✨ JALANKAN ANALISA KECERDASAN BISNIS</button>
+                    <section class="card-ent p-10 bg-gradient-to-br from-violet-900 to-black text-white relative overflow-hidden group">
+                        <i data-lucide="sparkles" class="absolute -right-6 -bottom-6 w-32 h-32 opacity-10"></i>
+                        <h3 class="text-sm font-black uppercase tracking-widest italic mb-4">Gemini Business AI Intelligence</h3>
+                        <p class="text-[11px] text-violet-200 mb-8 leading-relaxed uppercase font-bold italic">Analisalah riwayat penjualan dan pengeluaran harian untuk strategi promosi yang lebih cerdas.</p>
+                        <button onclick="analyzeBusinessAI()" class="w-full bg-white/10 hover:bg-white text-white hover:text-violet-900 py-4 rounded-3xl font-black text-[11px] uppercase transition-all shadow-xl">✨ JALANKAN ANALISA AI</button>
                     </section>
-                    <section class="card-ent p-10"><h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic border-b pb-4">Top 5 Produk</h3><div id="topProductsList" class="space-y-3"></div></section>
+                    <section class="card-ent p-10"><h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic border-b pb-4">Loyal Customers</h3><div id="topCustomers" class="space-y-3"></div></section>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section class="card-ent p-10 bg-slate-900 text-white flex flex-col justify-center">
-                        <h3 class="text-xs font-black uppercase tracking-widest mb-2 italic">Laporan Digital</h3>
-                        <p class="text-[10px] text-slate-400 mb-8 uppercase font-bold italic leading-relaxed opacity-60">Arsip data format Excel atau PDF untuk audit finansial.</p>
+                    <section class="card-ent p-10 bg-slate-900 text-white">
+                        <h3 class="text-xs font-black uppercase tracking-widest mb-4 italic leading-none">Journal Digital</h3>
                         <div class="flex gap-4">
-                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 h-16 rounded-3xl font-black text-[11px] uppercase active:scale-95 shadow-lg">Excel</button>
-                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 h-16 rounded-3xl font-black text-[11px] uppercase active:scale-95 shadow-lg">PDF Report</button>
+                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">XLSX Export</button>
+                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">PDF Journal</button>
                         </div>
                     </section>
                     <section class="card-ent p-10">
-                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-8 italic flex items-center gap-2"><i data-lucide="cloud-cog" class="w-4 h-4"></i> Cloud Configuration</h3>
+                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic">Pengaturan Cloud</h3>
                         <div class="space-y-4">
-                            <input type="text" id="apiInput" class="input-ent" placeholder="URL Apps Script">
-                            <input type="text" id="folderIdInput" class="input-ent" placeholder="ID Folder G-Drive">
-                            <button onclick="saveConfig()" class="w-full bg-violet-600 text-white h-16 rounded-3xl font-black text-[11px] uppercase italic active:scale-95 transition-all">SINKRONKAN PARAMETER</button>
+                            <input type="text" id="apiInput" class="input-pro" placeholder="API Apps Script URL">
+                            <input type="text" id="folderIdInput" class="input-pro" placeholder="Folder ID Media G-Drive">
+                            <button onclick="saveConfig()" class="w-full bg-violet-600 text-white py-4 rounded-3xl font-black text-[11px] uppercase active:scale-95 transition-all">SINKRONKAN PARAMETER</button>
                         </div>
                     </section>
                 </div>
             </div>
 
-            <div id="section-menu" class="hidden animate-pop">
-                <section class="card-ent">
-                    <div class="p-8 md:p-10 border-b border-slate-50 flex items-center justify-between bg-slate-50/20">
-                        <div><h3 class="text-lg font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Produk, Harga, & Ketersediaan</p></div>
-                        <button onclick="openMenuForm()" class="bg-slate-900 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg active:scale-95">+ BARU</button>
-                    </div>
-                    <div id="menuFullList" class="divide-y divide-slate-50"></div>
-                </section>
+            <!-- SECTION: MENU LIST (Refactored Grid) -->
+            <div id="section-menu" class="hidden animate-pop space-y-6">
+                 <div class="p-8 md:p-10 card-ent flex items-center justify-between bg-white">
+                    <div><h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Produk, HPP, & Media Asset</p></div>
+                    <button onclick="openMenuForm()" class="bg-slate-900 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">+ PRODUK</button>
+                </div>
+                <div id="menuFullList" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
             </div>
 
-            <div id="section-sales" class="hidden animate-pop">
-                <section class="card-ent">
-                    <div class="p-10 border-b border-slate-50 flex items-center justify-between"><h3 class="text-lg font-black text-slate-800 uppercase italic">Journal Penjualan</h3><div class="text-[9px] font-black text-slate-400 bg-slate-100 px-4 py-2 rounded-full uppercase tracking-widest italic">Verified Audit</div></div>
-                    <div id="salesListContainer" class="divide-y divide-slate-50 max-h-[60vh] overflow-y-auto no-scrollbar bg-slate-50/10"></div>
-                </section>
+            <!-- SECTION: SALES -->
+            <div id="section-sales" class="hidden animate-pop space-y-6">
+                <div class="p-8 md:p-10 card-ent flex justify-between items-center bg-white">
+                    <div><h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic leading-none">Sales Journal</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-2 italic tracking-widest">Verified Transactions Only</p></div>
+                    <button onclick="openExpenseForm()" class="bg-red-500 text-white px-6 py-4 rounded-3xl font-black text-[10px] uppercase shadow-lg shadow-red-100">+ BIAYA OPERASIONAL</button>
+                </div>
+                <div id="salesListContainer" class="divide-y divide-slate-50 card-ent bg-white max-h-[60vh] overflow-y-auto no-scrollbar px-4"></div>
             </div>
 
-            <div id="section-staff" class="hidden animate-pop">
-                <section class="card-ent">
-                    <div class="p-10 border-b border-slate-50 flex items-center justify-between bg-slate-50/20"><h3 class="text-lg font-black text-slate-800 uppercase italic">Akses Karyawan</h3><button onclick="openStaffForm()" class="bg-violet-600 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">+ STAFF</button></div>
-                    <div id="staffListContainer" class="divide-y divide-slate-50"></div>
-                </section>
+            <!-- SECTION: STAFF -->
+            <div id="section-staff" class="hidden animate-pop space-y-6">
+                 <div class="p-8 md:p-10 card-ent flex items-center justify-between bg-white">
+                    <h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic leading-none">Resources Management</h3>
+                    <button onclick="openStaffForm()" class="bg-violet-600 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">+ TAMBAH STAFF</button>
+                </div>
+                <div id="staffListContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- SECTION: AUDIT LOGS -->
+            <div id="section-audit" class="hidden animate-pop space-y-6">
+                <div class="p-8 md:p-10 card-ent bg-white">
+                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-[3px] mb-8 italic border-b pb-4">Audit Trail (Log Aktifitas Terakhir)</h3>
+                    <div id="auditLogs" class="space-y-2 max-h-[70vh] overflow-y-auto no-scrollbar"></div>
+                </div>
             </div>
 
         </div>
     </main>
 
     <script>
-        const apiKey = ""; // Disediakan oleh sistem
-        const DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        const apiKey = ""; 
+        let DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
         let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API;
         let FOLDER_ID = localStorage.getItem('RM_FOLDER_ID') || '';
-        let DB = { menu: [], transactions: [], users: [] };
-        let activeTab = 'dashboard';
+        let DB = { menu: [], transactions: [], users: [], expenses: [], logs: [], customers: [] };
 
         window.onload = () => {
-            lucide.createIcons();
-            checkAuth();
-            setInterval(() => {
-                const time = new Date().toLocaleTimeString('id-ID', {hour12:false});
-                if(document.getElementById('digitalClock')) document.getElementById('digitalClock').innerText = time + ' - Online';
-            }, 1000);
+            lucide.createIcons(); checkAuth();
+            setInterval(() => { document.getElementById('digitalClock').innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}) + ' - Online'; }, 1000);
             document.getElementById('apiInput').value = API_URL;
             document.getElementById('folderIdInput').value = FOLDER_ID;
         };
-
-        // --- GEMINI AI CORE ---
-
-        async function callGeminiAI(prompt, systemMsg) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemMsg }] }
-            };
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
-                    if (!res.ok) throw new Error();
-                    const result = await res.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI Gagal merespon.";
-                } catch (e) { await new Promise(r => setTimeout(r, 1000 * Math.pow(2, i))); }
-            }
-            return "Koneksi AI gagal.";
-        }
-
-        async function analyzeBusinessAI() {
-            const summary = `Total Omzet: ${document.getElementById('stat-revenue').innerText}, Total Transaksi: ${document.getElementById('stat-orders').innerText}, Data Terlaris: ${JSON.stringify(DB.transactions.slice(-5))}`;
-            Swal.fire({ title: 'AI sedang menganalisa...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            const response = await callGeminiAI(`Analisalah data bisnis ini: ${summary}. Berikan 3 rekomendasi strategi bisnis singkat dalam Bahasa Indonesia.`, "Anda adalah Konsultan Bisnis Profesional.");
-            Swal.fire({ title: '<span class="italic font-black text-xl uppercase">AI Analysis Report</span>', html: `<div class="text-left text-sm leading-relaxed p-4 bg-slate-50 rounded-3xl border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonText: 'OKE', confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' } });
-        }
-
-        async function suggestMenuAI() {
-            const name = document.getElementById('m-name').value;
-            const category = document.getElementById('m-cat').value;
-            if(!name) return Swal.fire('Error', 'Nama masakan wajib diisi.', 'warning');
-            const response = await callGeminiAI(`Tulis deskripsi menu "${name}" kategori "${category}" yang sangat menggugah selera (maks 20 kata). Berikan rekomendasi harga jual rasional dalam Rupiah.`, "Anda adalah Food Expert Copywriter.");
-            document.getElementById('m-desc').value = response;
-            Swal.fire({ icon: 'success', title: '✨ AI Assist Success', text: 'Deskripsi menu dioptimalkan.', timer: 1500, showConfirmButton: false });
-        }
-
-        // --- SYSTEM CORE ---
 
         function setModalEffect(active) {
             const main = document.getElementById('mainContent');
             if(active) main.setAttribute('inert', ''); else main.removeAttribute('inert');
         }
 
-        function checkAuth() {
-            const user = sessionStorage.getItem('ADMIN_AUTH');
-            const overlay = document.getElementById('loginOverlay');
-            const main = document.getElementById('mainContent');
-            const sidebar = document.getElementById('mainSidebar');
-            const pillNav = document.getElementById('mobilePillNav');
-
-            if (user) {
-                if (document.activeElement) document.activeElement.blur();
-                overlay.style.display = 'none'; overlay.setAttribute('inert', ''); 
-                main.classList.remove('hidden');
-                sidebar.classList.remove('hidden'); 
-                if(window.innerWidth <= 768) pillNav.classList.remove('hidden');
-                document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
-                syncData(true);
-            } else {
-                overlay.style.display = 'flex'; overlay.removeAttribute('inert');
-                main.classList.add('hidden'); sidebar.classList.add('hidden'); pillNav.classList.add('hidden');
-            }
-        }
-
         async function handleLogin() {
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            const btn = document.getElementById('loginBtn');
-            if(!user || !pass) return Swal.fire('Error', 'Username dan Password wajib diisi.', 'warning');
-            btn.innerText = 'MEMVERIFIKASI...'; btn.disabled = true;
+            if(!user || !pass) return Swal.fire('Oops!', 'Lengkapi Username & Password.', 'warning');
+            
+            Swal.fire({ title: 'Otentikasi...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 const data = await res.json();
                 const valid = data.users.find(u => u.Username.toLowerCase() === user.toLowerCase() && String(u.Password) === pass && u.Role === 'Owner');
                 if (valid) {
                     sessionStorage.setItem('ADMIN_AUTH', valid.Username);
-                    checkAuth();
-                } else { Swal.fire('Gagal', 'Kredensial salah atau role bukan Owner.', 'error'); }
-            } catch (e) { Swal.fire('Offline', 'Gagal menghubungi server Google Apps Script.', 'error'); }
-            finally { btn.innerText = 'MASUK KE PANEL'; btn.disabled = false; }
+                    checkAuth(); Swal.close();
+                } else { Swal.fire('Akses Ditolak', 'Kredensial salah atau bukan Owner.', 'error'); }
+            } catch (e) { Swal.fire('Error', 'Gagal hubungi server cloud.', 'error'); }
         }
 
-        function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
+        function checkAuth() {
+            const user = sessionStorage.getItem('ADMIN_AUTH');
+            const overlay = document.getElementById('loginOverlay');
+            if (user) {
+                overlay.style.display = 'none'; overlay.setAttribute('inert', '');
+                document.getElementById('mainContent').classList.remove('hidden');
+                document.getElementById('mainSidebar').classList.remove('hidden');
+                document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
+                syncData(true);
+            } else { overlay.style.display = 'flex'; document.getElementById('mainContent').classList.add('hidden'); }
+        }
 
         function switchTab(tab) {
-            activeTab = tab;
-            ['dashboard', 'menu', 'sales', 'staff'].forEach(t => {
-                const sec = document.getElementById(`section-${t}`), pill = document.getElementById(`pill-${t}`), nav = document.getElementById(`nav-${t}`);
+            ['dashboard', 'menu', 'sales', 'staff', 'audit'].forEach(t => {
+                const sec = document.getElementById(`section-${t}`);
                 if(sec) sec.classList.toggle('hidden', t !== tab);
-                if(pill) pill.classList.toggle('active', t === tab);
-                if(nav) nav.classList.toggle('active', t === tab);
+                document.getElementById(`nav-${t}`)?.classList.toggle('active', t === tab);
+                document.getElementById(`pill-${t}`)?.classList.toggle('active', t === tab);
             });
             document.getElementById('tabTitle').innerText = tab.toUpperCase();
             lucide.createIcons();
         }
 
-        function saveConfig() {
-            const url = document.getElementById('apiInput').value.trim();
-            const fid = document.getElementById('folderIdInput').value.trim();
-            localStorage.setItem('RM_API_URL', url); API_URL = url;
-            localStorage.setItem('RM_FOLDER_ID', fid); FOLDER_ID = fid;
-            Swal.fire({ icon: 'success', title: 'Data Tersimpan', timer: 1500, showConfirmButton: false });
-            syncData(true);
-        }
-
-        async function syncData(showLoader = false) {
-            if(showLoader) Swal.fire({ title: 'Turbo Sync Aktif...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        async function syncData(loader = false) {
+            if(loader) Swal.fire({ title: 'Turbo Sync Aktif...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 DB = await res.json();
-                renderStats(); renderMenuTable(); renderSalesList(); renderStaffList(); renderTopProducts();
-                if(showLoader) Swal.close();
-            } catch (e) { if(showLoader) Swal.fire('Error', 'Gagal sinkron data.', 'error'); }
+                renderStats(); renderMenu(); renderStaff(); renderSales(); renderLogs(); renderCRM();
+                if(loader) Swal.close();
+            } catch (e) { if(loader) Swal.fire('Offline', 'Sinkronisasi Gagal.', 'error'); }
         }
 
         function renderStats() {
-            const revenue = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' ? Number(t.Total) : 0), 0);
-            document.getElementById('stat-revenue').innerText = `Rp ${revenue.toLocaleString()}`;
+            const rev = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' ? Number(t.Total) : 0), 0);
+            const exp = DB.expenses ? DB.expenses.reduce((s, e) => s + Number(e.Amount), 0) : 0;
+            document.getElementById('stat-revenue').innerText = `Rp ${rev.toLocaleString()}`;
+            document.getElementById('stat-profit').innerText = `Rp ${(rev - exp).toLocaleString()}`;
             document.getElementById('stat-orders').innerText = DB.transactions.length;
-            document.getElementById('stat-menu').innerText = DB.menu.length;
         }
 
-        function renderTopProducts() {
-            const container = document.getElementById('topProductsList');
-            const counts = {};
-            DB.transactions.forEach(t => t.Items.split(',').forEach(i => { const n = i.trim(); counts[n] = (counts[n] || 0) + 1; }));
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            container.innerHTML = sorted.map(([name, count]) => `
-                <div class="flex items-center justify-between p-4 bg-slate-50/80 rounded-2xl border border-white border-dashed shadow-sm">
-                    <span class="text-[10px] md:text-xs font-black text-slate-700 uppercase italic truncate w-32 md:w-48">${name}</span>
-                    <span class="bg-violet-600 text-white text-[9px] font-black px-4 py-1.5 rounded-xl leading-none">${count}x</span>
+        function renderCRM() {
+            const cont = document.getElementById('topCustomers');
+            if(!cont || !DB.customers) return;
+            const sorted = [...DB.customers].sort((a,b) => b.Visits - a.Visits).slice(0, 5);
+            cont.innerHTML = sorted.map(c => `
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-white">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center text-violet-600 font-black text-xs">${c.Name.slice(0,1)}</div>
+                        <div><p class="text-[11px] font-black text-slate-700 uppercase italic">${c.Name}</p><p class="text-[9px] text-slate-400 font-bold">${c.Phone}</p></div>
+                    </div>
+                    <span class="bg-violet-600 text-white text-[9px] font-black px-3 py-1.5 rounded-xl leading-none">${c.Visits}x Visit</span>
                 </div>`).join('');
-            if(sorted.length === 0) container.innerHTML = '<p class="text-center py-4 text-[10px] text-slate-300 font-bold italic uppercase leading-none">No Data</p>';
         }
 
-        function renderMenuTable() {
+        function renderMenu() {
             const list = document.getElementById('menuFullList');
             list.innerHTML = DB.menu.map(m => `
-                <div class="p-6 md:p-8 flex items-center justify-between gap-5 transition-all hover:bg-slate-50/50 card-ent bg-white mb-4 animate-pop">
-                    <div class="flex items-center gap-5 flex-1 min-w-0">
-                        <div class="w-16 h-16 rounded-[24px] bg-slate-100 overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
-                            <img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100?text=Menu'">
-                        </div>
-                        <div class="min-w-0">
-                            <p class="font-black text-slate-800 text-sm md:text-base uppercase italic truncate leading-none mb-1 leading-none">${m.Name}</p>
-                            <p class="text-[10px] font-black text-violet-600 italic tracking-tighter leading-none">Rp ${Number(m.Price).toLocaleString()}</p>
-                            <span class="inline-flex mt-2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest ${m.Available ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100'}">${m.Available ? 'In Stock' : 'Out of Stock'}</span>
+                <div class="card-ent bg-white p-6 flex flex-col gap-4 animate-pop">
+                    <div class="relative w-full aspect-video rounded-[24px] overflow-hidden bg-slate-50 border-2 border-slate-50 shadow-inner">
+                        <img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300?text=Produk'">
+                        <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl font-black text-[9px] uppercase italic text-violet-600 shadow-sm">${m.Category}</div>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-black text-slate-800 text-base uppercase italic leading-none mb-1 truncate">${m.Name}</h4>
+                        <div class="flex items-center gap-3 mt-3">
+                            <span class="text-[13px] font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</span>
+                            <span class="text-[10px] font-bold text-slate-300 italic">HPP: ${Number(m.HPP || 0).toLocaleString()}</span>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="openMenuForm('${m.ID}')" class="w-11 h-11 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 active:scale-90 hover:text-blue-600 transition-all"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
-                        <button onclick="deleteData('Menu', '${m.ID}')" class="w-11 h-11 bg-red-50/50 rounded-2xl flex items-center justify-center text-red-400 active:scale-90 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    <div class="flex gap-2 pt-4 border-t border-slate-50">
+                        <button onclick="openMenuForm('${m.ID}')" class="flex-1 py-3 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 active:scale-95 transition-all hover:bg-violet-50 hover:text-violet-600"><i data-lucide="edit-3" class="w-4 h-4 mr-2"></i> <span class="text-[10px] font-black uppercase">Edit</span></button>
+                        <button onclick="deleteData('Menu', '${m.ID}')" class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-400 active:scale-95 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
         }
 
-        function renderSalesList() {
+        function renderStaff() {
+            const list = document.getElementById('staffListContainer');
+            list.innerHTML = DB.users.map(u => `
+                <div class="card-ent bg-white p-6 flex items-center gap-5 animate-pop">
+                    <img src="${u.Img || 'https://ui-avatars.com/api/?name='+u.Username}" class="w-16 h-16 rounded-[22px] border-2 border-slate-50 object-cover shadow-sm">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="font-black text-slate-800 text-sm uppercase italic truncate leading-none">${u.Username}</h4>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">${u.Role}</p>
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <button onclick="openStaffForm('${u.Username}')" class="p-3 bg-slate-50 rounded-xl text-slate-400 active:scale-95 hover:text-violet-600 transition-all"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                        <button onclick="deleteData('User', '${u.Username}')" class="p-3 bg-red-50 rounded-xl text-red-400 active:scale-95 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>`).join('');
+            lucide.createIcons();
+        }
+
+        function renderSales() {
             const container = document.getElementById('salesListContainer');
             container.innerHTML = DB.transactions.slice().reverse().map(t => `
-                <div class="p-6 md:p-8 flex flex-col gap-3 transition-all hover:bg-white animate-pop">
-                    <div class="flex items-start justify-between">
-                        <div><span class="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-none">Order #${t.ID.slice(-4)}</span><h4 class="text-[12px] font-black text-slate-800 uppercase italic mt-1.5 leading-none">${t.Role}</h4></div>
+                <div class="py-6 flex flex-col gap-3 hover:bg-slate-50/50 transition-all px-2">
+                    <div class="flex justify-between items-start">
+                        <div><span class="text-[8px] font-black text-slate-300 uppercase tracking-widest">TRX #${t.ID.slice(-6)}</span><h4 class="text-sm font-black text-slate-800 uppercase italic mt-1 leading-none">${t.Customer || t.Role}</h4></div>
                         <span class="font-black text-violet-600 text-base italic tracking-tighter leading-none">Rp ${Number(t.Total).toLocaleString()}</span>
                     </div>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase italic leading-relaxed opacity-80">${t.Items}</p>
-                    <div class="flex items-center justify-between text-[9px] font-black uppercase italic text-slate-400 pt-3 border-t border-slate-100 border-dashed">
-                        <div><i data-lucide="calendar" class="w-3 h-3 inline mr-1 opacity-50"></i>${new Date(t.Date).toLocaleDateString()}</div>
-                        <div class="bg-slate-100 px-3 py-1 rounded-lg text-slate-500 leading-none">${t.Type.split(' ')[0]}</div>
+                    <p class="text-[11px] font-bold text-slate-500 uppercase italic opacity-70 leading-relaxed">${t.Items}</p>
+                    <div class="flex items-center gap-3 text-[9px] font-black uppercase italic text-slate-300 pt-2 border-t border-slate-50 border-dashed mt-1">
+                        <span><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>${new Date(t.Date).toLocaleDateString()}</span>
+                        <span>|</span>
+                        <span>${t.Type}</span>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
         }
 
-        function renderStaffList() {
-            const container = document.getElementById('staffListContainer');
-            container.innerHTML = DB.users.map(u => `
-                <div class="p-6 md:p-8 flex items-center justify-between transition-all hover:bg-slate-50/50 card-ent bg-white mb-4 animate-pop">
-                    <div class="flex items-center gap-5">
-                        <div class="w-14 h-14 rounded-2xl bg-violet-100 flex items-center justify-center text-violet-600 font-black text-sm shadow-sm border border-violet-200 leading-none">${u.Username.slice(0,1).toUpperCase()}</div>
-                        <div><p class="font-black text-slate-800 uppercase italic text-xs tracking-widest leading-none">${u.Username}</p><p class="text-[9px] font-black text-slate-400 uppercase mt-2 tracking-[2px] leading-none opacity-60">${u.Role}</p></div>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="openStaffForm('${u.Username}')" class="w-11 h-11 bg-slate-50 text-slate-400 rounded-2xl active:scale-95 hover:text-violet-600 transition-all"><i data-lucide="settings" class="w-5 h-5"></i></button>
-                        <button onclick="deleteData('User', '${u.Username}')" class="w-11 h-11 bg-red-50 text-red-400 rounded-2xl active:scale-95 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
-                    </div>
+        function renderLogs() {
+            const cont = document.getElementById('auditLogs');
+            if(!DB.logs) return;
+            cont.innerHTML = DB.logs.map(l => `
+                <div class="text-[10px] p-4 bg-slate-50 rounded-2xl border border-white flex gap-4 items-center">
+                    <span class="font-bold text-slate-400 w-24 flex-shrink-0">${new Date(l.Timestamp).toLocaleTimeString()}</span>
+                    <span class="font-black text-violet-600 w-20 uppercase flex-shrink-0 truncate">${l.User}</span>
+                    <div class="flex-1 font-bold text-slate-700 italic border-l pl-4">${l.Action}: ${l.Detail}</div>
                 </div>`).join('');
-            lucide.createIcons();
+        }
+
+        async function openExpenseForm() {
+            setModalEffect(true);
+            const { value: form } = await Swal.fire({
+                title: '<span class="italic font-black text-xl uppercase">Operasional Biaya</span>',
+                html: `<div class="space-y-4 p-2 text-left">
+                    <input id="ex-cat" class="input-pro" placeholder="Kategori (Belanja, Listrik, Gaji)">
+                    <input id="ex-amt" type="number" class="input-pro" placeholder="Nominal (Rp)">
+                    <textarea id="ex-note" class="input-pro h-24 pt-4 resize-none" placeholder="Detail Biaya..."></textarea>
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
+                preConfirm: () => ({ action: 'addExpense', category: document.getElementById('ex-cat').value, amount: document.getElementById('ex-amt').value, note: document.getElementById('ex-note').value, operator: sessionStorage.getItem('ADMIN_AUTH') })
+            });
+            setModalEffect(false);
+            if(form) { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
         async function openMenuForm(id = null) {
             setModalEffect(true);
-            const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Date.now().toString().slice(-6), Name:'', Category:'Makanan', Price:0, Description:'', Img:'', Available: true };
+            const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Date.now().toString().slice(-6), Name:'', Category:'', Price:0, Description:'', Img:'', HPP: 0 };
             const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-xl uppercase tracking-tighter leading-none">${id ? 'Update Menu' : 'Master Menu Baru'}</span>`,
-                html: `<div class="space-y-4 p-2 text-left">
-                    <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic leading-none">Nama Produk</label>
-                    <input id="m-name" class="input-ent mt-1" value="${item.Name}"></div>
+                title: `<span class="italic font-black text-xl uppercase">${id ? 'Update Menu' : 'Produk Baru'}</span>`,
+                html: `<div class="space-y-4 p-2 text-left overflow-y-auto no-scrollbar max-h-[70vh]">
+                    <input id="m-name" class="input-pro" value="${item.Name}" placeholder="Nama Produk">
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic leading-none">Harga Jual</label>
-                        <input id="m-price" type="number" class="input-ent mt-1" value="${item.Price}"></div>
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic leading-none">Kategori</label>
-                        <input id="m-cat" class="input-ent mt-1" value="${item.Category}" placeholder="Ketik Kategori..."></div>
+                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-2">Harga Jual</label>
+                        <input id="m-price" type="number" class="input-pro mt-1" value="${item.Price}"></div>
+                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-2">HPP (Modal)</label>
+                        <input id="m-hpp" type="number" class="input-pro mt-1" value="${item.HPP || 0}"></div>
                     </div>
-                    <div><div class="flex justify-between items-center mb-1"><label class="text-[9px] font-black uppercase text-slate-400 ml-1 italic">Deskripsi</label><button onclick="suggestMenuAI()" class="ai-btn">✨ AI ASSIST</button></div>
-                    <textarea id="m-desc" class="input-ent h-24 pt-4 resize-none leading-relaxed">${item.Description || ''}</textarea></div>
+                    <input id="m-cat" class="input-pro" value="${item.Category}" placeholder="Kategori Menu (Ketik Baru)">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="text-[9px] font-black uppercase text-slate-400">Deskripsi Pemasaran</label>
+                        <button onclick="suggestMenuAI()" class="ai-glow-btn">✨ AI ASSIST</button>
+                    </div>
+                    <textarea id="m-desc" class="input-pro h-24 pt-4 resize-none leading-relaxed">${item.Description || ''}</textarea>
                     <div class="upload-zone" onclick="document.getElementById('f-menu').click()">
                         <input type="file" id="f-menu" class="hidden" onchange="handleFileUpload(this, 'p-menu', 'v-menu')">
-                        <div id="p-menu" class="flex flex-col items-center gap-2">
-                            ${item.Img ? `<img src="${item.Img}" class="w-20 h-20 rounded-[22px] object-cover shadow-lg border-2 border-white">` : '<i data-lucide="image-plus" class="w-10 h-10 text-slate-200"></i>'}
-                            <p class="text-[9px] font-black text-slate-400 uppercase italic">Unggah Media Foto</p>
+                        <div id="p-menu">
+                            ${item.Img ? `<img src="${item.Img}" class="w-24 h-24 mx-auto rounded-[22px] object-cover shadow-lg border-2 border-white">` : '<i data-lucide="image-plus" class="w-10 h-10 mx-auto text-slate-200"></i><p class="text-[9px] font-black text-slate-400 mt-2 uppercase">Unggah Foto Produk</p>'}
                         </div>
                     </div>
                     <input id="v-menu" type="hidden" value="${item.Img}">
                 </div>`,
                 showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
-                preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, img: document.getElementById('v-menu').value, description: document.getElementById('m-desc').value, available: true, folderId: FOLDER_ID })
+                preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, hpp: document.getElementById('m-hpp').value, img: document.getElementById('v-menu').value, description: document.getElementById('m-desc').value, folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
             });
             setModalEffect(false);
-            if(form) { Swal.fire({ title: 'Syncing Cloud...', didOpen: () => Swal.showLoading() }); await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
+            if(form) { Swal.fire({ title: 'Menyimpan Cloud...', didOpen: () => Swal.showLoading() }); await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
         async function handleFileUpload(input, pid, vid) {
@@ -452,52 +441,83 @@
             const reader = new FileReader();
             reader.onload = (e) => {
                 document.getElementById(vid).value = e.target.result;
-                document.getElementById(pid).innerHTML = `<img src="${e.target.result}" class="w-20 h-20 rounded-[22px] object-cover border-2 border-violet-500 shadow-md">`;
+                document.getElementById(pid).innerHTML = `<img src="${e.target.result}" class="w-24 h-24 mx-auto rounded-[22px] object-cover border-4 border-violet-500 shadow-xl animate-pop">`;
             };
             reader.readAsDataURL(file);
         }
 
-        async function exportToPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("PANGKALAN ENTERPRISE - REKAP SALES", 14, 15);
-            const body = DB.transactions.map(t => [t.ID.slice(-4), t.Role, t.Total, t.Type]);
-            doc.autoTable({ head: [['ID', 'Cust', 'Amount', 'Mode']], body: body, startY: 25, headStyles: {fillColor:[124, 58, 237]}, theme: 'striped' });
-            doc.save(`Sales_Report_${new Date().getTime()}.pdf`);
+        async function analyzeBusinessAI() {
+            const sum = `Omzet: ${document.getElementById('stat-revenue').innerText}, Laba: ${document.getElementById('stat-profit').innerText}, Total Transaksi: ${DB.transactions.length}, Staff Aktif: ${DB.users.length}`;
+            Swal.fire({ title: 'AI sedang menganalisa...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const response = await callGeminiAI(`Analisa bisnis RM Pangkalan ini: ${sum}. Berikan 3 strategi pertumbuhan tajam dalam Bahasa Indonesia.`, "Anda adalah Konsultan Bisnis Enterprise.");
+            Swal.fire({ title: '<span class="italic font-black text-xl uppercase">AI Business Report</span>', html: `<div class="text-left text-sm leading-relaxed p-4 bg-slate-50 rounded-3xl border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' } });
         }
 
-        function exportToExcel() {
-            const ws = XLSX.utils.json_to_sheet(DB.transactions);
-            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sales");
-            XLSX.writeFile(wb, `REPORT_PANGKALAN_${new Date().getTime()}.xlsx`);
+        async function suggestMenuAI() {
+            const name = document.getElementById('m-name').value;
+            if(!name) return Swal.fire('Oops', 'Tulis nama menu dulu.', 'warning');
+            const response = await callGeminiAI(`Tulis deskripsi menu "${name}" yang menggiurkan (maks 15 kata). Berikan rekomendasi harga jual Rupiah yang masuk akal.`, "Anda adalah Culinary Copywriter.");
+            document.getElementById('m-desc').value = response;
+            Swal.fire({ icon: 'success', title: '✨ Deskripsi AI Siap', timer: 1000, showConfirmButton: false });
+        }
+
+        async function callGeminiAI(prompt, sys) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            try {
+                const res = await fetch(url, { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: sys }] } }) });
+                const result = await res.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI sibuk.";
+            } catch (e) { return "Koneksi Gemini Putus."; }
         }
 
         async function openStaffForm(user = null) {
             setModalEffect(true);
-            const staff = user ? DB.users.find(u => u.Username === user) : { Username: '', Password: '', Role: 'Waiters' };
+            const staff = user ? DB.users.find(u => u.Username === user) : { Username: '', Password: '', Role: 'Waiters', FullName: '', NIK: '', Phone: '', Img: '' };
             const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-xl uppercase tracking-tighter leading-none">${user ? 'Security Profile' : 'New Identity'}</span>`,
+                title: `<span class="italic font-black text-xl uppercase">Profile Staff</span>`,
                 html: `<div class="space-y-4 p-2 text-left">
-                    <input id="s-user" class="input-ent" placeholder="Username" value="${staff.Username}" ${user ? 'readonly' : ''}>
-                    <input id="s-pass" type="text" class="input-ent" placeholder="PIN PIN" value="${staff.Password}">
-                    <select id="s-role" class="input-ent">
-                        <option value="Owner" ${staff.Role === 'Owner' ? 'selected' : ''}>Owner</option>
-                        <option value="Kasir" ${staff.Role === 'Kasir' ? 'selected' : ''}>Kasir</option>
-                        <option value="Waiters" ${staff.Role === 'Waiters' ? 'selected' : ''}>Waiters</option>
-                        <option value="Koki" ${staff.Role === 'Koki' ? 'selected' : ''}>Koki</option>
-                    </select>
+                    <input id="s-user" class="input-pro" placeholder="Username / ID" value="${staff.Username}" ${user ? 'readonly' : ''}>
+                    <input id="s-fname" class="input-pro" placeholder="Nama Lengkap" value="${staff.FullName || ''}">
+                    <div class="grid grid-cols-2 gap-4"><input id="s-nik" class="input-pro" placeholder="NIK KTP"><input id="s-phone" class="input-pro" placeholder="WhatsApp"></div>
+                    <input id="s-pass" type="text" class="input-pro" placeholder="PIN Akses" value="${staff.Password}">
+                    <select id="s-role" class="input-pro"><option value="Owner" ${staff.Role=='Owner'?'selected':''}>Owner (Penuh)</option><option value="Kasir" ${staff.Role=='Kasir'?'selected':''}>Kasir (POS)</option><option value="Waiters" ${staff.Role=='Waiters'?'selected':''}>Waiters</option><option value="Koki" ${staff.Role=='Koki'?'selected':''}>Koki</option></select>
+                    <div class="upload-zone" onclick="document.getElementById('f-staff').click()">
+                        <input type="file" id="f-staff" class="hidden" onchange="handleFileUpload(this, 'p-staff', 'v-staff')">
+                        <div id="p-staff">
+                            ${staff.Img ? `<img src="${staff.Img}" class="w-24 h-24 mx-auto rounded-[22px] object-cover shadow-lg border-2 border-white">` : '<i data-lucide="camera" class="w-10 h-10 mx-auto text-slate-200"></i><p class="text-[9px] font-black text-slate-400 mt-2 uppercase">Ganti Foto Profil</p>'}
+                        </div>
+                    </div>
+                    <input id="v-staff" type="hidden" value="${staff.Img}">
                 </div>`,
                 showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
-                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value })
+                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, fullName: document.getElementById('s-fname').value, nik: document.getElementById('s-nik').value, phone: document.getElementById('s-phone').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value, img: document.getElementById('v-staff').value, folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
             });
             setModalEffect(false);
             if(form) { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
-        async function deleteData(type, id) {
-            const { isConfirmed } = await Swal.fire({ title: `Hapus ${type}?`, text: "Data hilang permanen dari Cloud.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'YA, HAPUS', customClass: { popup: 'rounded-[40px] p-8', confirmButton: 'rounded-2xl font-black py-4 px-10' } });
-            if(isConfirmed) { Swal.fire({ title: 'Deleting...', didOpen: () => Swal.showLoading() }); const action = type === 'Menu' ? 'deleteMenu' : 'deleteUser'; const payload = type === 'Menu' ? { action, id } : { action, username: id }; await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }); syncData(true); }
+        function saveConfig() {
+            const u = document.getElementById('apiInput').value.trim();
+            const f = document.getElementById('folderIdInput').value.trim();
+            localStorage.setItem('RM_API_URL', u); API_URL = u;
+            localStorage.setItem('RM_FOLDER_ID', f); FOLDER_ID = f;
+            Swal.fire({ icon: 'success', title: 'Config Lock', text: 'ID Folder & API tersimpan permanen.', timer: 1500, showConfirmButton: false });
+            syncData(true);
         }
+
+        async function deleteData(type, id) {
+            const { isConfirmed } = await Swal.fire({ title: `Hapus ${type}?`, text: "Data hilang permanen dari sistem.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
+            if(isConfirmed) {
+                const action = type === 'Menu' ? 'deleteMenu' : 'deleteUser';
+                const payload = type === 'Menu' ? { action, id, operator: sessionStorage.getItem('ADMIN_AUTH') } : { action, username: id, operator: sessionStorage.getItem('ADMIN_AUTH') };
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                syncData(true); 
+            }
+        }
+
+        function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
+        function exportToExcel() { const ws = XLSX.utils.json_to_sheet(DB.transactions); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sales"); XLSX.writeFile(wb, `POS_REPORT_${new Date().getTime()}.xlsx`); }
+        async function exportToPDF() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("PANGKALAN ENTERPRISE - SALES REPORT", 14, 15); const body = DB.transactions.map(t => [t.ID.slice(-4), t.Customer || t.Role, t.Total, t.Type]); doc.autoTable({ head: [['ID', 'Cust', 'Total', 'Payment']], body: body, startY: 25, headStyles: {fillColor:[124, 58, 237]} }); doc.save(`Sales_Report.pdf`); }
     </script>
 </body>
 </html>
