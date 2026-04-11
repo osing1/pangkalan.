@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id" class="bg-[#f3f4f9]">
+<html lang="id" class="bg-[#f8fafc]">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>RM Pangkalan | Enterprise Owner Center v23.0</title>
+    <title>RM Pangkalan | Ultimate ERP Center v33.0</title>
     
     <!-- PWA Meta -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,208 +18,259 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        :root { --primary: #7c3aed; --bg: #f3f4f9; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        :root { --primary: #7c3aed; --bg: #f8fafc; }
         
-        html, body { background-color: var(--bg) !important; margin: 0; padding: 0; overflow: hidden; height: 100%; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; }
+        html, body { background-color: var(--bg); margin: 0; padding: 0; height: 100%; width: 100%; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; overflow: hidden; }
 
-        /* Sidebar Desktop - Fixed Height & Absolute Clarity */
+        /* Sidebar Sharp & Indestructible */
         .sidebar-fixed { 
-            background: var(--primary); border-radius: 0 45px 45px 0; 
-            height: 100vh !important; width: 280px;
+            background: #1e1b4b; border-radius: 0 16px 16px 0; 
+            height: 100vh !important; width: 260px;
             position: fixed; top: 0; left: 0; z-index: 1000;
-            box-shadow: 15px 0 40px rgba(124, 58, 237, 0.1);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.05);
         }
-        .nav-item { color: rgba(255,255,255,0.45); transition: 0.3s; border-radius: 22px; cursor: pointer; display: flex; align-items: center; margin-bottom: 10px; }
-        .nav-item:hover { color: white; background: rgba(255,255,255,0.08); }
-        .nav-item.active { background: white; color: var(--primary); box-shadow: 0 15px 35px rgba(0,0,0,0.12); font-weight: 800; }
+        .nav-item { color: rgba(255,255,255,0.5); transition: 0.2s; border-radius: 12px; cursor: pointer; display: flex; align-items: center; margin-bottom: 4px; }
+        .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: var(--primary); color: white; font-weight: 700; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3); }
         
-        /* Enterprise Components */
-        .card-ent { background: white; border-radius: 35px; border: 1.5px solid #f1f5f9; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.04); overflow: hidden; transition: 0.3s; }
-        .card-ent:hover { transform: translateY(-4px); }
+        .card-pro { background: white; border-radius: 16px; border: 1px solid #f1f5f9; box-shadow: 0 4px 15px -5px rgba(0,0,0,0.02); overflow: hidden; transition: 0.3s; }
+        .card-pro:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -10px rgba(0,0,0,0.05); }
 
-        /* Mobile Pill Nav - Pure Floating Zero Bleed */
+        /* Bottom Pill Nav - Mobile */
         .bottom-pill-nav {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            width: 92%; max-width: 440px; background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.6);
-            height: 76px; z-index: 9999; border-radius: 38px;
-            box-shadow: 0 25px 60px -15px rgba(124, 58, 237, 0.3);
-            display: flex; align-items: center; justify-content: space-around; padding: 0 10px;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 420px; background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px); border: 1px solid rgba(0, 0, 0, 0.05);
+            height: 68px; z-index: 9999; border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            display: flex; align-items: center; justify-content: space-around;
         }
 
         .tab-pill {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             gap: 2px; color: #94a3b8; font-weight: 800; font-size: 8px; text-transform: uppercase;
-            width: 60px; height: 56px; border-radius: 24px; transition: 0.3s;
+            width: 55px; height: 55px; border-radius: 14px; transition: 0.2s;
         }
-        .tab-pill.active { color: var(--primary); background: rgba(124, 58, 237, 0.08); }
+        .tab-pill.active { color: var(--primary); background: rgba(124, 58, 237, 0.06); }
 
-        /* Modal UI / Swiper Pro */
-        .swal2-popup.detail-modal { border-radius: 45px !important; padding: 1.2rem 0.05rem !important; width: 98% !important; max-width: 600px !important; }
-        .input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 18px; padding: 14px 20px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; }
-        .input-pro:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 5px rgba(124, 58, 237, 0.05); }
+        /* Custom Modal System */
+        .swal2-popup.executive-modal { border-radius: 20px !important; padding: 1.5rem !important; width: 96% !important; max-width: 550px !important; }
+        .swal2-popup.loading-mini { border-radius: 16px !important; padding: 1.5rem !important; width: 180px !important; background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); }
+        .input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-weight: 600; outline: none; transition: 0.2s; }
+        .input-pro:focus { border-color: var(--primary); background: white; }
 
-        .upload-zone { border: 2.5px dashed #e2e8f0; border-radius: 26px; padding: 25px; text-align: center; cursor: pointer; background: #fbfcfe; transition: 0.3s; }
-        .upload-zone:hover { border-color: var(--primary); background: #f5f3ff; }
-
-        @media (min-width: 769px) { .main-canvas { margin-left: 280px; width: calc(100% - 280px); } }
+        @media (min-width: 769px) { .main-canvas { margin-left: 260px; width: calc(100% - 260px); } }
+        
         @media (max-width: 768px) {
             #mainSidebar { display: none !important; }
-            .main-canvas { padding-bottom: 140px !important; width: 100vw !important; margin: 0 !important; background-color: var(--bg) !important; }
-            .mobile-px-min { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+            .main-canvas { 
+                padding-bottom: 120px !important; 
+                width: 100vw !important; margin-left: 0 !important;
+                position: relative; overflow-y: auto !important; height: 100vh;
+                background-color: var(--bg) !important;
+            }
+            .mobile-px-pro { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
         }
 
-        /* Focus & Blur Layering */
-        .blur-target[inert] { filter: blur(15px); opacity: 0.25; pointer-events: none; transition: 0.4s; }
-        #loginOverlay[inert] { display: none !important; }
-
+        .blur-target[inert] { filter: blur(12px); opacity: 0.3; pointer-events: none; transition: 0.4s ease; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes pop { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        .ai-glow-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; padding: 10px 20px; border-radius: 16px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); transition: 0.3s; }
-        .ai-glow-btn:hover { transform: scale(1.05); }
+        .ai-glow-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; padding: 10px 18px; border-radius: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; box-shadow: 0 10px 20px rgba(124, 58, 237, 0.2); transition: 0.3s; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
 
     <!-- SECURITY SCREEN -->
-    <div id="loginOverlay" class="fixed inset-0 bg-violet-600 z-[10001] flex items-center justify-center p-4">
-        <div class="bg-white p-12 rounded-[65px] shadow-2xl w-full max-w-md text-center animate-pop">
-            <div class="bg-violet-100 w-24 h-24 rounded-[40px] flex items-center justify-center mx-auto mb-8 shadow-sm">
-                <i data-lucide="shield-check" class="text-violet-600 w-12 h-12"></i>
+    <div id="loginOverlay" class="fixed inset-0 bg-indigo-950 z-[10001] flex items-center justify-center p-4">
+        <div class="bg-white p-10 rounded-[24px] shadow-2xl w-full max-w-md text-center animate-pop">
+            <div class="bg-violet-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-violet-100 shadow-sm">
+                <i data-lucide="shield-check" class="text-violet-600 w-10 h-10"></i>
             </div>
-            <h2 class="text-3xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase">OWNER ACCESS</h2>
-            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mb-12 italic">Secure Management System v23.0</p>
+            <h2 class="text-2xl font-black italic tracking-tighter text-slate-800 mb-2 uppercase leading-none">OWNER TERMINAL</h2>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px] mb-10 italic">Enterprise ERP v33.0</p>
             <div class="space-y-4">
-                <input type="text" id="loginUser" placeholder="Username" class="input-pro">
-                <input type="password" id="loginPass" placeholder="Password" class="input-pro">
-                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-5 rounded-[26px] font-black text-xs uppercase italic tracking-widest shadow-xl shadow-violet-200 active:scale-95 transition-all mt-6 uppercase tracking-widest">Otorisasi Panel</button>
+                <input type="text" id="loginUser" placeholder="Owner ID" class="input-pro">
+                <input type="password" id="loginPass" placeholder="Security PIN" class="input-pro">
+                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest active:scale-95 transition-all mt-4">AKSES SISTEM</button>
             </div>
         </div>
     </div>
 
-    <!-- DESKTOP SIDEBAR -->
-    <aside id="mainSidebar" class="hidden md:flex flex-col sidebar-fixed text-white p-10">
-        <div class="mb-16">
-            <span class="text-3xl font-black italic uppercase block tracking-tighter leading-none">PANGKALAN</span>
-            <span class="text-[10px] font-bold uppercase tracking-[5px] opacity-50 mt-1 block">Enterprise</span>
+    <!-- SIDEBAR -->
+    <aside id="mainSidebar" class="hidden md:flex flex-col sidebar-fixed text-white p-8">
+        <div class="mb-14 flex items-center gap-3 px-2">
+            <div class="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-violet-900/50"><i data-lucide="zap" class="text-white w-4 h-4"></i></div>
+            <div>
+                <span class="text-xl font-black italic block tracking-tight leading-none uppercase">Pangkalan</span>
+                <span class="text-[8px] font-bold uppercase tracking-[3px] opacity-40 mt-1 block leading-none">Enterprise</span>
+            </div>
         </div>
-        <nav class="flex-1 space-y-4 overflow-y-auto no-scrollbar pb-10">
-            <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active p-4 gap-5 transition-all"><i data-lucide="layout-dashboard"></i> <span class="text-[11px] uppercase tracking-widest font-black">Dashboard</span></div>
-            <div onclick="switchTab('menu')" id="nav-menu" class="nav-item p-4 gap-5 transition-all"><i data-lucide="utensils"></i> <span class="text-[11px] uppercase tracking-widest font-black">Menu Master</span></div>
-            <div onclick="switchTab('sales')" id="nav-sales" class="nav-item p-4 gap-5 transition-all"><i data-lucide="file-text"></i> <span class="text-[11px] uppercase tracking-widest font-black">Sales Report</span></div>
-            <div onclick="switchTab('staff')" id="nav-staff" class="nav-item p-4 gap-5 transition-all"><i data-lucide="users"></i> <span class="text-[11px] uppercase tracking-widest font-black">HR & SDM</span></div>
-            <div onclick="switchTab('audit')" id="nav-audit" class="nav-item p-4 gap-5 transition-all"><i data-lucide="activity"></i> <span class="text-[11px] uppercase tracking-widest font-black">Audit Logs</span></div>
+        <nav class="flex-1 space-y-1 overflow-y-auto no-scrollbar pb-10">
+            <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active p-3 gap-4 transition-all"><i data-lucide="layout-grid" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">Dashboard</span></div>
+            <div onclick="switchTab('menu')" id="nav-menu" class="nav-item p-3 gap-4 transition-all"><i data-lucide="utensils" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">Menu Master</span></div>
+            <div onclick="switchTab('inventory')" id="nav-inventory" class="nav-item p-3 gap-4 transition-all"><i data-lucide="package" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">Stok & Resep</span></div>
+            <div onclick="switchTab('sales')" id="nav-sales" class="nav-item p-3 gap-4 transition-all"><i data-lucide="file-text" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">Sales Journal</span></div>
+            <div onclick="switchTab('staff')" id="nav-staff" class="nav-item p-3 gap-4 transition-all"><i data-lucide="users" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">HR & SDM</span></div>
+            <div onclick="switchTab('crm')" id="nav-crm" class="nav-item p-3 gap-4 transition-all"><i data-lucide="user-check" class="w-5 h-5"></i> <span class="text-[11px] font-bold uppercase tracking-wider">Pelanggan</span></div>
         </nav>
-        <div class="mt-auto pt-10 border-t border-white/10">
-            <button onclick="handleLogout()" class="w-full bg-white/10 p-5 rounded-3xl font-black text-[10px] uppercase hover:bg-white/20 transition-all text-white">Logout System</button>
+        <div class="mt-auto border-t border-white/5 pt-6">
+            <button onclick="handleLogout()" class="w-full bg-white/5 p-3.5 rounded-xl font-bold text-[10px] uppercase hover:bg-white/10 transition-all text-white border border-white/5 tracking-widest leading-none">Logout</button>
         </div>
     </aside>
 
     <!-- MOBILE PILL NAV -->
-    <nav id="mobilePillNav" class="md:hidden bottom-pill-nav">
+    <nav id="mobilePillNav" class="md:hidden bottom-pill-nav hidden">
         <button onclick="switchTab('dashboard')" id="pill-dashboard" class="tab-pill active"><i data-lucide="home" class="w-6 h-6"></i><span>DASH</span></button>
-        <button onclick="switchTab('menu')" id="pill-menu" class="tab-pill"><i data-lucide="utensils" class="w-6 h-6"></i><span>MENU</span></button>
-        <button onclick="switchTab('sales')" id="pill-sales" class="tab-pill"><i data-lucide="file-text" class="w-6 h-6"></i><span>SALES</span></button>
-        <button onclick="switchTab('audit')" id="pill-audit" class="tab-pill"><i data-lucide="activity" class="w-6 h-6"></i><span>LOGS</span></button>
+        <button onclick="switchTab('menu')" id="pill-menu" class="tab-pill"><i data-lucide="book-open" class="w-6 h-6"></i><span>MENU</span></button>
+        <button onclick="switchTab('inventory')" id="pill-inventory" class="tab-pill"><i data-lucide="package" class="w-6 h-6"></i><span>STOK</span></button>
+        <button onclick="switchTab('sales')" id="pill-sales" class="tab-pill"><i data-lucide="clipboard-list" class="w-6 h-6"></i><span>LOGS</span></button>
         <button onclick="handleLogout()" class="tab-pill text-red-400"><i data-lucide="log-out" class="w-6 h-6"></i><span>EXIT</span></button>
     </nav>
 
-    <!-- MAIN CANVAS -->
-    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden main-canvas blur-target" style="background-color: var(--bg);">
-        <header class="h-20 md:h-24 px-6 md:px-12 flex items-center justify-between flex-shrink-0 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <!-- MAIN CONTENT -->
+    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden main-canvas">
+        <header class="h-20 md:h-24 px-4 md:px-10 flex items-center justify-between flex-shrink-0 bg-white border-b border-slate-50">
             <div class="flex items-center gap-4">
-                <div class="md:hidden bg-violet-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center font-black italic text-xs shadow-lg">RM</div>
+                <div class="md:hidden bg-violet-600 text-white w-11 h-11 rounded-2xl flex items-center justify-center font-black italic text-base shadow-lg">RM</div>
                 <div>
-                    <h1 id="tabTitle" class="text-xl md:text-2xl font-black text-slate-800 italic uppercase tracking-tighter leading-none">DASHBOARD</h1>
-                    <div class="flex items-center gap-2 mt-1">
+                    <h1 id="tabTitle" class="text-base md:text-xl font-black text-slate-800 uppercase italic tracking-tight leading-none uppercase">DASHBOARD</h1>
+                    <div class="flex items-center gap-2 mt-1.5">
                         <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                        <span id="digitalClock" class="text-[10px] font-black text-slate-400 tracking-widest uppercase">00:00:00 - Online</span>
+                        <span id="digitalClock" class="text-[9px] font-bold text-slate-400 tracking-widest uppercase">00:00:00 - SYNCED</span>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="syncData(true)" class="p-3 bg-slate-50 rounded-2xl text-violet-600 border border-slate-100 active:rotate-180 transition-all hover:bg-white"><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
-                <div class="w-12 md:w-16 h-12 md:h-16 rounded-[24px] bg-slate-900 flex items-center justify-center text-white font-black text-sm shadow-xl" id="userInitial">OW</div>
+            <div class="flex items-center gap-3">
+                <button onclick="syncData(true)" class="p-2.5 bg-slate-50 rounded-xl text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-4.5 h-4.5"></i></button>
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-indigo-950 flex items-center justify-center text-white font-black text-xs shadow-xl border-2 border-white" id="userInitial">OW</div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto no-scrollbar mobile-px-min p-4 md:p-12 space-y-8">
+        <div class="flex-1 overflow-y-auto no-scrollbar mobile-px-pro p-4 md:p-10 space-y-6 md:space-y-10">
             
             <!-- SECTION: DASHBOARD -->
-            <div id="section-dashboard" class="space-y-8 animate-pop">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                    <div class="card-ent p-8 border-l-[15px] border-violet-600"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Total Omzet</p><h2 id="stat-revenue" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">Rp 0</h2></div>
-                    <div class="card-ent p-8 border-l-[15px] border-orange-500"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Laba Bersih (AI)</p><h2 id="stat-profit" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">Rp 0</h2></div>
-                    <div class="card-ent p-8 border-l-[15px] border-blue-500"><p class="text-[10px] font-black text-slate-400 uppercase italic mb-1">Transaksi Berhasil</p><h2 id="stat-orders" class="text-2xl md:text-3xl font-black text-slate-800 italic leading-none tracking-tighter">0</h2></div>
+            <div id="section-dashboard" class="space-y-6 md:space-y-8 animate-pop">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6">
+                    <div class="card-pro p-6 border-l-[8px] border-violet-600 bg-white">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Total Omzet</p>
+                        <h2 id="stat-revenue" class="text-xl md:text-2xl font-extrabold text-slate-800 italic leading-none tracking-tighter">Rp 0</h2>
+                    </div>
+                    <div class="card-pro p-6 border-l-[8px] border-orange-500 bg-white">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-orange-500">Laba Bersih (Net)</p>
+                        <h2 id="stat-profit" class="text-xl md:text-2xl font-extrabold text-slate-800 italic leading-none tracking-tighter text-green-600">Rp 0</h2>
+                    </div>
+                    <div class="card-pro p-6 border-l-[8px] border-blue-500 bg-white">
+                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Volume Sales</p>
+                        <h2 id="stat-orders" class="text-xl md:text-2xl font-extrabold text-slate-800 italic leading-none tracking-tighter">0</h2>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section class="card-ent p-10 bg-gradient-to-br from-violet-900 to-black text-white relative overflow-hidden group">
-                        <i data-lucide="sparkles" class="absolute -right-6 -bottom-6 w-32 h-32 opacity-10"></i>
-                        <h3 class="text-sm font-black uppercase tracking-widest italic mb-4">Gemini Business AI Intelligence</h3>
-                        <p class="text-[11px] text-violet-200 mb-8 leading-relaxed uppercase font-bold italic">Analisalah riwayat penjualan dan pengeluaran harian untuk strategi promosi yang lebih cerdas.</p>
-                        <button onclick="analyzeBusinessAI()" class="w-full bg-white/10 hover:bg-white text-white hover:text-violet-900 py-4 rounded-3xl font-black text-[11px] uppercase transition-all shadow-xl">✨ JALANKAN ANALISA AI</button>
+                <!-- Financial Trend Visualization -->
+                <section class="card-pro p-6 md:p-8 bg-white overflow-hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-[3px] italic">Financial Growth Trend</h3>
+                        <span class="text-[9px] bg-slate-100 px-2 py-1 rounded font-bold text-slate-400 uppercase">7-Day Real Analytics</span>
+                    </div>
+                    <div class="h-48 md:h-64">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </section>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
+                    <section class="card-pro p-8 bg-[#1e1b4b] text-white relative overflow-hidden group">
+                        <i data-lucide="sparkles" class="absolute -right-6 -bottom-6 w-32 h-32 opacity-10 group-hover:scale-110 transition-transform"></i>
+                        <h3 class="text-sm font-black uppercase italic tracking-widest mb-4 flex items-center gap-2">Gemini ERP Intelligence</h3>
+                        <p class="text-[11px] text-slate-300 mb-8 leading-relaxed italic opacity-80 uppercase">Analisalah tren laba rugi secara otomatis berdasarkan database finansial Anda.</p>
+                        <button onclick="analyzeBusinessAI()" class="w-full bg-white text-indigo-950 py-4 rounded-xl font-black text-[10px] uppercase shadow-xl active:scale-95 transition-all">✨ JALANKAN ANALISA EKSEKUTIF</button>
                     </section>
-                    <section class="card-ent p-10"><h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic border-b pb-4">Loyal Customers</h3><div id="topCustomers" class="space-y-3"></div></section>
+                    <section class="card-pro p-8"><h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic border-b pb-4 flex justify-between items-center">Menu Paling Laris <i data-lucide="trending-up" class="w-4 h-4 text-green-500"></i></h3><div id="topSellingMenu" class="space-y-3"></div></section>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <section class="card-ent p-10 bg-slate-900 text-white">
-                        <h3 class="text-xs font-black uppercase tracking-widest mb-4 italic leading-none">Journal Digital</h3>
-                        <div class="flex gap-4">
-                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">XLSX Export</button>
-                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">PDF Journal</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 pb-20">
+                    <section class="card-pro p-8 bg-slate-900 text-white flex flex-col justify-center">
+                        <h3 class="text-xs font-black uppercase tracking-widest mb-4 italic">Management Reporting</h3>
+                        <div class="flex gap-3">
+                            <button onclick="exportToExcel()" class="flex-1 bg-green-600 py-4 rounded-xl font-bold text-[10px] uppercase shadow-lg">XLSX Export</button>
+                            <button onclick="exportToPDF()" class="flex-1 bg-red-600 py-4 rounded-xl font-bold text-[10px] uppercase shadow-lg">PDF Journal</button>
                         </div>
                     </section>
-                    <section class="card-ent p-10">
-                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic">Pengaturan Cloud</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="apiInput" class="input-pro" placeholder="API Apps Script URL">
-                            <input type="text" id="folderIdInput" class="input-pro" placeholder="Folder ID Media G-Drive">
-                            <button onclick="saveConfig()" class="w-full bg-violet-600 text-white py-4 rounded-3xl font-black text-[11px] uppercase active:scale-95 transition-all">SINKRONKAN PARAMETER</button>
+                    <section class="card-pro p-8">
+                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-widest mb-6 italic flex items-center gap-2">Cloud Configuration <i data-lucide="database" class="w-3.5 h-3.5 opacity-30"></i></h3>
+                        <div class="space-y-3">
+                            <input type="text" id="apiInput" class="input-pro text-[12px]" placeholder="API Gateway URL">
+                            <input type="text" id="folderIdInput" class="input-pro text-[12px]" placeholder="Media Folder ID">
+                            <button onclick="saveConfig()" class="w-full bg-violet-600 text-white py-4 rounded-xl font-bold text-[10px] uppercase active:scale-95 transition-all">Update Cloud Settings</button>
                         </div>
                     </section>
                 </div>
             </div>
 
-            <!-- SECTION: MENU LIST (Refactored Grid) -->
-            <div id="section-menu" class="hidden animate-pop space-y-6">
-                 <div class="p-8 md:p-10 card-ent flex items-center justify-between bg-white">
-                    <div><h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Produk, HPP, & Media Asset</p></div>
-                    <button onclick="openMenuForm()" class="bg-slate-900 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">+ PRODUK</button>
+            <!-- SECTION: MENU MASTER -->
+            <div id="section-menu" class="hidden animate-pop space-y-6 pb-20">
+                 <div class="p-6 md:p-8 card-pro flex items-center justify-between bg-white">
+                    <div><h3 class="text-lg font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">HPP, Pricing & Media Asset</p></div>
+                    <button onclick="openMenuForm()" class="bg-indigo-950 text-white px-8 py-3.5 rounded-xl font-black text-[10px] uppercase shadow-xl active:scale-95">+ PRODUK</button>
                 </div>
-                <div id="menuFullList" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                <div id="menuFullList" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-6"></div>
             </div>
 
-            <!-- SECTION: SALES -->
-            <div id="section-sales" class="hidden animate-pop space-y-6">
-                <div class="p-8 md:p-10 card-ent flex justify-between items-center bg-white">
-                    <div><h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic leading-none">Sales Journal</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-2 italic tracking-widest">Verified Transactions Only</p></div>
-                    <button onclick="openExpenseForm()" class="bg-red-500 text-white px-6 py-4 rounded-3xl font-black text-[10px] uppercase shadow-lg shadow-red-100">+ BIAYA OPERASIONAL</button>
+            <!-- SECTION: INVENTORY -->
+            <div id="section-inventory" class="hidden animate-pop space-y-6 pb-20">
+                <div class="p-6 md:p-8 card-pro flex items-center justify-between bg-white">
+                    <div><h3 class="text-lg font-black text-slate-800 uppercase italic">Gudang & Resep</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Monitoring Bahan Baku & Costing</p></div>
+                    <div class="flex gap-2">
+                        <button onclick="openRecipeBuilder()" class="bg-violet-600 text-white px-5 py-3.5 rounded-xl font-black text-[10px] uppercase shadow-md active:scale-95">ATUR RESEP</button>
+                        <button onclick="openStockUpdateForm()" class="bg-indigo-950 text-white px-5 py-3.5 rounded-xl font-black text-[10px] uppercase shadow-md active:scale-95">+ STOK</button>
+                    </div>
                 </div>
-                <div id="salesListContainer" class="divide-y divide-slate-50 card-ent bg-white max-h-[60vh] overflow-y-auto no-scrollbar px-4"></div>
+                <div id="inventoryGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4"></div>
+                <div class="card-pro p-8 bg-white">
+                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-[4px] mb-6 italic border-b pb-4">Daftar Penggunaan Bahan (Costing)</h3>
+                    <div id="recipeList" class="space-y-2"></div>
+                </div>
             </div>
 
-            <!-- SECTION: STAFF -->
-            <div id="section-staff" class="hidden animate-pop space-y-6">
-                 <div class="p-8 md:p-10 card-ent flex items-center justify-between bg-white">
-                    <h3 class="text-lg md:text-xl font-black text-slate-800 uppercase italic leading-none">Resources Management</h3>
-                    <button onclick="openStaffForm()" class="bg-violet-600 text-white px-8 py-4 rounded-3xl font-black text-[11px] uppercase shadow-lg">+ TAMBAH STAFF</button>
+            <!-- SECTION: CRM -->
+            <div id="section-crm" class="hidden animate-pop space-y-6 pb-20">
+                <div class="p-6 md:p-8 card-pro flex items-center justify-between bg-white">
+                    <div><h3 class="text-lg font-black text-slate-800 uppercase italic">Member Database</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Loyalty Points & Visit History</p></div>
+                    <button onclick="Swal.fire('Info', 'Fitur Blast Promo dalam pengembangan', 'info')" class="bg-indigo-950 text-white px-8 py-3.5 rounded-xl font-black text-[10px] uppercase shadow-xl">BLAST PROMO</button>
                 </div>
-                <div id="staffListContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"></div>
+                <div class="card-pro bg-white overflow-hidden">
+                    <div id="crmListContainer" class="divide-y divide-slate-50"></div>
+                </div>
             </div>
 
-            <!-- SECTION: AUDIT LOGS -->
-            <div id="section-audit" class="hidden animate-pop space-y-6">
-                <div class="p-8 md:p-10 card-ent bg-white">
-                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-[3px] mb-8 italic border-b pb-4">Audit Trail (Log Aktifitas Terakhir)</h3>
-                    <div id="auditLogs" class="space-y-2 max-h-[70vh] overflow-y-auto no-scrollbar"></div>
+            <!-- SECTION: SALES JOURNAL -->
+            <div id="section-sales" class="hidden animate-pop space-y-4 pb-20">
+                <div class="p-6 md:p-8 card-pro flex justify-between items-center bg-white">
+                    <div><h3 class="text-lg font-black text-slate-800 uppercase italic leading-none">Journal Penjualan</h3><p class="text-[10px] font-bold text-slate-400 uppercase mt-2 italic">Verified Transactions History</p></div>
+                    <button onclick="openExpenseForm()" class="bg-red-500 text-white px-6 py-3 rounded-xl font-black text-[10px] uppercase shadow-lg shadow-red-100">+ PENGELUARAN</button>
+                </div>
+                <div id="salesListContainer" class="divide-y divide-slate-100 card-pro bg-white max-h-[75vh] overflow-y-auto no-scrollbar px-2 md:px-6"></div>
+            </div>
+
+            <!-- SECTION: SDM RESOURCES -->
+            <div id="section-staff" class="hidden animate-pop space-y-6 pb-20">
+                 <div class="p-6 md:p-10 card-pro flex items-center justify-between bg-white">
+                    <h3 class="text-lg font-black text-slate-800 uppercase italic leading-none">Manajemen SDM</h3>
+                    <button onclick="openStaffForm()" class="bg-violet-600 text-white px-8 py-3.5 rounded-xl font-black text-[10px] uppercase shadow-lg active:scale-95">+ STAFF</button>
+                </div>
+                <div id="staffListContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- SECTION: SYSTEM AUDIT -->
+            <div id="section-audit" class="hidden animate-pop space-y-6 pb-20">
+                <div class="p-8 md:p-10 card-pro bg-white">
+                    <h3 class="text-xs font-black text-slate-800 uppercase tracking-[4px] mb-8 italic border-b pb-4 flex justify-between items-center">Audit Activity Logs <i data-lucide="shield-alert" class="w-4 h-4 text-orange-400 opacity-30"></i></h3>
+                    <div id="auditLogs" class="space-y-3 max-h-[70vh] overflow-y-auto no-scrollbar"></div>
                 </div>
             </div>
 
@@ -228,14 +279,14 @@
 
     <script>
         const apiKey = ""; 
-        let DEFAULT_API = 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
-        let API_URL = localStorage.getItem('RM_API_URL') || DEFAULT_API;
+        let API_URL = localStorage.getItem('RM_API_URL') || 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
         let FOLDER_ID = localStorage.getItem('RM_FOLDER_ID') || '';
-        let DB = { menu: [], transactions: [], users: [], expenses: [], logs: [], customers: [] };
+        let DB = { menu: [], transactions: [], users: [], expenses: [], logs: [], customers: [], stock: [], recipes: [] };
+        let currentChart = null;
 
         window.onload = () => {
             lucide.createIcons(); checkAuth();
-            setInterval(() => { document.getElementById('digitalClock').innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}) + ' - Online'; }, 1000);
+            setInterval(() => { document.getElementById('digitalClock').innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}) + ' - LIVE'; }, 1000);
             document.getElementById('apiInput').value = API_URL;
             document.getElementById('folderIdInput').value = FOLDER_ID;
         };
@@ -245,96 +296,191 @@
             if(active) main.setAttribute('inert', ''); else main.removeAttribute('inert');
         }
 
+        function showMiniLoader(title) {
+            Swal.fire({
+                title: `<p class="text-[10px] font-black uppercase tracking-widest text-slate-400">${title}</p>`,
+                html: `<div class="flex justify-center py-2"><div class="w-8 h-8 border-4 border-slate-100 border-t-violet-600 rounded-full animate-spin"></div></div>`,
+                showConfirmButton: false, allowOutsideClick: false, customClass: { popup: 'loading-mini' }
+            });
+        }
+
         async function handleLogin() {
             const user = document.getElementById('loginUser').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-            if(!user || !pass) return Swal.fire('Oops!', 'Lengkapi Username & Password.', 'warning');
-            
-            Swal.fire({ title: 'Otentikasi...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            if(!user || !pass) return;
+            showMiniLoader('Authenticating...');
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 const data = await res.json();
                 const valid = data.users.find(u => u.Username.toLowerCase() === user.toLowerCase() && String(u.Password) === pass && u.Role === 'Owner');
                 if (valid) {
                     sessionStorage.setItem('ADMIN_AUTH', valid.Username);
-                    checkAuth(); Swal.close();
-                } else { Swal.fire('Akses Ditolak', 'Kredensial salah atau bukan Owner.', 'error'); }
-            } catch (e) { Swal.fire('Error', 'Gagal hubungi server cloud.', 'error'); }
+                    checkAuth();
+                    Swal.close();
+                } else { Swal.fire({ text: 'Gagal Otorisasi.', icon: 'error' }); }
+            } catch (e) { Swal.fire({ text: 'Server sibuk.', icon: 'error' }); }
         }
 
         function checkAuth() {
             const user = sessionStorage.getItem('ADMIN_AUTH');
-            const overlay = document.getElementById('loginOverlay');
             if (user) {
-                overlay.style.display = 'none'; overlay.setAttribute('inert', '');
+                document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('mainContent').classList.remove('hidden');
                 document.getElementById('mainSidebar').classList.remove('hidden');
+                document.getElementById('mobilePillNav').classList.remove('hidden');
                 document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase();
                 syncData(true);
-            } else { overlay.style.display = 'flex'; document.getElementById('mainContent').classList.add('hidden'); }
+            } else { document.getElementById('loginOverlay').style.display = 'flex'; document.getElementById('mainContent').classList.add('hidden'); }
         }
 
         function switchTab(tab) {
-            ['dashboard', 'menu', 'sales', 'staff', 'audit'].forEach(t => {
+            ['dashboard', 'menu', 'sales', 'staff', 'audit', 'inventory', 'crm'].forEach(t => {
                 const sec = document.getElementById(`section-${t}`);
                 if(sec) sec.classList.toggle('hidden', t !== tab);
                 document.getElementById(`nav-${t}`)?.classList.toggle('active', t === tab);
                 document.getElementById(`pill-${t}`)?.classList.toggle('active', t === tab);
             });
             document.getElementById('tabTitle').innerText = tab.toUpperCase();
+            if(tab === 'dashboard') setTimeout(initChart, 200);
             lucide.createIcons();
         }
 
         async function syncData(loader = false) {
-            if(loader) Swal.fire({ title: 'Turbo Sync Aktif...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            if(!API_URL || API_URL.length < 10) return;
+            if(loader) showMiniLoader('Premium Sync...');
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 DB = await res.json();
-                renderStats(); renderMenu(); renderStaff(); renderSales(); renderLogs(); renderCRM();
+                renderStats(); renderMenu(); renderStaff(); renderSales(); renderLogs(); renderTopSelling(); renderInventory(); renderCRM();
                 if(loader) Swal.close();
-            } catch (e) { if(loader) Swal.fire('Offline', 'Sinkronisasi Gagal.', 'error'); }
+                initChart();
+            } catch (e) { if(loader) Swal.fire({ text: 'Sync Gagal.', icon: 'error' }); }
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('revenueChart');
+            if(!ctx) return;
+            if(currentChart) currentChart.destroy();
+            
+            const days = {};
+            const last7Days = [...Array(7)].map((_, i) => {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                return d.toLocaleDateString();
+            }).reverse();
+
+            last7Days.forEach(d => days[d] = 0);
+            DB.transactions.forEach(t => {
+                const d = new Date(t.Date).toLocaleDateString();
+                if(days[d] !== undefined && t.Status !== 'Pending') days[d] += Number(t.Total);
+            });
+
+            currentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(days).map(d => d.split('/')[0] + '/' + d.split('/')[1]),
+                    datasets: [{
+                        label: 'Revenue',
+                        data: Object.values(days),
+                        borderColor: '#7c3aed',
+                        backgroundColor: 'rgba(124, 58, 237, 0.05)',
+                        borderWidth: 4, tension: 0.4, fill: true, pointRadius: 2, pointBackgroundColor: '#7c3aed'
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9, weight: 'bold' } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } }
+                    }
+                }
+            });
         }
 
         function renderStats() {
-            const rev = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' ? Number(t.Total) : 0), 0);
-            const exp = DB.expenses ? DB.expenses.reduce((s, e) => s + Number(e.Amount), 0) : 0;
-            document.getElementById('stat-revenue').innerText = `Rp ${rev.toLocaleString()}`;
-            document.getElementById('stat-profit').innerText = `Rp ${(rev - exp).toLocaleString()}`;
-            document.getElementById('stat-orders').innerText = DB.transactions.length;
+            const revenue = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' ? Number(t.Total) : 0), 0);
+            const opEx = DB.expenses ? DB.expenses.reduce((s, e) => s + Number(e.Amount), 0) : 0;
+            let totalHPP = 0;
+            DB.transactions.filter(t => t.Status !== 'Pending').forEach(t => {
+                t.Items.split(',').forEach(item => {
+                    const menu = DB.menu.find(m => m.Name.toLowerCase() === item.trim().toLowerCase());
+                    if(menu) totalHPP += Number(menu.HPP || 0);
+                });
+            });
+            const netProfit = revenue - (totalHPP + opEx);
+            document.getElementById('stat-revenue').innerText = `Rp ${revenue.toLocaleString()}`;
+            document.getElementById('stat-profit').innerText = `Rp ${netProfit.toLocaleString()}`;
+            document.getElementById('stat-orders').innerText = `${DB.transactions.length} TRX`;
         }
 
         function renderCRM() {
-            const cont = document.getElementById('topCustomers');
+            const cont = document.getElementById('crmListContainer');
             if(!cont || !DB.customers) return;
-            const sorted = [...DB.customers].sort((a,b) => b.Visits - a.Visits).slice(0, 5);
-            cont.innerHTML = sorted.map(c => `
-                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-white">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center text-violet-600 font-black text-xs">${c.Name.slice(0,1)}</div>
-                        <div><p class="text-[11px] font-black text-slate-700 uppercase italic">${c.Name}</p><p class="text-[9px] text-slate-400 font-bold">${c.Phone}</p></div>
+            cont.innerHTML = DB.customers.map(c => `
+                <div class="flex items-center justify-between p-6 hover:bg-slate-50 transition-all animate-pop">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-2xl flex items-center justify-center text-indigo-700 font-black text-lg shadow-sm border-2 border-white">${c.Name.slice(0,1)}</div>
+                        <div><p class="font-black text-slate-800 uppercase italic text-sm leading-none">${c.Name}</p><p class="text-[10px] font-bold text-slate-400 mt-1.5">${c.Phone}</p></div>
                     </div>
-                    <span class="bg-violet-600 text-white text-[9px] font-black px-3 py-1.5 rounded-xl leading-none">${c.Visits}x Visit</span>
+                    <div class="text-right">
+                        <p class="text-sm font-black text-violet-600 leading-none">${Number(c.Points).toLocaleString()} Poin</p>
+                        <p class="text-[9px] font-black text-slate-300 uppercase mt-2 italic">${c.Visits} Kunjungan</p>
+                    </div>
+                </div>`).join('');
+        }
+
+        function renderInventory() {
+            const grid = document.getElementById('inventoryGrid');
+            const recipeCont = document.getElementById('recipeList');
+            if(!grid || !DB.stock) return;
+            grid.innerHTML = DB.stock.map(s => `
+                <div class="card-pro p-4 text-center bg-white border-b-4 ${s.Qty < s.MinQty ? 'border-red-500 bg-red-50/10' : 'border-slate-50'} animate-pop">
+                    <p class="text-[8px] font-black text-slate-300 uppercase mb-1">${s.Unit}</p>
+                    <h4 class="text-[10px] font-black text-slate-700 uppercase italic truncate mb-2">${s.Name}</h4>
+                    <p class="text-xl font-black ${s.Qty < s.MinQty ? 'text-red-600' : 'text-slate-800'}">${s.Qty}</p>
+                </div>`).join('');
+            recipeCont.innerHTML = (DB.recipes || []).map(r => `
+                <div class="flex justify-between items-center p-4 bg-slate-50 rounded-xl text-[10px] font-bold uppercase italic shadow-sm border border-white">
+                    <span class="text-violet-600 font-black w-14">#${r.MenuID}</span>
+                    <span class="flex-1 text-slate-500 truncate px-4">${r.IngredientName}</span>
+                    <span class="text-indigo-950 bg-white px-3 py-1 rounded-lg border border-slate-100 font-black italic">USE: ${r.AmountUsed}</span>
+                </div>`).join('');
+        }
+
+        function renderTopSelling() {
+            const cont = document.getElementById('topSellingMenu');
+            if(!cont || !DB.transactions) return;
+            const counts = {};
+            DB.transactions.forEach(t => t.Items.split(',').forEach(i => { const n = i.trim(); counts[n] = (counts[n] || 0) + 1; }));
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            cont.innerHTML = sorted.map(([name, count]) => `
+                <div class="flex items-center justify-between p-3.5 bg-slate-50 rounded-xl border border-white shadow-sm hover:scale-[1.01] transition-transform">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-indigo-950 text-white rounded-lg flex items-center justify-center font-black text-xs">${name.slice(0,1).toUpperCase()}</div>
+                        <p class="text-[11px] font-black text-slate-700 uppercase italic truncate w-32 md:w-auto">${name}</p>
+                    </div>
+                    <span class="bg-violet-600 text-white text-[8px] font-black px-3 py-1 rounded-md">${count} Porsi</span>
                 </div>`).join('');
         }
 
         function renderMenu() {
             const list = document.getElementById('menuFullList');
             list.innerHTML = DB.menu.map(m => `
-                <div class="card-ent bg-white p-6 flex flex-col gap-4 animate-pop">
-                    <div class="relative w-full aspect-video rounded-[24px] overflow-hidden bg-slate-50 border-2 border-slate-50 shadow-inner">
-                        <img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300?text=Produk'">
-                        <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl font-black text-[9px] uppercase italic text-violet-600 shadow-sm">${m.Category}</div>
+                <div class="card-pro bg-white p-5 flex flex-col gap-4 animate-pop">
+                    <div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-slate-50 shadow-inner">
+                        <img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x250?text=Produk'">
+                        <div class="absolute top-2 left-2 bg-white/95 backdrop-blur px-2.5 py-1 rounded-lg font-black text-[8px] uppercase italic text-violet-600 shadow-sm">${m.Category}</div>
                     </div>
                     <div class="flex-1">
-                        <h4 class="font-black text-slate-800 text-base uppercase italic leading-none mb-1 truncate">${m.Name}</h4>
-                        <div class="flex items-center gap-3 mt-3">
-                            <span class="text-[13px] font-black text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</span>
-                            <span class="text-[10px] font-bold text-slate-300 italic">HPP: ${Number(m.HPP || 0).toLocaleString()}</span>
+                        <h4 class="font-black text-slate-800 text-[13px] uppercase italic truncate mb-1 leading-none">${m.Name}</h4>
+                        <div class="flex items-center gap-3 mt-3 font-black">
+                            <span class="text-[14px] text-violet-600 italic">Rp ${Number(m.Price).toLocaleString()}</span>
+                            <span class="text-[10px] text-slate-300 italic opacity-60">HPP: ${Number(m.HPP || 0).toLocaleString()}</span>
                         </div>
                     </div>
-                    <div class="flex gap-2 pt-4 border-t border-slate-50">
-                        <button onclick="openMenuForm('${m.ID}')" class="flex-1 py-3 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400 active:scale-95 transition-all hover:bg-violet-50 hover:text-violet-600"><i data-lucide="edit-3" class="w-4 h-4 mr-2"></i> <span class="text-[10px] font-black uppercase">Edit</span></button>
-                        <button onclick="deleteData('Menu', '${m.ID}')" class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-400 active:scale-95 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <div class="flex gap-2 pt-3 border-t border-slate-50">
+                        <button onclick="openMenuForm('${m.ID}')" class="flex-1 py-3 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 active:scale-95 transition-all hover:bg-violet-50 hover:text-violet-600 font-black text-[9px] uppercase"><i data-lucide="edit-3" class="w-3.5 h-3.5 mr-2"></i> Edit</button>
+                        <button onclick="deleteData('Menu', '${m.ID}')" class="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center text-red-400 active:scale-90 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
@@ -343,15 +489,14 @@
         function renderStaff() {
             const list = document.getElementById('staffListContainer');
             list.innerHTML = DB.users.map(u => `
-                <div class="card-ent bg-white p-6 flex items-center gap-5 animate-pop">
-                    <img src="${u.Img || 'https://ui-avatars.com/api/?name='+u.Username}" class="w-16 h-16 rounded-[22px] border-2 border-slate-50 object-cover shadow-sm">
+                <div class="card-pro bg-white p-5 flex items-center gap-4 animate-pop">
+                    <img src="${u.Img || 'https://ui-avatars.com/api/?name='+u.Username+'&background=7c3aed&color=fff'}" class="w-11 h-11 rounded-xl border border-slate-50 object-cover shadow-sm">
                     <div class="flex-1 min-w-0">
-                        <h4 class="font-black text-slate-800 text-sm uppercase italic truncate leading-none">${u.Username}</h4>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">${u.Role}</p>
+                        <h4 class="font-black text-slate-800 text-[13px] uppercase italic truncate leading-none">${u.Username}</h4>
+                        <p class="text-[9px] font-bold text-slate-400 uppercase mt-1.5 tracking-widest">${u.Role}</p>
                     </div>
-                    <div class="flex flex-col gap-1.5">
-                        <button onclick="openStaffForm('${u.Username}')" class="p-3 bg-slate-50 rounded-xl text-slate-400 active:scale-95 hover:text-violet-600 transition-all"><i data-lucide="settings" class="w-4 h-4"></i></button>
-                        <button onclick="deleteData('User', '${u.Username}')" class="p-3 bg-red-50 rounded-xl text-red-400 active:scale-95 hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    <div class="flex gap-1.5">
+                        <button onclick="openStaffForm('${u.Username}')" class="p-2.5 bg-slate-50 rounded-lg text-slate-400 hover:text-violet-600 active:scale-90 transition-all"><i data-lucide="settings" class="w-4 h-4"></i></button>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
@@ -360,43 +505,52 @@
         function renderSales() {
             const container = document.getElementById('salesListContainer');
             container.innerHTML = DB.transactions.slice().reverse().map(t => `
-                <div class="py-6 flex flex-col gap-3 hover:bg-slate-50/50 transition-all px-2">
+                <div class="py-6 flex flex-col gap-2 hover:bg-slate-50/50 transition-all px-2 rounded-xl">
                     <div class="flex justify-between items-start">
-                        <div><span class="text-[8px] font-black text-slate-300 uppercase tracking-widest">TRX #${t.ID.slice(-6)}</span><h4 class="text-sm font-black text-slate-800 uppercase italic mt-1 leading-none">${t.Customer || t.Role}</h4></div>
-                        <span class="font-black text-violet-600 text-base italic tracking-tighter leading-none">Rp ${Number(t.Total).toLocaleString()}</span>
+                        <div><span class="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-none">TX #${t.ID.slice(-6)}</span><h4 class="text-[12px] font-black text-slate-800 uppercase italic mt-1.5 leading-none">${t.Customer || t.Role}</h4></div>
+                        <span class="font-black text-violet-600 text-sm italic tracking-tighter leading-none">Rp ${Number(t.Total).toLocaleString()}</span>
                     </div>
-                    <p class="text-[11px] font-bold text-slate-500 uppercase italic opacity-70 leading-relaxed">${t.Items}</p>
-                    <div class="flex items-center gap-3 text-[9px] font-black uppercase italic text-slate-300 pt-2 border-t border-slate-50 border-dashed mt-1">
-                        <span><i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i>${new Date(t.Date).toLocaleDateString()}</span>
-                        <span>|</span>
-                        <span>${t.Type}</span>
-                    </div>
+                    <p class="text-[11px] font-bold text-slate-500 uppercase italic opacity-60 leading-relaxed">${t.Items}</p>
+                    <div class="mt-2 text-[8px] font-black text-slate-300 uppercase italic">${t.Type}</div>
                 </div>`).join('');
-            lucide.createIcons();
         }
 
         function renderLogs() {
             const cont = document.getElementById('auditLogs');
             if(!DB.logs) return;
             cont.innerHTML = DB.logs.map(l => `
-                <div class="text-[10px] p-4 bg-slate-50 rounded-2xl border border-white flex gap-4 items-center">
-                    <span class="font-bold text-slate-400 w-24 flex-shrink-0">${new Date(l.Timestamp).toLocaleTimeString()}</span>
-                    <span class="font-black text-violet-600 w-20 uppercase flex-shrink-0 truncate">${l.User}</span>
-                    <div class="flex-1 font-bold text-slate-700 italic border-l pl-4">${l.Action}: ${l.Detail}</div>
+                <div class="text-[10px] p-4 bg-slate-50 rounded-2xl border border-white flex gap-4 items-center animate-pop">
+                    <span class="font-bold text-slate-400 w-20 flex-shrink-0 border-r pr-3">${new Date(l.Timestamp).toLocaleTimeString()}</span>
+                    <span class="font-black text-violet-600 w-16 uppercase flex-shrink-0 truncate">${l.User}</span>
+                    <div class="flex-1 font-bold text-slate-700 italic border-l-2 pl-3 border-violet-100">${l.Action}: ${l.Detail}</div>
                 </div>`).join('');
         }
 
-        async function openExpenseForm() {
+        // --- FORMS & DIALOGS ---
+
+        async function openRecipeBuilder() {
             setModalEffect(true);
             const { value: form } = await Swal.fire({
-                title: '<span class="italic font-black text-xl uppercase">Operasional Biaya</span>',
+                title: '<p class="italic font-black text-xl uppercase tracking-tighter">Recipe Builder</p>',
                 html: `<div class="space-y-4 p-2 text-left">
-                    <input id="ex-cat" class="input-pro" placeholder="Kategori (Belanja, Listrik, Gaji)">
-                    <input id="ex-amt" type="number" class="input-pro" placeholder="Nominal (Rp)">
-                    <textarea id="ex-note" class="input-pro h-24 pt-4 resize-none" placeholder="Detail Biaya..."></textarea>
+                    <input id="rec-mid" class="input-pro" placeholder="ID Menu (misal: M001)">
+                    <input id="rec-ing" class="input-pro" placeholder="Nama Bahan Baku (misal: Ayam)">
+                    <input id="rec-qty" type="number" class="input-pro" placeholder="Jumlah Pemakaian (angka)">
                 </div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
-                preConfirm: () => ({ action: 'addExpense', category: document.getElementById('ex-cat').value, amount: document.getElementById('ex-amt').value, note: document.getElementById('ex-note').value, operator: sessionStorage.getItem('ADMIN_AUTH') })
+                showCancelButton: true, confirmButtonColor: '#7c3aed', confirmButtonText: 'SIMPAN RESEP',
+                preConfirm: () => ({ action: 'updateRecipe', menuId: document.getElementById('rec-mid').value, ingredient: document.getElementById('rec-ing').value, qty: document.getElementById('rec-qty').value })
+            });
+            setModalEffect(false);
+            if(form) { showMiniLoader('Saving...'); await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
+        }
+
+        async function openStockUpdateForm() {
+            setModalEffect(true);
+            const { value: form } = await Swal.fire({
+                title: '<p class="italic font-black text-lg uppercase tracking-tighter">Update Stok</p>',
+                html: `<div class="space-y-3 p-2 text-left"><input id="st-id" class="input-pro" placeholder="ID Bahan"><input id="st-name" class="input-pro" placeholder="Nama Bahan"><input id="st-qty" type="number" class="input-pro" placeholder="Qty Baru"><input id="st-unit" class="input-pro" placeholder="Unit (kg/pcs)"></div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', 
+                preConfirm: () => ({ action: 'updateStock', id: document.getElementById('st-id').value, name: document.getElementById('st-name').value, qty: document.getElementById('st-qty').value, unit: document.getElementById('st-unit').value })
             });
             setModalEffect(false);
             if(form) { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
@@ -406,118 +560,123 @@
             setModalEffect(true);
             const item = id ? DB.menu.find(m => m.ID == id) : { ID: 'M'+Date.now().toString().slice(-6), Name:'', Category:'', Price:0, Description:'', Img:'', HPP: 0 };
             const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-xl uppercase">${id ? 'Update Menu' : 'Produk Baru'}</span>`,
+                title: `<p class="italic font-black text-lg uppercase tracking-tighter">${id ? 'Update Menu' : 'Menu Baru'}</p>`,
                 html: `<div class="space-y-4 p-2 text-left overflow-y-auto no-scrollbar max-h-[70vh]">
                     <input id="m-name" class="input-pro" value="${item.Name}" placeholder="Nama Produk">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-2">Harga Jual</label>
-                        <input id="m-price" type="number" class="input-pro mt-1" value="${item.Price}"></div>
-                        <div><label class="text-[9px] font-black uppercase text-slate-400 ml-2">HPP (Modal)</label>
-                        <input id="m-hpp" type="number" class="input-pro mt-1" value="${item.HPP || 0}"></div>
-                    </div>
-                    <input id="m-cat" class="input-pro" value="${item.Category}" placeholder="Kategori Menu (Ketik Baru)">
-                    <div class="flex justify-between items-center px-1">
-                        <label class="text-[9px] font-black uppercase text-slate-400">Deskripsi Pemasaran</label>
-                        <button onclick="suggestMenuAI()" class="ai-glow-btn">✨ AI ASSIST</button>
-                    </div>
-                    <textarea id="m-desc" class="input-pro h-24 pt-4 resize-none leading-relaxed">${item.Description || ''}</textarea>
-                    <div class="upload-zone" onclick="document.getElementById('f-menu').click()">
+                    <div class="grid grid-cols-2 gap-3"><input id="m-price" type="number" class="input-pro" value="${item.Price}" placeholder="Jual"><input id="m-hpp" type="number" class="input-pro" value="${item.HPP || 0}" placeholder="HPP"></div>
+                    <input id="m-cat" class="input-pro" value="${item.Category}" placeholder="Kategori">
+                    <div class="flex justify-between items-center px-1"><label class="text-[9px] font-black uppercase text-slate-400 italic">Pemasaran AI ✨</label><button onclick="suggestMenuAI()" id="ai-assist-btn" class="text-[9px] font-black bg-violet-50 text-violet-600 px-3 py-1 rounded-full uppercase">✨ AUTO-WRITE</button></div>
+                    <textarea id="m-desc" class="input-pro h-24 pt-4 resize-none leading-relaxed italic font-medium">${item.Description || ''}</textarea>
+                    <div class="border-2 border-dashed border-slate-100 rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('f-menu').click()">
                         <input type="file" id="f-menu" class="hidden" onchange="handleFileUpload(this, 'p-menu', 'v-menu')">
-                        <div id="p-menu">
-                            ${item.Img ? `<img src="${item.Img}" class="w-24 h-24 mx-auto rounded-[22px] object-cover shadow-lg border-2 border-white">` : '<i data-lucide="image-plus" class="w-10 h-10 mx-auto text-slate-200"></i><p class="text-[9px] font-black text-slate-400 mt-2 uppercase">Unggah Foto Produk</p>'}
-                        </div>
+                        <div id="p-menu">${item.Img ? `<img src="${item.Img}" class="w-20 h-20 mx-auto rounded-xl object-cover shadow-md">` : '<i data-lucide="image-plus" class="w-10 h-10 mx-auto text-slate-200"></i><p class="text-[8px] font-black text-slate-300 uppercase mt-2">Unggah Foto</p>'}</div>
                     </div>
                     <input id="v-menu" type="hidden" value="${item.Img}">
                 </div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
+                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'executive-modal' },
                 preConfirm: () => ({ action: 'updateMenu', id: item.ID, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, hpp: document.getElementById('m-hpp').value, img: document.getElementById('v-menu').value, description: document.getElementById('m-desc').value, folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
             });
             setModalEffect(false);
-            if(form) { Swal.fire({ title: 'Menyimpan Cloud...', didOpen: () => Swal.showLoading() }); await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
+            if(form) { showMiniLoader('Saving...'); await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
-        async function handleFileUpload(input, pid, vid) {
-            const file = input.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                document.getElementById(vid).value = e.target.result;
-                document.getElementById(pid).innerHTML = `<img src="${e.target.result}" class="w-24 h-24 mx-auto rounded-[22px] object-cover border-4 border-violet-500 shadow-xl animate-pop">`;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function analyzeBusinessAI() {
-            const sum = `Omzet: ${document.getElementById('stat-revenue').innerText}, Laba: ${document.getElementById('stat-profit').innerText}, Total Transaksi: ${DB.transactions.length}, Staff Aktif: ${DB.users.length}`;
-            Swal.fire({ title: 'AI sedang menganalisa...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-            const response = await callGeminiAI(`Analisa bisnis RM Pangkalan ini: ${sum}. Berikan 3 strategi pertumbuhan tajam dalam Bahasa Indonesia.`, "Anda adalah Konsultan Bisnis Enterprise.");
-            Swal.fire({ title: '<span class="italic font-black text-xl uppercase">AI Business Report</span>', html: `<div class="text-left text-sm leading-relaxed p-4 bg-slate-50 rounded-3xl border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' } });
-        }
-
-        async function suggestMenuAI() {
-            const name = document.getElementById('m-name').value;
-            if(!name) return Swal.fire('Oops', 'Tulis nama menu dulu.', 'warning');
-            const response = await callGeminiAI(`Tulis deskripsi menu "${name}" yang menggiurkan (maks 15 kata). Berikan rekomendasi harga jual Rupiah yang masuk akal.`, "Anda adalah Culinary Copywriter.");
-            document.getElementById('m-desc').value = response;
-            Swal.fire({ icon: 'success', title: '✨ Deskripsi AI Siap', timer: 1000, showConfirmButton: false });
-        }
-
-        async function callGeminiAI(prompt, sys) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            try {
-                const res = await fetch(url, { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: sys }] } }) });
-                const result = await res.json();
-                return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI sibuk.";
-            } catch (e) { return "Koneksi Gemini Putus."; }
+        async function openExpenseForm() {
+            setModalEffect(true);
+            const { value: form } = await Swal.fire({
+                title: '<p class="italic font-black text-lg uppercase tracking-tighter">Input Biaya</p>',
+                html: `<div class="space-y-3 p-2 text-left"><input id="ex-cat" class="input-pro" placeholder="Kategori"><input id="ex-amt" type="number" class="input-pro" placeholder="Nominal"><textarea id="ex-note" class="input-pro h-24 pt-4 resize-none" placeholder="Detail..."></textarea></div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'executive-modal' },
+                preConfirm: () => ({ action: 'addExpense', category: document.getElementById('ex-cat').value, amount: document.getElementById('ex-amt').value, note: document.getElementById('ex-note').value, operator: sessionStorage.getItem('ADMIN_AUTH') })
+            });
+            setModalEffect(false);
+            if(form) { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
         async function openStaffForm(user = null) {
             setModalEffect(true);
             const staff = user ? DB.users.find(u => u.Username === user) : { Username: '', Password: '', Role: 'Waiters', FullName: '', NIK: '', Phone: '', Img: '' };
             const { value: form } = await Swal.fire({
-                title: `<span class="italic font-black text-xl uppercase">Profile Staff</span>`,
-                html: `<div class="space-y-4 p-2 text-left">
-                    <input id="s-user" class="input-pro" placeholder="Username / ID" value="${staff.Username}" ${user ? 'readonly' : ''}>
-                    <input id="s-fname" class="input-pro" placeholder="Nama Lengkap" value="${staff.FullName || ''}">
-                    <div class="grid grid-cols-2 gap-4"><input id="s-nik" class="input-pro" placeholder="NIK KTP"><input id="s-phone" class="input-pro" placeholder="WhatsApp"></div>
-                    <input id="s-pass" type="text" class="input-pro" placeholder="PIN Akses" value="${staff.Password}">
-                    <select id="s-role" class="input-pro"><option value="Owner" ${staff.Role=='Owner'?'selected':''}>Owner (Penuh)</option><option value="Kasir" ${staff.Role=='Kasir'?'selected':''}>Kasir (POS)</option><option value="Waiters" ${staff.Role=='Waiters'?'selected':''}>Waiters</option><option value="Koki" ${staff.Role=='Koki'?'selected':''}>Koki</option></select>
-                    <div class="upload-zone" onclick="document.getElementById('f-staff').click()">
-                        <input type="file" id="f-staff" class="hidden" onchange="handleFileUpload(this, 'p-staff', 'v-staff')">
-                        <div id="p-staff">
-                            ${staff.Img ? `<img src="${staff.Img}" class="w-24 h-24 mx-auto rounded-[22px] object-cover shadow-lg border-2 border-white">` : '<i data-lucide="camera" class="w-10 h-10 mx-auto text-slate-200"></i><p class="text-[9px] font-black text-slate-400 mt-2 uppercase">Ganti Foto Profil</p>'}
-                        </div>
-                    </div>
-                    <input id="v-staff" type="hidden" value="${staff.Img}">
-                </div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'detail-modal' },
-                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, fullName: document.getElementById('s-fname').value, nik: document.getElementById('s-nik').value, phone: document.getElementById('s-phone').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value, img: document.getElementById('v-staff').value, folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
+                title: '<p class="italic font-black text-lg uppercase tracking-tighter">Profil Staf</p>',
+                html: `<div class="space-y-4 p-2 text-left"><input id="s-user" class="input-pro" placeholder="System ID" value="${staff.Username}" ${user ? 'readonly' : ''}><input id="s-fname" class="input-pro" placeholder="Nama Lengkap KTP" value="${staff.FullName || ''}"><div class="grid grid-cols-2 gap-3"><input id="s-nik" class="input-pro" placeholder="NIK"><input id="s-phone" class="input-pro" placeholder="WA"></div><input id="s-pass" type="text" class="input-pro" placeholder="PIN Akses" value="${staff.Password}"><select id="s-role" class="input-pro"><option value="Owner" ${staff.Role=='Owner'?'selected':''}>Owner</option><option value="Kasir" ${staff.Role=='Kasir'?'selected':''}>Kasir</option><option value="Waiters" ${staff.Role=='Waiters'?'selected':''}>Waiters</option><option value="Koki" ${staff.Role=='Koki'?'selected':''}>Koki</option></select></div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', customClass: { popup: 'executive-modal' },
+                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, fullName: document.getElementById('s-fname').value, nik: document.getElementById('s-nik').value, phone: document.getElementById('s-phone').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value, img: '', folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
             });
             setModalEffect(false);
             if(form) { await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(form) }); syncData(true); }
         }
 
+        async function handleFileUpload(input, pid, vid) {
+            const file = input.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800;
+                    let width = img.width, height = img.height;
+                    if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
+                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                    const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                    document.getElementById(vid).value = base64;
+                    document.getElementById(pid).innerHTML = `<img src="${base64}" class="w-20 h-20 mx-auto rounded-xl object-cover border-4 border-violet-500 shadow-xl animate-pop">`;
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function analyzeBusinessAI() {
+            const revenue = document.getElementById('stat-revenue').innerText;
+            const profit = document.getElementById('stat-profit').innerText;
+            const sum = `Omzet: ${revenue}, Profit Bersih: ${profit}, TRX: ${DB.transactions.length}, Staff: ${DB.users.length}`;
+            showMiniLoader('AI Analyzing...');
+            const response = await callGeminiAI(`Analisalah data finansial RM Pangkalan: ${sum}. Perhatikan margin profitnya. Berikan ringkasan executive 3 poin taktis dalam Bahasa Indonesia.`, "Anda adalah Konsultan Bisnis Keuangan Senior.");
+            Swal.fire({ title: '<p class="italic font-black text-lg uppercase leading-none">Financial Insight</p>', html: `<div class="text-left text-[13px] leading-relaxed p-5 bg-slate-50 rounded-2xl border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonColor: '#7c3aed', customClass: { popup: 'executive-modal' } });
+        }
+
+        async function suggestMenuAI() {
+            const nameEl = document.getElementById('m-name');
+            if(!nameEl || !nameEl.value) return Swal.fire({ text: 'Tulis nama produk.', icon: 'warning', confirmButtonColor: '#7c3aed' });
+            const btn = document.getElementById('ai-assist-btn');
+            if(btn) btn.disabled = true;
+            try {
+                const response = await callGeminiAI(`Tulis deskripsi menu "${nameEl.value}" yang mewah (maks 15 kata).`, "Anda adalah Food Expert.");
+                const descEl = document.getElementById('m-desc');
+                if(descEl) descEl.value = response;
+                Swal.fire({ icon: 'success', title: 'AI Ready', timer: 1000, showConfirmButton: false });
+            } catch (e) { Swal.fire({ text: 'AI Gagal.', icon: 'error' }); } finally { if(btn) btn.disabled = false; }
+        }
+
+        async function callGeminiAI(prompt, sys) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const res = await fetch(url, { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: sys }] } }) });
+            const result = await res.json();
+            return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI sibuk.";
+        }
+
         function saveConfig() {
-            const u = document.getElementById('apiInput').value.trim();
-            const f = document.getElementById('folderIdInput').value.trim();
+            const u = document.getElementById('apiInput').value.trim(), f = document.getElementById('folderIdInput').value.trim();
             localStorage.setItem('RM_API_URL', u); API_URL = u;
             localStorage.setItem('RM_FOLDER_ID', f); FOLDER_ID = f;
-            Swal.fire({ icon: 'success', title: 'Config Lock', text: 'ID Folder & API tersimpan permanen.', timer: 1500, showConfirmButton: false });
+            Swal.fire({ text: 'Config Terupdate.', icon: 'success', timer: 1500, confirmButtonColor: '#7c3aed' });
             syncData(true);
         }
 
         async function deleteData(type, id) {
-            const { isConfirmed } = await Swal.fire({ title: `Hapus ${type}?`, text: "Data hilang permanen dari sistem.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
+            const { isConfirmed } = await Swal.fire({ text: `Hapus ${type}?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'HAPUS SEKARANG' });
             if(isConfirmed) {
+                showMiniLoader('Deleting...');
                 const action = type === 'Menu' ? 'deleteMenu' : 'deleteUser';
-                const payload = type === 'Menu' ? { action, id, operator: sessionStorage.getItem('ADMIN_AUTH') } : { action, username: id, operator: sessionStorage.getItem('ADMIN_AUTH') };
+                const payload = { action, id, username: id, operator: sessionStorage.getItem('ADMIN_AUTH') };
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 syncData(true); 
             }
         }
 
         function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
-        function exportToExcel() { const ws = XLSX.utils.json_to_sheet(DB.transactions); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sales"); XLSX.writeFile(wb, `POS_REPORT_${new Date().getTime()}.xlsx`); }
-        async function exportToPDF() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("PANGKALAN ENTERPRISE - SALES REPORT", 14, 15); const body = DB.transactions.map(t => [t.ID.slice(-4), t.Customer || t.Role, t.Total, t.Type]); doc.autoTable({ head: [['ID', 'Cust', 'Total', 'Payment']], body: body, startY: 25, headStyles: {fillColor:[124, 58, 237]} }); doc.save(`Sales_Report.pdf`); }
+        function exportToExcel() { const ws = XLSX.utils.json_to_sheet(DB.transactions); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Sales"); XLSX.writeFile(wb, `EXECUTIVE_ERP_${new Date().getTime()}.xlsx`); }
+        async function exportToPDF() { const { jsPDF } = window.jspdf; const doc = new jsPDF(); doc.text("RM PANGKALAN - EXECUTIVE REPORT", 14, 15); const body = DB.transactions.map(t => [t.ID.slice(-6), t.Customer || t.Role, t.Total, t.Type]); doc.autoTable({ head: [['ID', 'Cust', 'Total', 'Payment']], body: body, startY: 25, headStyles: {fillColor:[124, 58, 237]} }); doc.save(`Executive_Journal.pdf`); }
     </script>
 </body>
 </html>
