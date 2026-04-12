@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>RM Pangkalan | Enterprise ERP Turbo v48.0</title>
+    <title>RM Pangkalan | Enterprise ERP Turbo v53.0</title>
     
-    <!-- PWA & Mobile Optimization -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#7c3aed">
@@ -15,47 +14,42 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         :root { --primary: #7c3aed; --bg: #f8fafc; }
         html, body { background-color: var(--bg); margin: 0; padding: 0; height: 100%; width: 100%; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; -webkit-tap-highlight-color: transparent; overflow: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b; overflow: hidden; }
 
-        /* Sidebar UI */
         .sidebar-fixed { background: #1e1b4b; border-radius: 0 20px 20px 0; height: 100vh !important; width: 260px; position: fixed; top: 0; left: 0; z-index: 1000; box-shadow: 10px 0 40px rgba(0,0,0,0.08); }
         .nav-item { color: rgba(255,255,255,0.4); transition: 0.2s; border-radius: 12px; cursor: pointer; display: flex; align-items: center; margin-bottom: 4px; padding: 10px 14px; font-weight: 600; font-size: 13px; }
         .nav-item:hover { color: white; background: rgba(255,255,255,0.03); }
         .nav-item.active { background: var(--primary); color: white; font-weight: 800; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3); }
         
-        /* Ultra Compact Cards */
-        .card-pro { background: white; border-radius: 18px; border: 1px solid #f1f5f9; box-shadow: 0 2px 8px -2px rgba(0,0,0,0.02); transition: 0.2s; overflow: hidden; }
-        .card-pro:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -8px rgba(0,0,0,0.05); }
-
+        .card-pro { background: white; border-radius: 18px; border: 1px solid #f1f5f9; box-shadow: 0 2px 8px -2px rgba(0,0,0,0.02); overflow: hidden; transition: 0.2s; }
         .bottom-pill-nav { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); width: 96%; max-width: 420px; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(0, 0, 0, 0.05); height: 62px; z-index: 9999; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: space-around; }
         .tab-pill { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #94a3b8; font-weight: 800; font-size: 7.5px; text-transform: uppercase; width: 50px; height: 50px; border-radius: 14px; transition: 0.2s; }
         .tab-pill.active { color: var(--primary); background: rgba(124, 58, 237, 0.06); }
 
-        .input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 600; outline: none; transition: 0.2s; }
+        .input-pro { width: 100%; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 600; outline: none; }
         .input-pro:focus { border-color: var(--primary); background: white; }
 
         @media (min-width: 769px) { .main-canvas { margin-left: 260px; width: calc(100% - 260px); } }
         @media (max-width: 768px) {
             #mainSidebar { display: none !important; }
-            .main-canvas { padding-bottom: 90px !important; width: 100vw !important; margin-left: 0 !important; position: relative; overflow-y: auto !important; height: 100vh; }
-            .mobile-px-pro { padding-left: 0.4rem !important; padding-right: 0.4rem !important; }
-            .text-xs-pro { font-size: 9px !important; }
+            .main-canvas { padding-bottom: 80px !important; width: 100vw !important; margin-left: 0 !important; position: relative; overflow-y: auto !important; height: 100vh; }
+            .mobile-px-pro { padding-left: 0.3rem !important; padding-right: 0.3rem !important; }
+            .text-xs-pro { font-size: 8.5px !important; }
             .card-pro { border-radius: 12px; }
+            .h-header { height: 3.5rem !important; }
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes pop { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
         
-        .upload-zone { border: 2px dashed #e2e8f0; border-radius: 14px; padding: 10px; text-align: center; cursor: pointer; transition: 0.2s; }
-        .upload-zone:hover { border-color: var(--primary); background: #f5f3ff; }
+        .upload-zone { border: 2px dashed #e2e8f0; border-radius: 12px; padding: 10px; text-align: center; cursor: pointer; background: #fbfcfe; transition: 0.2s; }
+        [inert] { filter: blur(4px); pointer-events: none; user-select: none; transition: 0.3s; }
     </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -63,24 +57,24 @@
     <!-- LOGIN SCREEN -->
     <div id="loginOverlay" class="fixed inset-0 bg-indigo-950 z-[10001] flex items-center justify-center p-4">
         <div class="bg-white p-8 rounded-[30px] shadow-2xl w-full max-md:max-w-md text-center animate-pop">
-            <div class="bg-violet-50 w-16 h-16 rounded-[20px] flex items-center justify-center mx-auto mb-6 shadow-inner">
+            <div class="bg-violet-50 w-16 h-16 rounded-[20px] flex items-center justify-center mx-auto mb-4 shadow-inner">
                 <i data-lucide="shield-check" class="text-violet-600 w-8 h-8"></i>
             </div>
             <h2 class="text-xl font-black italic tracking-tighter text-slate-800 mb-1 uppercase leading-none">OWNER TERMINAL</h2>
-            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-[2px] mb-8">Turbo ERP v48.0</p>
+            <p class="text-[8px] font-bold text-slate-400 uppercase tracking-[2px] mb-8">Turbo ERP v53.0</p>
             <div class="space-y-3">
-                <input type="text" id="loginUser" placeholder="Username" class="input-pro text-center tracking-widest">
-                <input type="password" id="loginPass" placeholder="PIN PIN PIN" class="input-pro text-center">
-                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all mt-2 shadow-lg">AKSES DASHBOARD</button>
+                <input type="text" id="loginUser" placeholder="Username" class="input-pro text-center tracking-widest" value="own">
+                <input type="password" id="loginPass" placeholder="Access PIN" class="input-pro text-center">
+                <button onclick="handleLogin()" id="loginBtn" class="w-full bg-violet-600 text-white py-3.5 rounded-xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all mt-2 shadow-lg">BUKA TERMINAL</button>
             </div>
         </div>
     </div>
 
-    <!-- SIDEBAR (Desktop) -->
-    <aside id="mainSidebar" class="hidden md:flex flex-col sidebar-fixed text-white p-6">
+    <!-- SIDEBAR -->
+    <aside id="mainSidebar" class="hidden md:flex flex-col sidebar-fixed text-white p-6" inert>
         <div class="mb-10 flex items-center gap-3 px-2">
             <div class="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center shadow-lg"><i data-lucide="zap" class="text-white w-4 h-4"></i></div>
-            <span class="text-xl font-black italic tracking-tight uppercase leading-none">Pangkalan</span>
+            <span class="text-xl font-black italic tracking-tight uppercase">Pangkalan</span>
         </div>
         <nav class="flex-1 space-y-1 overflow-y-auto no-scrollbar">
             <div onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active transition-all"><i data-lucide="layout-grid" class="w-4 h-4 mr-3"></i> <span>Dashboard</span></div>
@@ -89,107 +83,137 @@
             <div onclick="switchTab('sales')" id="nav-sales" class="nav-item transition-all"><i data-lucide="file-text" class="w-4 h-4 mr-3"></i> <span>Journal Sales</span></div>
             <div onclick="switchTab('staff')" id="nav-staff" class="nav-item transition-all"><i data-lucide="users" class="w-4 h-4 mr-3"></i> <span>SDM Resource</span></div>
         </nav>
-        <button onclick="handleLogout()" class="mt-auto bg-white/5 p-3 rounded-xl font-bold text-[9px] uppercase hover:bg-white/10 text-white tracking-widest transition-all">Logout</button>
+        <button onclick="handleLogout()" class="mt-auto bg-white/5 p-3 rounded-xl font-bold text-[9px] uppercase hover:bg-white/10 transition-all text-white tracking-widest">Logout</button>
     </aside>
 
     <!-- MOBILE PILL NAV -->
-    <nav id="mobilePillNav" class="md:hidden bottom-pill-nav hidden">
+    <nav id="mobilePillNav" class="md:hidden bottom-pill-nav hidden" inert>
         <button onclick="switchTab('dashboard')" id="pill-dashboard" class="tab-pill active"><i data-lucide="home" class="w-5 h-5"></i><span>DASH</span></button>
         <button onclick="switchTab('inventory')" id="pill-inventory" class="tab-pill"><i data-lucide="package" class="w-5 h-5"></i><span>STOK</span></button>
         <button onclick="switchTab('menu')" id="pill-menu" class="tab-pill"><i data-lucide="book-open" class="w-5 h-5"></i><span>MENU</span></button>
-        <button onclick="switchTab('sales')" id="pill-sales" class="tab-pill"><i data-lucide="file-text" class="w-5 h-5"></i><span>JOURNAL</span></button>
         <button onclick="handleLogout()" class="tab-pill text-red-400"><i data-lucide="log-out" class="w-5 h-5"></i><span>EXIT</span></button>
     </nav>
 
     <!-- MAIN CANVAS -->
-    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden main-canvas">
-        <header class="h-14 md:h-18 px-4 md:px-10 flex items-center justify-between flex-shrink-0 bg-white border-b border-slate-50">
+    <main id="mainContent" class="hidden flex-1 flex flex-col min-w-0 overflow-hidden main-canvas" inert>
+        <header class="h-14 md:h-18 h-header px-4 md:px-10 flex items-center justify-between flex-shrink-0 bg-white border-b border-slate-50 shadow-sm">
+            <h1 id="tabTitle" class="text-xs md:text-xl font-black text-slate-800 uppercase italic">DASHBOARD</h1>
             <div class="flex items-center gap-2">
-                <div class="md:hidden bg-violet-600 text-white w-8 h-8 rounded-lg flex items-center justify-center font-black italic text-[10px]">RM</div>
-                <h1 id="tabTitle" class="text-xs md:text-xl font-black text-slate-800 uppercase italic leading-none">DASHBOARD</h1>
-            </div>
-            <div class="flex items-center gap-2">
-                <button onclick="syncData(true)" class="p-1.5 bg-slate-50 rounded-lg text-violet-600 border border-slate-100"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
+                <button onclick="syncData(true)" class="p-1.5 bg-slate-50 rounded-lg text-violet-600 border border-slate-100 active:rotate-180 transition-all"><i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i></button>
                 <div class="w-8 h-8 md:w-11 md:h-11 rounded-lg bg-indigo-950 flex items-center justify-center text-white font-black text-[9px]" id="userInitial">OW</div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto no-scrollbar mobile-px-pro p-3 md:p-8 space-y-4 md:space-y-8">
+        <div class="flex-1 overflow-y-auto no-scrollbar mobile-px-pro p-3 md:p-8 space-y-4 md:space-y-10">
             
-            <!-- SECTION: DASHBOARD -->
-            <div id="section-dashboard" class="space-y-4 md:space-y-6 animate-pop">
+            <!-- SECTION: ANALYTICS -->
+            <div id="section-dashboard" class="space-y-4 md:space-y-8 animate-pop">
                 <div class="grid grid-cols-3 gap-2 md:gap-6">
                     <div class="card-pro p-3 md:p-8 border-l-[4px] md:border-l-[12px] border-violet-600">
-                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Omzet</p>
-                        <h2 id="stat-revenue" class="text-[10px] md:text-2xl font-black italic tracking-tighter text-violet-700 leading-none">Rp 0</h2>
+                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase mb-0.5">Omzet</p>
+                        <h2 id="stat-revenue" class="text-[10px] md:text-2xl font-black italic text-violet-700 leading-none">Rp 0</h2>
                     </div>
                     <div class="card-pro p-3 md:p-8 border-l-[4px] md:border-l-[12px] border-orange-500">
-                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Laba</p>
-                        <h2 id="stat-profit" class="text-[10px] md:text-2xl font-black italic tracking-tighter text-green-600 leading-none">Rp 0</h2>
+                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase mb-0.5">Net Profit</p>
+                        <h2 id="stat-profit" class="text-[10px] md:text-2xl font-black italic text-green-600 leading-none">Rp 0</h2>
                     </div>
                     <div class="card-pro p-3 md:p-8 border-l-[4px] md:border-l-[12px] border-blue-500">
-                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Aset</p>
-                        <h2 id="stat-asset" class="text-[10px] md:text-2xl font-black italic tracking-tighter text-indigo-700 leading-none">Rp 0</h2>
+                        <p class="text-[7px] md:text-[10px] font-black text-slate-400 uppercase mb-0.5">Aset Stok</p>
+                        <h2 id="stat-asset" class="text-[10px] md:text-2xl font-black italic text-indigo-700 leading-none">Rp 0</h2>
                     </div>
                 </div>
 
+                <!-- PERIODIC REPORTS TABLE -->
+                <section class="card-pro p-4 md:p-6 bg-white shadow-sm border border-slate-50">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-[9px] md:text-[11px] font-black text-slate-800 uppercase italic">Ringkasan Laporan Periodik</h3>
+                        <span class="text-[8px] bg-slate-100 px-2 py-1 rounded font-bold text-slate-400 uppercase italic">Live-Data</span>
+                    </div>
+                    <div class="overflow-x-auto no-scrollbar">
+                        <table class="w-full text-left text-[8px] md:text-[11px]">
+                            <thead class="bg-slate-50 text-slate-400 uppercase font-black">
+                                <tr>
+                                    <th class="p-2">Periode</th>
+                                    <th class="p-2">Orders</th>
+                                    <th class="p-2">Revenue</th>
+                                    <th class="p-2">Net Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="periodicReportBody" class="divide-y divide-slate-50 font-bold text-slate-700 uppercase italic">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <section class="card-pro p-4 bg-white min-h-[200px]"><canvas id="revenueChart"></canvas></section>
-                    <section class="card-pro p-4 bg-[#1e1b4b] text-white flex flex-col justify-center relative overflow-hidden">
-                        <i data-lucide="zap" class="absolute -right-4 -bottom-4 w-20 h-20 opacity-10"></i>
-                        <h3 class="text-[10px] font-black uppercase italic mb-2">Gemini Executive AI</h3>
-                        <p class="text-[9px] text-slate-300 mb-4 font-medium italic opacity-70 leading-relaxed uppercase">Analisa biaya produksi dan strategi efisiensi stok harian.</p>
-                        <button onclick="analyzeBusinessAI()" class="w-full bg-white text-indigo-950 py-2.5 rounded-lg font-black text-[9px] uppercase shadow-md active:scale-95 transition-all">✨ JALANKAN ANALISA</button>
+                    <section class="card-pro p-2 md:p-6 bg-white min-h-[180px]"><canvas id="revenueChart"></canvas></section>
+                    <section class="card-pro p-4 md:p-6 bg-[#1e1b4b] text-white flex flex-col justify-center">
+                        <h3 class="text-[10px] font-black uppercase italic mb-2 tracking-widest leading-none">Enterprise AI Insight</h3>
+                        <p class="text-[9px] text-slate-300 mb-4 font-medium italic opacity-70 leading-relaxed uppercase">Analis tren biaya porsi dan efisiensi belanja stok harian otomatis.</p>
+                        <button onclick="analyzeBusinessAI()" id="ai-analyze-btn" class="w-full bg-white text-indigo-950 py-2.5 rounded-lg font-black text-[9px] uppercase active:scale-95 transition-all">✨ JALANKAN STRATEGI AI</button>
                     </section>
                 </div>
                 
-                <section class="card-pro p-4 md:p-6">
-                    <h3 class="text-[9px] md:text-[11px] font-black text-slate-800 uppercase tracking-[3px] mb-4 italic border-b pb-2 flex justify-between items-center">Analisa Produk Terlaris <i data-lucide="trending-up" class="w-3.5 h-3.5 text-green-500"></i></h3>
-                    <div id="topSellingMenu" class="space-y-2"></div>
+                <section class="card-pro p-3 md:p-6 mt-4">
+                    <h3 class="text-[9px] md:text-[11px] font-black text-slate-800 uppercase italic border-b pb-2 flex justify-between items-center leading-none">Produk Terlaris (Performance) <i data-lucide="trending-up" class="w-3.5 h-3.5 text-green-500"></i></h3>
+                    <div id="topSellingMenu" class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3"></div>
+                </section>
+                
+                <section class="card-pro p-4 md:p-6 bg-slate-900 text-white flex flex-col justify-center">
+                    <h3 class="text-[10px] font-black uppercase mb-3 tracking-widest">Global Config Center</h3>
+                    <div class="space-y-2">
+                        <input type="text" id="apiInput" class="input-pro !bg-white/5 !text-white !border-white/10 text-[10px]" placeholder="API Gateway URL">
+                        <input type="text" id="folderIdInput" class="input-pro !bg-white/5 !text-white !border-white/10 text-[10px]" placeholder="Media Folder ID">
+                        <button onclick="saveConfig()" class="w-full bg-violet-600 py-2.5 rounded-lg font-black text-[9px] uppercase active:scale-95 transition-all">SIMPAN KONFIGURASI CLOUD</button>
+                    </div>
                 </section>
             </div>
 
-            <!-- SECTION: INVENTORY -->
+            <!-- SECTION: INVENTORY & RECIPES -->
             <div id="section-inventory" class="hidden animate-pop space-y-4 pb-20">
-                <div class="p-3 md:p-6 card-pro flex items-center justify-between bg-white border-b-2 border-indigo-50 shadow-sm">
-                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic">Gudang & Costing</h3><p class="text-[7px] md:text-[10px] font-bold text-slate-400 uppercase italic leading-none">Stok & Analisa Resep</p></div>
+                <div class="p-3 md:p-6 card-pro flex items-center justify-between bg-white border-b-2 border-indigo-50">
+                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic leading-none">Gudang & Costing</h3><p class="text-[7px] md:text-[10px] font-bold text-slate-400 uppercase mt-1 italic">Manajemen Stok & Harga Bahan</p></div>
                     <div class="flex gap-1.5 md:gap-3">
-                        <button onclick="openRecipeBuilder()" class="bg-violet-600 text-white px-3 md:px-5 py-2 rounded-lg font-black text-[8px] md:text-[10px] uppercase active:scale-95">LINK</button>
-                        <button onclick="openStockUpdateForm()" class="bg-indigo-950 text-white px-3 md:px-5 py-2 rounded-lg font-black text-[8px] md:text-[10px] uppercase active:scale-95">+ STOK</button>
+                        <button onclick="openRecipeBuilder()" class="bg-violet-600 text-white px-3 md:px-5 py-2 rounded-lg font-black text-[8px] md:text-[10px] uppercase">LINK</button>
+                        <button onclick="openStockUpdateForm()" class="bg-indigo-950 text-white px-3 md:px-5 py-2 rounded-lg font-black text-[8px] md:text-[10px] uppercase">+ STOK</button>
                     </div>
                 </div>
-                <div id="inventoryContainer" class="space-y-6"></div>
-                <div class="card-pro p-4 md:p-6 bg-white border-t-4 border-indigo-900 shadow-xl">
-                    <h3 class="text-[9px] md:text-[11px] font-black text-slate-800 uppercase tracking-[4px] mb-4 italic border-b pb-3">Breakdown Biaya Resep (Costing)</h3>
+                <div id="inventoryContainer" class="space-y-4"></div>
+                <div class="card-pro p-4 md:p-8 bg-white border-t-4 border-indigo-900 shadow-xl">
+                    <h3 class="text-[9px] md:text-[11px] font-black text-slate-800 uppercase tracking-[4px] mb-4 italic border-b pb-3 leading-none uppercase">Precision Manufacturing Sheet</h3>
                     <div id="recipeList" class="space-y-4"></div>
                 </div>
             </div>
 
-            <!-- SECTION: MENU -->
+            <!-- SECTION: MENU MASTER -->
             <div id="section-menu" class="hidden animate-pop space-y-4 pb-20">
-                 <div class="p-4 md:p-6 card-pro flex items-center justify-between bg-white shadow-sm border-b-2 border-indigo-50">
-                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[8px] font-bold text-slate-400 uppercase italic leading-none">Product Management</p></div>
+                 <div class="p-4 md:p-6 card-pro flex items-center justify-between bg-white border-b-2 border-indigo-50 shadow-sm">
+                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic">Katalog Master</h3><p class="text-[8px] font-bold text-slate-400 uppercase italic mt-1 leading-none tracking-widest">Produk & Media Database</p></div>
                     <button onclick="openMenuForm()" class="bg-violet-600 text-white px-6 md:px-10 py-2.5 rounded-xl font-black text-[10px] uppercase active:scale-95 shadow-lg">+ PRODUK</button>
                 </div>
-                <div id="menuFullList" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6"></div>
+                <div id="menuFullList" class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-4"></div>
             </div>
 
-            <!-- SECTION: STAFF -->
+            <!-- SECTION: SDM RESOURCE -->
             <div id="section-staff" class="hidden animate-pop space-y-4 pb-20">
                  <div class="p-4 md:p-6 card-pro flex items-center justify-between bg-white border-b-2 border-indigo-50 shadow-sm">
-                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic leading-none">Database SDM</h3><p class="text-[8px] font-bold text-slate-400 uppercase italic mt-1 leading-none">Manajemen Karyawan</p></div>
+                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic leading-none">Database SDM</h3><p class="text-[8px] font-bold text-slate-400 uppercase italic mt-1 leading-none tracking-widest">Profil Karyawan & Akses</p></div>
                     <button onclick="openStaffForm()" class="bg-violet-600 text-white px-6 md:px-8 py-2.5 rounded-xl font-black text-[10px] uppercase active:scale-95 shadow-lg">+ STAFF</button>
                 </div>
                 <div id="staffListContainer" class="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4"></div>
             </div>
 
-            <!-- SECTION: SALES -->
+            <!-- SECTION: SALES JOURNAL -->
             <div id="section-sales" class="hidden animate-pop space-y-4 pb-20">
-                <div class="p-4 md:p-6 card-pro flex justify-between items-center bg-white shadow-sm border-b-2 border-indigo-50">
-                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic leading-none">Journal Sales</h3><p class="text-[8px] font-bold text-slate-400 uppercase mt-1 leading-none tracking-widest italic">Verified Transactions</p></div>
-                    <button onclick="exportToExcel()" class="bg-green-600 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase shadow-lg">XLSX EXPORT</button>
+                <div class="p-4 md:p-6 card-pro flex flex-col md:flex-row justify-between items-start md:items-center bg-white border-b-2 border-indigo-50 gap-4">
+                    <div><h3 class="text-xs md:text-lg font-black text-slate-800 uppercase italic leading-none text-violet-700">Journal Sales</h3><p class="text-[8px] font-bold text-slate-400 uppercase mt-2 leading-none italic uppercase">Transaksi Terverifikasi</p></div>
+                    <div class="flex items-center gap-2 w-full md:w-auto">
+                        <input type="date" id="filterStart" class="input-pro !w-1/2 md:!w-32">
+                        <input type="date" id="filterEnd" class="input-pro !w-1/2 md:!w-32">
+                        <button onclick="exportFilteredExcel()" class="bg-green-600 text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase shadow-lg flex-shrink-0">EXPORT XLSX</button>
+                    </div>
                 </div>
-                <div id="salesListContainer" class="divide-y card-pro bg-white px-2 md:px-8 max-h-[70vh] overflow-y-auto no-scrollbar"></div>
+                <div id="salesListContainer" class="divide-y card-pro bg-white px-2 md:px-8 max-h-[70vh] overflow-y-auto no-scrollbar shadow-sm"></div>
             </div>
 
         </div>
@@ -197,23 +221,38 @@
 
     <script>
         const apiKey = ""; 
-        let API_URL = localStorage.getItem('RM_API_URL') || '';
-        let DB = { menu: [], transactions: [], users: [], stock: [], recipes: [], expenses: [] };
+        let API_URL = localStorage.getItem('RM_API_URL') || 'https://script.google.com/macros/s/AKfycbxbOjRecwa41sC0QAqkMoCOYKm5-YLM9nZRpnXiYDghZkuNe7RJohWXUx56EHM3Von4AQ/exec';
+        let FOLDER_ID = localStorage.getItem('RM_FOLDER_ID') || '';
+        let DB = { menu: [], transactions: [], users: [], stock: [], recipes: [], expenses: [], customers:[] };
         let currentChart = null;
 
         window.onload = () => { 
             lucide.createIcons(); checkAuth(); 
             setInterval(() => { const el = document.getElementById('digitalClock'); if(el) el.innerText = new Date().toLocaleTimeString('id-ID', {hour12:false}); }, 1000); 
+            const pinIn = document.getElementById('loginPass'); if(pinIn) pinIn.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
+            const apiIn = document.getElementById('apiInput'), folderIn = document.getElementById('folderIdInput');
+            if(apiIn) apiIn.value = API_URL; if(folderIn) folderIn.value = FOLDER_ID;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const fs = document.getElementById('filterStart'), fe = document.getElementById('filterEnd');
+            if(fs) fs.value = today; if(fe) fe.value = today;
         };
 
-        function setModalEffect(active) { const main = document.getElementById('mainContent'); if(main) active ? main.setAttribute('inert', '') : main.removeAttribute('inert'); }
-        function showMiniLoader(title) { Swal.fire({ title: `<p class="text-[10px] font-black uppercase tracking-widest text-slate-400">${title}</p>`, html: `<div class="flex justify-center py-2"><div class="w-6 h-6 border-4 border-slate-100 border-t-violet-600 rounded-full animate-spin"></div></div>`, showConfirmButton: false, allowOutsideClick: false, customClass: { popup: 'loading-mini' } }); }
+        function setModalEffect(active) { ['mainContent', 'mainSidebar', 'mobilePillNav'].forEach(id => { const el = document.getElementById(id); if(el) active ? el.setAttribute('inert', '') : el.removeAttribute('inert'); }); }
+        function showMiniLoader(title) { Swal.fire({ title: `<p class="text-[10px] font-black uppercase tracking-widest text-slate-400">${title}</p>`, html: `<div class="flex justify-center py-2"><div class="w-8 h-8 border-4 border-slate-100 border-t-violet-600 rounded-full animate-spin"></div></div>`, showConfirmButton: false, allowOutsideClick: false }); }
 
         function checkAuth() {
             const user = sessionStorage.getItem('ADMIN_AUTH');
             const overlay = document.getElementById('loginOverlay'), main = document.getElementById('mainContent'), sidebar = document.getElementById('mainSidebar'), pill = document.getElementById('mobilePillNav');
-            if (user) { if(overlay) overlay.style.display = 'none'; if(main) main.classList.remove('hidden'); if(sidebar) sidebar.classList.remove('hidden'); if(pill) pill.classList.remove('hidden'); if(document.getElementById('userInitial')) document.getElementById('userInitial').innerText = user.slice(0,2).toUpperCase(); syncData(true); } 
-            else { if(overlay) overlay.style.display = 'flex'; if(main) main.classList.add('hidden'); }
+            if (user) { 
+                overlay.style.display = 'none'; overlay.setAttribute('inert', '');
+                [main, sidebar, pill].forEach(el => { if(el) { el.classList.remove('hidden'); el.removeAttribute('inert'); } });
+                const ui = document.getElementById('userInitial'); if(ui) ui.innerText = user.slice(0,2).toUpperCase(); 
+                syncData(true); 
+            } else { 
+                overlay.style.display = 'flex'; overlay.removeAttribute('inert');
+                [main, sidebar, pill].forEach(el => { if(el) { el.classList.add('hidden'); el.setAttribute('inert', ''); } });
+            }
         }
 
         async function handleLogin() {
@@ -226,8 +265,8 @@
                 const data = await res.json();
                 const valid = data.users.find(u => u.Username.toLowerCase() === user.toLowerCase() && String(u.Password) === pass && u.Role === 'Owner');
                 if (valid) { sessionStorage.setItem('ADMIN_AUTH', valid.Username); checkAuth(); Swal.close(); } 
-                else { Swal.fire({ text: 'PIN Akses Tidak Valid.', icon: 'error' }); }
-            } catch (e) { Swal.fire({ text: 'API URL Belum Terkonfigurasi.', icon: 'info' }); }
+                else { Swal.fire({ text: 'PIN Salah.', icon: 'error' }); }
+            } catch (e) { Swal.fire({ text: 'API URL Belum Terpasang.', icon: 'info' }); }
         }
 
         function switchTab(tab) {
@@ -237,8 +276,8 @@
                 if(nav) nav.classList.toggle('active', t === tab);
                 if(pill) pill.classList.toggle('active', t === tab);
             });
-            const tabTitle = document.getElementById('tabTitle'); if(tabTitle) tabTitle.innerText = tab.toUpperCase();
-            if(tab === 'dashboard') setTimeout(initChart, 200);
+            const tt = document.getElementById('tabTitle'); if(tt) tt.innerText = tab.toUpperCase();
+            if(tab === 'dashboard') setTimeout(() => { initChart(); renderPeriodicReports(); }, 200);
             lucide.createIcons();
         }
 
@@ -248,111 +287,153 @@
             try {
                 const res = await fetch(`${API_URL}?action=getData`);
                 DB = await res.json();
-                renderStats(); renderMenu(); renderStaff(); renderSales(); renderInventory(); renderTopSelling();
+                renderStats(); renderMenu(); renderStaff(); renderSales(); renderInventory(); renderPeriodicReports(); renderTopSelling();
                 if(loader) Swal.close();
                 initChart();
-            } catch (e) { if(loader) Swal.fire({ text: 'Koneksi Cloud Terputus.', icon: 'error' }); }
+            } catch (e) { if(loader) Swal.fire({ text: 'Sinkronisasi Gagal.', icon: 'error' }); }
         }
 
         async function turboCRUD(payload) {
             showMiniLoader('Processing...');
             try {
+                // Post to GAS
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+                
+                // Optimistic Local Update for Images
+                if(payload.action === 'updateMenu' && payload.img.startsWith('data:image')) {
+                    const menu = DB.menu.find(m => String(m.ID) === String(payload.id));
+                    if(menu) menu.Img = payload.img;
+                }
+                if(payload.action === 'updateUser' && payload.img.startsWith('data:image')) {
+                    const user = DB.users.find(u => u.Username === payload.username);
+                    if(user) user.Img = payload.img;
+                }
+
                 await syncData(false);
-                Swal.fire({ icon:'success', title:'Data Saved', timer:800, showConfirmButton:false });
-            } catch (e) { Swal.fire('Error', 'Gagal update database.', 'error'); }
+                Swal.fire({ icon:'success', title:'Success', timer:800, showConfirmButton:false });
+            } catch (e) { Swal.fire('Error', 'Update database gagal.', 'error'); }
         }
 
-        function renderInventory() {
-            const cont = document.getElementById('inventoryContainer'), recipeCont = document.getElementById('recipeList');
-            if(!cont || !DB.stock) return;
-
-            const groups = { 'Protein': [], 'Karbo & Tepung': [], 'Bumbu & Cairan': [], 'Minuman & Buah': [], 'Operasional': [] };
-            DB.stock.forEach(s => {
-                const name = s.Name.toLowerCase();
-                if(name.includes('ayam') || name.includes('sapi') || name.includes('telur') || name.includes('ikan') || name.includes('bebek')) groups['Protein'].push(s);
-                else if(name.includes('beras') || name.includes('tepung')) groups['Karbo & Tepung'].push(s);
-                else if(name.includes('minyak') || name.includes('garam') || name.includes('kecap') || name.includes('saus') || name.includes('gula')) groups['Bumbu & Cairan'].push(s);
-                else if(name.includes('aqua') || name.includes('jeruk') || name.includes('teh') || name.includes('alpukat') || name.includes('kelapa') || name.includes('susu') || name.includes('soda')) groups['Minuman & Buah'].push(s);
-                else groups['Operasional'].push(s);
-            });
-
-            cont.innerHTML = Object.entries(groups).map(([key, items]) => {
-                if(items.length === 0) return '';
-                return `<div class="space-y-3"><h4 class="text-[8px] md:text-[10px] font-black text-indigo-900 uppercase tracking-[2px] italic border-l-4 border-violet-600 pl-2 leading-none uppercase">${key}</h4><div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4">${items.map(s => {
-                    const totalVal = Number(s.Qty) * Number(s.Price || 0);
-                    return `<div onclick="editStock('${s.ID}')" class="card-pro p-3 text-center bg-white border-b-[4px] ${s.Qty < s.MinQty ? 'border-red-500 bg-red-50/10' : 'border-slate-100'} animate-pop">
-                        <span class="text-[7px] md:text-[8px] font-black text-slate-300 uppercase">${s.Unit}</span>
-                        <h4 class="text-[9px] md:text-[11px] font-black text-slate-700 uppercase italic truncate my-1 leading-tight">${s.Name}</h4>
-                        <p class="text-xl font-black ${s.Qty < s.MinQty ? 'text-red-600' : 'text-slate-800'}">${s.Qty}</p>
-                        <p class="text-[8px] md:text-[10px] font-black text-violet-600 mt-1 italic leading-none">Rp ${totalVal.toLocaleString()}</p>
-                    </div>`;
-                }).join('')}</div></div>`;
-            }).join('');
-            
-            const recipesByMenu = (DB.recipes || []).reduce((acc, r) => { if(!acc[r.MenuID]) acc[r.MenuID] = []; acc[r.MenuID].push(r); return acc; }, {});
-            recipeCont.innerHTML = Object.entries(recipesByMenu).map(([menuId, components]) => {
-                const menuObj = DB.menu.find(m => String(m.ID).trim() === String(menuId).trim());
-                const displayName = (components[0] && components[0].MenuName) ? components[0].MenuName : (menuObj ? menuObj.Name : 'UNREGISTERED');
-                let totalHPP = 0;
-                const rows = components.map(ing => {
-                    const stockItem = DB.stock.find(s => s.Name.toLowerCase() === ing.IngredientName.toLowerCase());
-                    const unitP = stockItem ? Number(stockItem.Price || 0) : 0;
-                    const cCost = unitP * Number(ing.AmountUsed);
-                    totalHPP += cCost;
-                    return `<div class="flex justify-between items-center p-2.5 bg-white rounded-xl shadow-sm border border-slate-50"><div class="flex flex-col"><span class="text-[9px] md:text-[10px] font-black text-slate-700 uppercase italic leading-none">${ing.IngredientName}</span><p class="text-[7px] font-bold text-slate-300 mt-1 uppercase">${ing.AmountUsed} ${stockItem?.Unit || ''} @ Rp ${unitP.toLocaleString()}</p></div><span class="text-[9px] md:text-[11px] font-black text-violet-600 italic">Rp ${cCost.toLocaleString()}</span></div>`;
-                }).join('');
-                return `<div class="card-pro p-4 bg-slate-50/40 border-2 border-slate-100 animate-pop mb-4"><div class="flex flex-col md:flex-row justify-between mb-3 pb-3 border-b border-slate-200 gap-2"><div class="flex items-center gap-3"><div><h5 class="text-[9px] md:text-[12px] font-black text-slate-800 uppercase italic leading-none">#${menuId} - ${displayName}</h5><p class="text-[7px] font-bold text-slate-400 mt-1 tracking-widest uppercase">Precision Costing Analysis</p></div></div><div class="text-right"><p class="text-[7px] font-black text-slate-400 uppercase leading-none mb-1 italic">Modal Porsi</p><p class="text-base md:text-xl font-black text-violet-600 leading-none tracking-tighter">Rp ${totalHPP.toLocaleString()}</p></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">${rows}</div></div>`;
-            }).join('');
-            lucide.createIcons();
-        }
+        // --- CORE RENDER LOGIC ---
 
         function renderStats() {
-            const revenue = DB.transactions.reduce((s, t) => s + (t.Status !== 'Pending' && t.Status !== 'Void' ? Number(t.Total) : 0), 0);
+            const trxs = DB.transactions.filter(t => t.Status !== 'Pending' && t.Status !== 'Void');
+            const revenue = trxs.reduce((s, t) => s + Number(t.Total), 0);
             const assetValue = DB.stock.reduce((s, b) => s + (Number(b.Qty) * Number(b.Price || 0)), 0);
             const opEx = (DB.expenses || []).reduce((s, e) => s + Number(e.Amount), 0);
-            let totalHPPSold = 0;
-            DB.transactions.filter(t => t.Status !== 'Pending' && t.Status !== 'Void').forEach(t => {
-                t.Items.split(',').forEach(itemName => {
-                    const menu = DB.menu.find(m => m.Name.toLowerCase() === itemName.trim().toLowerCase());
-                    if(menu) totalHPPSold += Number(menu.HPP || 0);
+            let totalHPP = 0;
+            trxs.forEach(t => {
+                t.Items.split(',').forEach(item => {
+                    const menu = DB.menu.find(m => m.Name.toLowerCase() === item.trim().toLowerCase());
+                    if(menu) totalHPP += Number(menu.HPP || 0);
                 });
             });
-            const netProfit = revenue - (totalHPPSold + opEx);
-            const sRev = document.getElementById('stat-revenue'), sPro = document.getElementById('stat-profit'), sAst = document.getElementById('stat-asset');
-            if(sRev) sRev.innerText = `Rp ${revenue.toLocaleString()}`;
-            if(sPro) sPro.innerText = `Rp ${netProfit.toLocaleString()}`;
-            if(sAst) sAst.innerText = `Rp ${assetValue.toLocaleString()}`;
+            const sr = document.getElementById('stat-revenue'), sp = document.getElementById('stat-profit'), sa = document.getElementById('stat-asset');
+            if(sr) sr.innerText = `Rp ${revenue.toLocaleString()}`;
+            if(sp) sp.innerText = `Rp ${(revenue - (totalHPP + opEx)).toLocaleString()}`;
+            if(sa) sa.innerText = `Rp ${assetValue.toLocaleString()}`;
+        }
+
+        function renderPeriodicReports() {
+            const cont = document.getElementById('periodicReportBody'); if(!cont) return;
+            const now = new Date();
+            const startOfDay = new Date(new Date().setHours(0,0,0,0));
+            const startOfWeek = new Date(new Date().setDate(now.getDate() - now.getDay()));
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+            const calculateFor = (startDate) => {
+                const f = DB.transactions.filter(t => new Date(t.Date) >= startDate && t.Status !== 'Pending' && t.Status !== 'Void');
+                const rev = f.reduce((s, t) => s + Number(t.Total), 0);
+                return { count: f.length, rev: rev, profit: rev * 0.45 };
+            };
+
+            const day = calculateFor(startOfDay), week = calculateFor(startOfWeek), month = calculateFor(startOfMonth);
+            cont.innerHTML = `
+                <tr><td class="p-2 italic border-r">HARI INI</td><td class="p-2">${day.count}</td><td class="p-2">Rp ${day.rev.toLocaleString()}</td><td class="p-2 text-green-600">Rp ${day.profit.toLocaleString()}</td></tr>
+                <tr><td class="p-2 italic border-r">MINGGU INI</td><td class="p-2">${week.count}</td><td class="p-2">Rp ${week.rev.toLocaleString()}</td><td class="p-2 text-green-600">Rp ${week.profit.toLocaleString()}</td></tr>
+                <tr><td class="p-2 italic border-r">BULAN INI</td><td class="p-2">${month.count}</td><td class="p-2">Rp ${month.rev.toLocaleString()}</td><td class="p-2 text-green-600">Rp ${month.profit.toLocaleString()}</td></tr>
+            `;
         }
 
         function renderTopSelling() {
             const cont = document.getElementById('topSellingMenu'); if(!cont || !DB.transactions) return;
             const counts = {};
-            DB.transactions.forEach(t => t.Items.split(',').forEach(i => { const n = i.trim(); counts[n] = (counts[n] || 0) + 1; }));
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            cont.innerHTML = sorted.map(([name, count]) => `<div class="flex items-center justify-between p-3 bg-slate-50/50 rounded-xl border border-white shadow-sm transition-all hover:scale-[1.01]"><div class="flex items-center gap-3"><div class="w-7 h-7 bg-indigo-950 text-white rounded-lg flex items-center justify-center font-black text-[9px] italic">${name.slice(0,1).toUpperCase()}</div><p class="text-[9px] md:text-[11px] font-black text-slate-700 uppercase italic truncate w-32 md:w-auto leading-none">${name}</p></div><span class="bg-violet-600 text-white text-[8px] font-black px-3 py-1.5 rounded-lg">${count} Sold</span></div>`).join('');
+            DB.transactions.filter(t => t.Status !== 'Void').forEach(t => t.Items.split(',').forEach(i => { const n = i.trim(); counts[n] = (counts[n] || 0) + 1; }));
+            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 6);
+            cont.innerHTML = sorted.map(([name, count]) => `<div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-white shadow-sm hover:scale-[1.01] transition-all"><p class="text-[9px] font-black text-slate-700 uppercase italic truncate leading-none">${name}</p><span class="bg-violet-600 text-white text-[8px] font-black px-3 py-1.5 rounded-lg">${count} Terjual</span></div>`).join('');
         }
 
+        function renderInventory() {
+            const cont = document.getElementById('inventoryContainer'), rc = document.getElementById('recipeList');
+            if(!cont || !rc) return;
+            const groups = { 'Protein': [], 'Karbo & Tepung': [], 'Bumbu & Cairan': [], 'Minuman & Buah': [], 'Operasional': [] };
+            DB.stock.forEach(s => {
+                const n = s.Name.toLowerCase();
+                if(n.includes('ayam') || n.includes('sapi') || n.includes('ikan') || n.includes('bebek') || n.includes('telur')) groups['Protein'].push(s);
+                else if(n.includes('beras') || n.includes('tepung')) groups['Karbo & Tepung'].push(s);
+                else if(n.includes('minyak') || n.includes('garam') || n.includes('kecap') || n.includes('gula')) groups['Bumbu & Cairan'].push(s);
+                else if(n.includes('aqua') || n.includes('jeruk') || n.includes('alpukat') || n.includes('kelapa') || n.includes('soda')) groups['Minuman & Buah'].push(s);
+                else groups['Operasional'].push(s);
+            });
+            cont.innerHTML = Object.entries(groups).map(([k, items]) => items.length === 0 ? '' : `<div class="space-y-2"><h4 class="text-[8px] font-black text-indigo-900 uppercase border-l-4 border-violet-600 pl-2 leading-none">${k}</h4><div class="grid grid-cols-2 md:grid-cols-6 gap-2">${items.map(s => `<div onclick="editStock('${s.ID}')" class="card-pro p-2.5 text-center cursor-pointer hover:border-violet-300 transition-all ${s.Qty < s.MinQty ? 'bg-red-50 border-red-200' : ''}"><span class="text-[7px] text-slate-300 font-black uppercase leading-none">${s.Unit}</span><h4 class="text-[9px] font-black text-slate-700 uppercase italic truncate my-1 leading-tight">${s.Name}</h4><p class="text-xl font-black ${s.Qty < s.MinQty ? 'text-red-600' : 'text-slate-800'}">${s.Qty}</p></div>`).join('')}</div></div>`).join('');
+            
+            const rbm = (DB.recipes || []).reduce((acc, r) => { if(!acc[r.MenuID]) acc[r.MenuID] = []; acc[r.MenuID].push(r); return acc; }, {});
+            rc.innerHTML = Object.entries(rbm).map(([mid, comps]) => {
+                const mObj = DB.menu.find(m => String(m.ID).trim() === String(mid).trim());
+                const dName = (comps[0] && comps[0].MenuName) ? comps[0].MenuName : (mObj ? mObj.Name : 'UNKNOWN');
+                let tHPP = 0;
+                const rows = comps.map(ing => {
+                    const si = DB.stock.find(s => s.Name.toLowerCase() === ing.IngredientName.toLowerCase());
+                    const up = si ? Number(si.Price || 0) : 0;
+                    const cc = up * Number(ing.AmountUsed);
+                    tHPP += cc;
+                    return `<div class="flex justify-between items-center p-2 bg-white rounded-lg border border-slate-50"><div class="flex flex-col"><span class="text-[9px] font-black text-slate-700 uppercase italic leading-none">${ing.IngredientName}</span><p class="text-[7px] font-bold text-slate-300 mt-1 uppercase">${ing.AmountUsed} @ Rp ${up.toLocaleString()}</p></div><span class="text-[9px] font-black text-violet-600 italic">Rp ${cc.toLocaleString()}</span></div>`;
+                }).join('');
+                return `<div class="card-pro p-4 bg-slate-50 animate-pop mb-4 shadow-sm"><div class="flex justify-between mb-3 border-b border-slate-200 pb-2"><h5 class="text-[10px] md:text-[12px] font-black text-slate-800 uppercase italic leading-none">#${mid} - ${dName}</h5><p class="text-[11px] font-black text-violet-600 leading-none italic uppercase">Rp ${tHPP.toLocaleString()}</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-2">${rows}</div></div>`;
+            }).join('');
+        }
+
+        async function editStock(id) {
+            const item = DB.stock.find(s => String(s.ID) === String(id));
+            if (!item) return;
+            const { value: form } = await Swal.fire({
+                title: 'Edit Stok',
+                html: `<div class="space-y-2 p-2 text-left"><input id="st-id" class="input-pro mb-1" value="${item.ID}" readonly><input id="st-name" class="input-pro mb-1" value="${item.Name}" placeholder="Nama"><div class="grid grid-cols-2 gap-2"><input id="st-qty" type="number" class="input-pro" value="${item.Qty}" placeholder="Qty"><input id="st-price" type="number" class="input-pro" value="${item.Price || 0}" placeholder="Harga"></div><input id="st-unit" class="input-pro" value="${item.Unit}" placeholder="Unit"></div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed',
+                preConfirm: () => ({ action:'updateStock', id: document.getElementById('st-id').value, name: document.getElementById('st-name').value, qty: document.getElementById('st-qty').value, price: document.getElementById('st-price').value, unit: document.getElementById('st-unit').value })
+            });
+            if(form) turboCRUD(form);
+        }
+
+        // --- MENU & STAFF CRUD ---
         function renderMenu() {
             const list = document.getElementById('menuFullList'); if(!list) return;
             list.innerHTML = DB.menu.map(m => `
-                <div class="card-pro bg-white p-2.5 md:p-4 flex flex-col gap-2 animate-pop relative group">
-                    <button onclick="deleteData('Menu', '${m.ID}')" class="absolute top-2 right-2 z-10 w-6 h-6 bg-red-500 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all active:scale-75 shadow-lg"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                    <div onclick="openMenuForm('${m.ID}')" class="cursor-pointer">
-                        <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-50"><img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300?text=Food'"><div class="absolute bottom-1 right-1 bg-white/95 px-1.5 py-0.5 rounded-md font-black text-[7px] uppercase italic text-violet-600 border border-violet-100">${m.Category}</div></div>
-                        <div class="mt-2 flex-1"><h4 class="font-black text-slate-800 text-[10px] md:text-[12px] uppercase italic truncate leading-none">${m.Name}</h4><div class="flex items-center justify-between mt-2"><span class="text-[10px] md:text-sm text-violet-600 font-black italic">Rp ${Number(m.Price).toLocaleString()}</span><span class="text-[7px] md:text-[9px] text-slate-300 font-bold italic opacity-60">HPP: ${Number(m.HPP || 0).toLocaleString()}</span></div></div>
+                <div class="card-pro bg-white p-2 flex flex-col gap-1 relative group cursor-pointer animate-pop shadow-sm" onclick="openMenuForm('${m.ID}')">
+                    <div class="w-full aspect-[4/3] rounded-lg overflow-hidden bg-slate-50 relative">
+                        <img src="${m.Img}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x300?text=Food'">
+                        <div class="absolute top-1 right-1 bg-violet-600 p-1.5 rounded-lg text-white shadow-xl opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="camera" class="w-3.5 h-3.5"></i></div>
+                        <div class="absolute bottom-1 right-1 bg-white/95 px-1.5 py-0.5 rounded-md font-black text-[6px] uppercase italic text-violet-600 border border-violet-100">${m.Category}</div>
                     </div>
+                    <h4 class="font-black text-slate-800 text-[8.5px] md:text-[10px] uppercase italic truncate mt-1 leading-none">${m.Name}</h4>
+                    <div class="flex justify-between items-center mt-0.5"><span class="text-[9px] text-violet-600 font-black italic leading-none">Rp ${Number(m.Price).toLocaleString()}</span><span class="text-[7px] text-slate-300 font-bold opacity-60">ID:${m.ID}</span></div>
                 </div>`).join('');
             lucide.createIcons();
         }
 
         async function openMenuForm(id = null) {
-            const item = id ? DB.menu.find(m => m.ID == id) : { ID: Math.floor(1000 + Math.random() * 9000), Name:'', Category:'', Price:0, Description:'', Img:'', HPP: 0 };
+            const item = id ? DB.menu.find(m => String(m.ID) === String(id)) : { ID: Math.floor(1000 + Math.random() * 9000), Name:'', Category:'', Price:0, HPP: 0, Img: '' };
             const { value: form } = await Swal.fire({
-                title: `<p class="italic font-black text-lg uppercase tracking-tighter">${id ? 'Update Menu' : 'Menu Baru'}</p>`,
-                html: `<div class="space-y-3 p-2 text-left max-h-[60vh] overflow-y-auto no-scrollbar"><div class="grid grid-cols-3 gap-2"><input id="m-id" class="input-pro col-span-1 opacity-50 text-center" value="${item.ID}" readonly><input id="m-name" class="input-pro col-span-2" value="${item.Name}" placeholder="Produk"></div><div class="grid grid-cols-2 gap-2"><input id="m-price" type="number" class="input-pro" value="${item.Price}" placeholder="Jual"><input id="m-hpp" type="number" class="input-pro" value="${item.HPP || 0}" placeholder="HPP"></div><input id="m-cat" class="input-pro" value="${item.Category}" placeholder="Kategori"><textarea id="m-desc" class="input-pro h-16 text-[11px] resize-none" placeholder="Deskripsi...">${item.Description || ''}</textarea><div class="upload-zone" onclick="document.getElementById('f-menu').click()"><input type="file" id="f-menu" class="hidden" onchange="handleFileUpload(this, 'p-menu', 'v-menu')"><div id="p-menu">${item.Img ? `<img src="${item.Img}" class="w-14 h-14 mx-auto rounded-lg object-cover shadow-md">` : '<i data-lucide="camera" class="w-6 h-6 mx-auto text-slate-200"></i><p class="text-[8px] font-black text-slate-300 uppercase mt-1">Upload Photo</p>'}</div></div><input id="v-menu" type="hidden" value="${item.Img}"></div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', confirmButtonText: 'SAVE',
-                preConfirm: () => ({ action: 'updateMenu', id: document.getElementById('m-id').value, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, hpp: document.getElementById('m-hpp').value, img: document.getElementById('v-menu').value, description: document.getElementById('m-desc').value, folderId: localStorage.getItem('RM_FOLDER_ID'), operator: sessionStorage.getItem('ADMIN_AUTH') })
+                title: id ? 'Update Menu' : 'Produk Baru',
+                html: `<div class="space-y-2 p-2 text-left">
+                    <div class="grid grid-cols-3 gap-2 mb-1"><input id="m-id" class="input-pro col-span-1" value="${item.ID}" readonly><input id="m-name" class="input-pro col-span-2" value="${item.Name}" placeholder="Nama"></div>
+                    <div class="grid grid-cols-2 gap-2 mb-1"><input id="m-price" type="number" class="input-pro" value="${item.Price}" placeholder="Jual"><input id="m-hpp" type="number" class="input-pro" value="${item.HPP || 0}" placeholder="HPP"></div>
+                    <input id="m-cat" class="input-pro mb-1" value="${item.Category}" placeholder="Kategori">
+                    <div class="upload-zone" onclick="document.getElementById('f-menu').click()"><input type="file" id="f-menu" class="hidden" onchange="handleFileUpload(this, 'p-menu', 'v-menu')"><div id="p-menu">${item.Img ? `<img src="${item.Img}" class="w-16 h-16 mx-auto rounded object-cover shadow-sm">` : '<i data-lucide="image-plus" class="w-6 h-6 mx-auto text-slate-300"></i><p class="text-[7px] font-black text-slate-400 mt-1 uppercase leading-none">Unggah Foto Menu</p>'}</div></div>
+                    <input id="v-menu" type="hidden" value="${item.Img}">
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', didOpen: () => lucide.createIcons(),
+                preConfirm: () => ({ action:'updateMenu', id: document.getElementById('m-id').value, name: document.getElementById('m-name').value, category: document.getElementById('m-cat').value, price: document.getElementById('m-price').value, hpp: document.getElementById('m-hpp').value, img: document.getElementById('v-menu').value, folderId: FOLDER_ID, operator: sessionStorage.getItem('ADMIN_AUTH') })
             });
             if(form) turboCRUD(form);
         }
@@ -360,66 +441,88 @@
         function renderStaff() {
             const list = document.getElementById('staffListContainer'); if(!list) return;
             list.innerHTML = DB.users.map(u => `
-                <div class="card-pro bg-white p-3 flex items-center gap-3 animate-pop shadow-sm relative group">
-                    <button onclick="deleteData('Staff', '${u.Username}')" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all active:scale-75 shadow-md"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                    <img src="${u.Img || 'https://ui-avatars.com/api/?name='+u.Username+'&background=7c3aed&color=fff'}" class="w-10 h-10 rounded-xl border-2 border-white shadow object-cover"><div class="flex-1 min-w-0"><h4 class="font-black text-slate-800 text-[11px] uppercase italic truncate leading-none">${u.Username}</h4><p class="text-[8px] font-bold text-slate-400 uppercase mt-1 tracking-widest leading-none">${u.Role}</p></div><button onclick="openStaffForm('${u.Username}')" class="p-2.5 bg-slate-50 rounded-lg text-slate-400 hover:text-violet-600 active:scale-90 transition-all shadow-sm"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                <div onclick="openStaffForm('${u.Username}')" class="card-pro bg-white p-3 flex items-center gap-3 shadow-sm cursor-pointer hover:border-violet-200 animate-pop transition-all group">
+                    <div class="relative">
+                        <img src="${u.Img || 'https://ui-avatars.com/api/?name='+u.Username}" class="w-9 h-9 rounded-xl object-cover shadow-sm">
+                        <div class="absolute -bottom-1 -right-1 bg-violet-600 p-0.5 rounded-full text-white shadow-lg"><i data-lucide="camera" class="w-2.5 h-2.5"></i></div>
+                    </div>
+                    <div class="flex-1 min-w-0"><h4 class="font-black text-slate-800 text-[10px] uppercase italic leading-none">${u.Username}</h4><p class="text-[8px] font-bold text-slate-400 mt-1 uppercase leading-none">${u.Role}</p></div>
                 </div>`).join('');
             lucide.createIcons();
         }
 
         async function openStaffForm(user = null) {
-            const staff = user ? DB.users.find(u => u.Username === user) : { Username:'', Password:'', Role:'Waiters', FullName:'', NIK:'', Phone:'', Img:'' };
+            const staff = user ? DB.users.find(u => u.Username === user) : { Username:'', Password:'', Role:'Waiters', Img: '' };
             const { value: form } = await Swal.fire({
-                title: '<p class="italic font-black text-lg uppercase tracking-tighter">Profil Staff</p>',
-                html: `<div class="space-y-3 p-2 text-left max-h-[60vh] overflow-y-auto no-scrollbar"><input id="s-user" class="input-pro uppercase tracking-widest" placeholder="User ID" value="${staff.Username}" ${user ? 'readonly opacity-50' : ''}><input id="s-fname" class="input-pro" placeholder="Nama Lengkap" value="${staff.FullName || ''}"><div class="grid grid-cols-2 gap-2"><input id="s-nik" class="input-pro" placeholder="NIK" value="${staff.NIK || ''}"><input id="s-phone" class="input-pro" placeholder="WA" value="${staff.Phone || ''}"></div><input id="s-pass" type="text" class="input-pro" placeholder="Security PIN" value="${staff.Password}"><select id="s-role" class="input-pro"><option value="Owner" ${staff.Role=='Owner'?'selected':''}>Owner</option><option value="Kasir" ${staff.Role=='Kasir'?'selected':''}>Kasir</option><option value="Waiters" ${staff.Role=='Waiters'?'selected':''}>Waiters</option><option value="Koki" ${staff.Role=='Koki'?'selected':''}>Koki</option></select><div class="upload-zone mt-2" onclick="document.getElementById('f-staff').click()"><input type="file" id="f-staff" class="hidden" onchange="handleFileUpload(this, 'p-staff', 'v-staff')"><div id="p-staff">${staff.Img ? `<img src="${staff.Img}" class="w-14 h-14 mx-auto rounded-lg object-cover shadow-lg border-2 border-violet-100">` : '<i data-lucide="camera" class="w-6 h-6 mx-auto text-slate-200"></i><p class="text-[8px] font-black text-slate-300 uppercase mt-1">Add Photo</p>'}</div></div><input id="v-staff" type="hidden" value="${staff.Img}"></div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', confirmButtonText: 'SAVE PROFILE',
-                preConfirm: () => ({ action: 'updateUser', username: document.getElementById('s-user').value, fullName: document.getElementById('s-fname').value, nik: document.getElementById('s-nik').value, phone: document.getElementById('s-phone').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value, img: document.getElementById('v-staff').value, operator: sessionStorage.getItem('ADMIN_AUTH') })
+                title: 'Profil Staff',
+                html: `<div class="space-y-2 p-2 text-left">
+                    <input id="s-user" class="input-pro mb-1 uppercase" value="${staff.Username}" placeholder="Username" ${user?'readonly':''}>
+                    <input id="s-pass" class="input-pro mb-1" value="${staff.Password}" placeholder="PIN AKSES">
+                    <select id="s-role" class="input-pro mb-1"><option value="Owner" ${staff.Role=='Owner'?'selected':''}>Owner</option><option value="Kasir" ${staff.Role=='Kasir'?'selected':''}>Kasir</option><option value="Waiters" ${staff.Role=='Waiters'?'selected':''}>Waiters</option><option value="Koki" ${staff.Role=='Koki'?'selected':''}>Koki</option></select>
+                    <div class="upload-zone" onclick="document.getElementById('f-staff').click()"><input type="file" id="f-staff" class="hidden" onchange="handleFileUpload(this, 'p-staff', 'v-staff')"><div id="p-staff">${staff.Img ? `<img src="${staff.Img}" class="w-16 h-16 mx-auto rounded-full object-cover shadow-sm">` : '<i data-lucide="camera" class="w-6 h-6 mx-auto text-slate-300"></i><p class="text-[7px] font-black text-slate-400 mt-1 uppercase leading-none">Upload Foto</p>'}</div></div>
+                    <input id="v-staff" type="hidden" value="${staff.Img}">
+                </div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed', didOpen: () => lucide.createIcons(),
+                preConfirm: () => ({ action:'updateUser', username: document.getElementById('s-user').value, password: document.getElementById('s-pass').value, role: document.getElementById('s-role').value, img: document.getElementById('v-staff').value, folderId: FOLDER_ID })
             });
             if(form) turboCRUD(form);
         }
 
-        async function openStockUpdateForm() {
-            const { value: form } = await Swal.fire({
-                title: '<p class="italic font-black text-lg uppercase tracking-tighter">Inventory Update</p>',
-                html: `<div class="space-y-3 p-2 text-left"><input id="st-id" class="input-pro uppercase" placeholder="B001"><input id="st-name" class="input-pro" placeholder="Nama Bahan Baku"><div class="grid grid-cols-2 gap-2"><input id="st-qty" type="number" class="input-pro" placeholder="Qty Baru"><input id="st-price" type="number" class="input-pro" placeholder="Harga Beli"></div><input id="st-unit" class="input-pro text-center uppercase tracking-widest" placeholder="KG/L/PCS"></div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', confirmButtonText: 'INPUT STOK',
-                preConfirm: () => ({ action: 'updateStock', id: document.getElementById('st-id').value, name: document.getElementById('st-name').value, qty: document.getElementById('st-qty').value, price: document.getElementById('st-price').value, unit: document.getElementById('st-unit').value, minQty: 5 })
-            });
-            if(form) turboCRUD(form);
-        }
-
-        async function openRecipeBuilder() {
-            const { value: form } = await Swal.fire({
-                title: '<p class="italic font-black text-lg uppercase tracking-tighter leading-none text-violet-700">Costing Linker</p>',
-                html: `<div class="space-y-3 p-2 text-left"><label class="text-[8px] font-black uppercase text-slate-400 ml-1 italic">1. Pilih Menu</label><select id="rec-mid" class="input-pro">${DB.menu.map(m => `<option value="${m.ID}">${m.Name} (#${m.ID})</option>`).join('')}</select><label class="text-[8px] font-black uppercase text-slate-400 ml-1 italic">2. Pilih Bahan</label><select id="rec-ing" class="input-pro">${DB.stock.map(s => `<option value="${s.Name}">${s.Name} (${s.Unit})</option>`).join('')}</select><label class="text-[8px] font-black uppercase text-slate-400 ml-1 italic">3. Takaran Pakai</label><input id="rec-qty" type="number" step="0.001" class="input-pro" placeholder="Contoh: 0.25"></div>`,
-                showCancelButton: true, confirmButtonColor: '#7c3aed', confirmButtonText: 'LINK KOMPOSISI',
-                preConfirm: () => ({ action: 'updateRecipe', menuId: document.getElementById('rec-mid').value, ingredient: document.getElementById('rec-ing').value, qty: document.getElementById('rec-qty').value })
-            });
-            if(form) turboCRUD(form);
-        }
+        // --- SALES & EXCEL LOGIC ---
 
         function renderSales() {
             const container = document.getElementById('salesListContainer'); if(!container) return;
-            container.innerHTML = DB.transactions.slice().reverse().map(t => `<div class="py-4 flex flex-col gap-2 hover:bg-slate-50 transition-all px-2 rounded-xl animate-pop"><div class="flex justify-between items-start"><div><span class="text-[8px] font-black text-slate-300 uppercase tracking-[2px] leading-none mb-1 block">TX #${t.ID.slice(-6)}</span><h4 class="text-[11px] font-black text-slate-800 uppercase italic leading-none">${t.Customer || t.Role}</h4></div><span class="font-black text-violet-600 text-xs italic tracking-tighter leading-none">Rp ${Number(t.Total).toLocaleString()}</span></div><p class="text-[10px] font-bold text-slate-500 uppercase italic opacity-60 leading-tight truncate">${t.Items}</p></div>`).join('');
+            container.innerHTML = DB.transactions.slice().reverse().map(t => `<div class="py-3 flex flex-col gap-1 hover:bg-slate-50 transition-all px-2 rounded-xl animate-pop"><div class="flex justify-between items-start"><div><span class="text-[7px] font-black text-slate-300 uppercase tracking-[2px] leading-none mb-0.5 block">#${t.ID.slice(-6)}</span><h4 class="text-[10px] font-black text-slate-800 uppercase italic leading-none truncate">${t.Customer || t.Role}</h4></div><span class="font-black text-violet-600 text-[10px] leading-none italic">Rp ${Number(t.Total).toLocaleString()}</span></div><p class="text-[9px] font-bold text-slate-400 uppercase italic leading-tight truncate opacity-70">${t.Items}</p></div>`).join('');
         }
 
-        function initChart() { const ctx = document.getElementById('revenueChart'); if(!ctx) return; if(currentChart) currentChart.destroy(); const days = {}; const last7Days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - i); return d.toLocaleDateString(); }).reverse(); last7Days.forEach(d => days[d] = 0); DB.transactions.forEach(t => { const d = new Date(t.Date).toLocaleDateString(); if(days[d] !== undefined && t.Status !== 'Pending') days[d] += Number(t.Total); }); currentChart = new Chart(ctx, { type: 'line', data: { labels: Object.keys(days).map(d => d.split('/')[0] + '/' + d.split('/')[1]), datasets: [{ label: 'Daily Omzet', data: Object.values(days), borderColor: '#7c3aed', backgroundColor: 'rgba(124, 58, 237, 0.05)', borderWidth: 5, tension: 0.4, fill: true, pointRadius: 3, pointBackgroundColor: '#7c3aed' }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 9, weight: 'bold' } } }, x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } } } } }); }
-        function exportToExcel() { const data = DB.transactions.map(t => ({ TANGGAL: new Date(t.Date).toLocaleDateString('id-ID'), ID: t.ID, NOMINAL: Number(t.Total) })); const total = data.reduce((s, r) => s + r.NOMINAL, 0); data.push({}); data.push({ TANGGAL: 'GRAND TOTAL', NOMINAL: total }); const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Financial"); XLSX.writeFile(wb, `TURBO_REPORT_${Date.now()}.xlsx`); }
-        async function deleteData(type, id) { const { isConfirmed } = await Swal.fire({ text: `Hapus ${type} ${id}?`, icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'HAPUS' }); if(isConfirmed) turboCRUD({ action: type === 'Menu' ? 'deleteMenu' : 'deleteUser', id, username: id, operator: sessionStorage.getItem('ADMIN_AUTH') }); }
-        function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
-        
-        async function analyzeBusinessAI() { 
-            const sum = `Omzet: ${document.getElementById('stat-revenue').innerText}, Profit: ${document.getElementById('stat-profit').innerText}, TRX: ${DB.transactions.length}`;
-            showMiniLoader('AI Analyzing...');
-            const response = await callGeminiAI(`Analisalah data bisnis: ${sum}. Berikan 3 poin strategis efisiensi biaya dalam Bahasa Indonesia.`, "Anda adalah Business Analyst Senior.");
-            Swal.fire({ title: '<p class="italic font-black text-lg uppercase">Financial Insight</p>', html: `<div class="text-left text-[11px] leading-relaxed p-5 bg-slate-50 rounded-[25px] border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonColor: '#7c3aed' });
+        function exportFilteredExcel() {
+            const startInput = document.getElementById('filterStart').value, endInput = document.getElementById('filterEnd').value;
+            if(!startInput || !endInput) return Swal.fire('Error', 'Pilih rentang tanggal.', 'warning');
+            
+            const start = new Date(startInput), end = new Date(endInput);
+            end.setHours(23, 59, 59);
+
+            const filtered = DB.transactions.filter(t => { const d = new Date(t.Date); return d >= start && d <= end; });
+            if (filtered.length === 0) return Swal.fire('Kosong', 'Tidak ada data pada periode tersebut.', 'info');
+
+            const data = filtered.map(t => ({ TANGGAL: new Date(t.Date).toLocaleDateString('id-ID'), ID: t.ID, PELANGGAN: t.Customer || t.Role, ITEMS: t.Items, TOTAL: Number(t.Total) }));
+            const total = data.reduce((s, r) => s + r.TOTAL, 0);
+            data.push({}); data.push({ TANGGAL: 'GRAND TOTAL', TOTAL: total });
+
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Laporan Penjualan");
+            XLSX.writeFile(wb, `REPORT_${startInput}_KE_${endInput}.xlsx`);
         }
-        
-        async function callGeminiAI(prompt, sys) {
+
+        // --- AI & SYSTEM UTILS ---
+
+        async function analyzeBusinessAI() {
+            const sRev = document.getElementById('stat-revenue'), sPro = document.getElementById('stat-profit');
+            const dataStr = `Revenue: ${sRev?sRev.innerText:'0'}, Profit: ${sPro?sPro.innerText:'0'}, Orders: ${DB.transactions.length}, StockItems: ${DB.stock.length}`;
+            showMiniLoader('AI Analyzing...');
+            try {
+                const prompt = `Analisalah data bisnis RM Pangkalan: ${dataStr}. Berikan 3 poin taktis efisiensi biaya porsi (HPP) dalam Bahasa Indonesia.`;
+                const response = await callGeminiAI(prompt, "Anda adalah Business Analyst Senior.");
+                Swal.fire({ title: '<p class="italic font-black text-lg uppercase leading-none">Executive Insights</p>', html: `<div class="text-left text-[11px] leading-relaxed p-6 bg-slate-50 rounded-[30px] border italic font-medium">${response.replace(/\n/g, '<br>')}</div>`, confirmButtonColor: '#7c3aed' });
+            } catch (e) { Swal.fire('Error', 'AI sedang sibuk, pastikan API URL benar.', 'error'); }
+        }
+
+        async function callGeminiAI(prompt, system, retries = 5, delay = 1000) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-            const res = await fetch(url, { method: 'POST', body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: sys }] } }) });
-            const result = await res.json();
-            return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI Sedang Sibuk.";
+            const payload = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: system }] } };
+            
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(url, { method: 'POST', body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error();
+                    const result = await res.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "AI Tidak memberikan respon.";
+                } catch (err) {
+                    if (i === retries - 1) throw err;
+                    await new Promise(r => setTimeout(r, delay * Math.pow(2, i)));
+                }
+            }
         }
 
         async function handleFileUpload(input, pid, vid) {
@@ -435,11 +538,24 @@
                     const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
                     const base64 = canvas.toDataURL('image/jpeg', 0.7);
                     document.getElementById(vid).value = base64;
-                    document.getElementById(pid).innerHTML = `<img src="${base64}" class="w-14 h-14 mx-auto rounded-lg object-cover shadow-lg border-2 border-violet-500">`;
+                    document.getElementById(pid).innerHTML = `<img src="${base64}" class="w-12 h-12 mx-auto rounded object-cover shadow-lg border-2 border-violet-500 animate-pop">`;
                 };
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
+        }
+
+        function initChart() { const ctx = document.getElementById('revenueChart'); if(!ctx) return; if(currentChart) currentChart.destroy(); const days = {}; const last7 = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - i); return d.toLocaleDateString(); }).reverse(); last7.forEach(d => days[d] = 0); DB.transactions.forEach(t => { const d = new Date(t.Date).toLocaleDateString(); if(days[d] !== undefined && t.Status !== 'Pending') days[d] += Number(t.Total); }); currentChart = new Chart(ctx, { type: 'line', data: { labels: Object.keys(days).map(d => d.split('/')[0]), datasets: [{ label: 'Omzet', data: Object.values(days), borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.05)', borderWidth: 5, tension: 0.4, fill: true, pointRadius: 2 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { size: 9 } } } } } }); }
+        function saveConfig() { const u = document.getElementById('apiInput').value.trim(), f = document.getElementById('folderIdInput').value.trim(); localStorage.setItem('RM_API_URL', u); API_URL = u; localStorage.setItem('RM_FOLDER_ID', f); FOLDER_ID = f; Swal.fire({ text: 'Config Cloud Berhasil Diupdate.', icon: 'success', timer: 1500 }); syncData(true); }
+        function handleLogout() { sessionStorage.removeItem('ADMIN_AUTH'); location.reload(); }
+        async function openRecipeBuilder() {
+            const { value: form } = await Swal.fire({
+                title: 'Link Resep',
+                html: `<div class="space-y-2 p-2 text-left"><select id="rec-mid" class="input-pro">${DB.menu.map(m => `<option value="${m.ID}">${m.Name} (#${m.ID})</option>`).join('')}</select><select id="rec-ing" class="input-pro">${DB.stock.map(s => `<option value="${s.Name}">${s.Name}</option>`).join('')}</select><input id="rec-qty" type="number" step="0.001" class="input-pro" placeholder="Takaran Pakai"></div>`,
+                showCancelButton: true, confirmButtonColor: '#7c3aed',
+                preConfirm: () => { const sel = document.getElementById('rec-mid'); return { action:'updateRecipe', menuId: sel.value, menuName: sel.options[sel.selectedIndex].text.split(' (#')[0], ingredient: document.getElementById('rec-ing').value, qty: document.getElementById('rec-qty').value }; }
+            });
+            if(form) turboCRUD(form);
         }
     </script>
 </body>
